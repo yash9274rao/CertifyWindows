@@ -1,0 +1,210 @@
+import 'dart:collection';
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+
+import 'QRViewExmple.dart';
+import 'api/api_service.dart';
+import 'login.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of the application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: MyLanch(),
+    );
+  }
+}
+
+class MyLanch extends StatefulWidget {
+  @override
+  _MyHome createState() => _MyHome();
+}
+
+class _MyHome extends State<MyLanch> {
+  var textHolderModalController = "";
+  Map<String, dynamic> diveInfo = new HashMap();
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    activiAPI();
+    return MaterialApp(
+      home: new Scaffold(
+        body: Container(
+          color: Colors.white,
+          child: Container(
+            child: Row(
+              children: [
+                new Expanded(
+                  flex: 1,
+                  child: new Container(
+                    child: new Image(
+                      image: AssetImage('images/assets/image.png'),
+                    ),
+                  ),
+                ),
+                new Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                        child: Text(
+                          'Register Device',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 22),
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                          child: Divider(color: Colors.grey)),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                        child: Text(
+                            'This device is not configured to work online. If'
+                                ' you already have a cloud account'),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.all(16.0),
+                            textStyle: const TextStyle(fontSize: 20),
+                            backgroundColor: Colors.blue,
+                          ),
+                          onPressed: () {
+                            print("AAAAAAAAAAAAAAAA");
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => login()));
+                          },
+                          child: Text("Login to Register the Device"),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
+                        child: Text(
+                          '${textHolderModalController}',
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
+                        child: TextButton(
+                          style: TextButton.styleFrom(
+                            foregroundColor: Colors.blue,
+                            padding: const EdgeInsets.all(16.0),
+                            textStyle: const TextStyle(fontSize: 20),
+                            side: BorderSide(color: Colors.blue, width: 1),
+                          ),
+                          onPressed: () {
+                            print("BBBBBBBBBBBBBBBBBBBB");
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => QRViewExample()));
+                          },
+                          child: Text("Try Activation Again"),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> initPlatformState() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      print('Running on ${androidInfo.serialNumber}'); // e.g. "Moto G (4)"
+      setState(() {
+        textHolderModalController =
+        'If you have already added the device on the '
+            'portal SL NO: ${androidInfo.id.replaceAll(".", "").replaceAll
+          ("/", "")}';
+      });
+      diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
+      diveInfo['uniqueDeviceId'] = '${androidInfo.id}';
+      diveInfo['deviceModel'] = '${androidInfo.model}';
+      diveInfo['deviceSN'] = '${androidInfo.id}';
+
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      setState(() {
+        textHolderModalController =
+        'If you have already added the device on the '
+            'portal SL NO: ${iosInfo.identifierForVendor}';
+      });
+      diveInfo['osVersion'] = '${iosInfo.systemVersion}';
+      diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
+      diveInfo['deviceModel'] = '${iosInfo.model}';
+      diveInfo['deviceSN'] = '${iosInfo.identifierForVendor}';
+      //   print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
+    } else if (defaultTargetPlatform == TargetPlatform.windows) {
+      WebBrowserInfo webBrowserDeviceInfo = await deviceInfo.webBrowserInfo;
+      // textHolderModal = 'If you have already added the device on the '
+      //     'portal SL NO:${webBrowserInfo.userAgent}';
+      setState(() {
+        textHolderModalController =
+        'If you have already added the device on the '
+            'portal SL NO: ${webBrowserDeviceInfo.productSub}';
+      });
+      diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
+      diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
+      diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
+      diveInfo['deviceSN'] = '${webBrowserDeviceInfo.productSub}';
+    } else if (defaultTargetPlatform == TargetPlatform.macOS) {
+      MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+      setState(() {
+        textHolderModalController =
+        'If you have already added the device on the '
+            'portal SL NO: ${macOsDeviceInfo.systemGUID}';
+      });
+    }
+  }
+
+  Future<void> activiAPI() async {
+    diveInfo['appVersion'] = "v3.4.232";
+    diveInfo['mobileNumber'] = "+1";
+    diveInfo['IMEINumber'] = "";
+    diveInfo['batteryStatus'] = "100";
+    diveInfo['networkStatus'] = "true";
+    diveInfo['appState'] = "Foreground";
+    Map<String, String> createDoc = new HashMap();
+    createDoc['pushAuthToken'] = "deZtte2SRZO1o8vjy3KXVL:APA91bHnYyPhKC2k45yS0X2dCFI2WAqP0D6nXO9FKVMgUGxzbDDey24LSjAVfG48RZvf1LPAnx-tQ-C9v4hJL8clAUerwk1QFWQSUkNy-2I-sbbOgH8mw1nNsKzc8dQDAcrhu2SYVQVq";
+    createDoc['deviceInfo'] = '${diveInfo}';
+    Map<String, String> headers = new HashMap();
+    headers['device_sn'] = "A060980P03900057";
+    // headers['Content-type'] = "application/json";
+    headers['Authorization'] = '';
+    ApiService().getUsers(headers, diveInfo);
+  }
+}
