@@ -1,9 +1,10 @@
 import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:snaphybrid/common/sharepref.dart';
 
 import 'QRViewExmple.dart';
 import 'api/api_service.dart';
@@ -45,7 +46,6 @@ class _MyHome extends State<MyLanch> {
 
   @override
   Widget build(BuildContext context) {
-    activiAPI();
     return MaterialApp(
       home: new Scaffold(
         body: Container(
@@ -82,7 +82,7 @@ class _MyHome extends State<MyLanch> {
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                         child: Text(
                             'This device is not configured to work online. If'
-                                ' you already have a cloud account'),
+                            ' you already have a cloud account'),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
@@ -140,29 +140,32 @@ class _MyHome extends State<MyLanch> {
   }
 
   Future<void> initPlatformState() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       print('Running on ${androidInfo.serialNumber}'); // e.g. "Moto G (4)"
+      var sn = androidInfo.id.replaceAll(".", "").replaceAll("/", "");
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
-            'portal SL NO: ${androidInfo.id.replaceAll(".", "").replaceAll
-          ("/", "")}';
+            'If you have already added the device on the '
+            'portal SL NO: ${sn}';
       });
+      pref.setString(Sharepref.serialNo, sn);
+
       diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
       diveInfo['uniqueDeviceId'] = '${androidInfo.id}';
       diveInfo['deviceModel'] = '${androidInfo.model}';
-      diveInfo['deviceSN'] = '${androidInfo.id}';
-
+      diveInfo['deviceSN'] = '${sn}';
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${iosInfo.identifierForVendor}';
       });
+      pref.setString(Sharepref.serialNo, iosInfo.identifierForVendor.toString());
       diveInfo['osVersion'] = '${iosInfo.systemVersion}';
       diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
       diveInfo['deviceModel'] = '${iosInfo.model}';
@@ -174,9 +177,11 @@ class _MyHome extends State<MyLanch> {
       //     'portal SL NO:${webBrowserInfo.userAgent}';
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${webBrowserDeviceInfo.productSub}';
       });
+      pref.setString(
+          Sharepref.serialNo, webBrowserDeviceInfo.productSub.toString());
       diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
       diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
       diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
@@ -185,13 +190,16 @@ class _MyHome extends State<MyLanch> {
       MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${macOsDeviceInfo.systemGUID}';
       });
     }
+    activiAPI();
   }
 
   Future<void> activiAPI() async {
+    var pref = await SharedPreferences.getInstance();
+    String sn = pref.getString(Sharepref.serialNo) as String;
     diveInfo['appVersion'] = "v3.4.232";
     diveInfo['mobileNumber'] = "+1";
     diveInfo['IMEINumber'] = "";
@@ -199,12 +207,12 @@ class _MyHome extends State<MyLanch> {
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
     Map<String, String> createDoc = new HashMap();
-    createDoc['pushAuthToken'] = "deZtte2SRZO1o8vjy3KXVL:APA91bHnYyPhKC2k45yS0X2dCFI2WAqP0D6nXO9FKVMgUGxzbDDey24LSjAVfG48RZvf1LPAnx-tQ-C9v4hJL8clAUerwk1QFWQSUkNy-2I-sbbOgH8mw1nNsKzc8dQDAcrhu2SYVQVq";
+    createDoc['pushAuthToken'] = "";
     createDoc['deviceInfo'] = '${diveInfo}';
     Map<String, String> headers = new HashMap();
-    headers['device_sn'] = "A060980P03900057";
+    headers['device_sn'] = sn;
     // headers['Content-type'] = "application/json";
     headers['Authorization'] = '';
-    ApiService().getUsers(headers, diveInfo);
+    ApiService().getUsers(headers, diveInfo,sn);
   }
 }
