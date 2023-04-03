@@ -120,10 +120,11 @@ class _MyHome extends State<MyLanch> {
                           ),
                           onPressed: () {
                             print("BBBBBBBBBBBBBBBBBBBB");
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QRViewExample()));
+                            activiAPI();
+                            // Navigator.pushReplacement(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (context) => QRViewExample()));
                           },
                           child: Text("Try Activation Again"),
                         ),
