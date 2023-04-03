@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/common/sharepref.dart';
+import 'package:snaphybrid/home_screen.dart';
 
 import 'QRViewExmple.dart';
 import 'api/api_service.dart';
@@ -120,11 +121,11 @@ class _MyHome extends State<MyLanch> {
                           ),
                           onPressed: () {
                             print("BBBBBBBBBBBBBBBBBBBB");
-                            activiAPI();
-                            // Navigator.pushReplacement(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (context) => QRViewExample()));
+                          //  activiAPI();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
                           },
                           child: Text("Try Activation Again"),
                         ),
