@@ -51,7 +51,7 @@ class _MyHome extends State<HomeScreen> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(25, 20, 10, 15),
                             child: Text(
-                              'Home Screen Text1',
+                              'Wellcome To RR',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 22),
                             ),
@@ -59,7 +59,7 @@ class _MyHome extends State<HomeScreen> {
                           Padding(
                             padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                             child: Text(
-                              'Home Screen Text2',
+                              'You are in Home Screen',
                               style: TextStyle(
                                   fontWeight: FontWeight.normal, fontSize: 18),
                             ),
@@ -110,17 +110,17 @@ class _MyHome extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
 
                         child: TextButton(
                             style: TextButton.styleFrom(
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
+                            textStyle: const TextStyle(fontSize: 24),
                             backgroundColor: Colors.green,
                           ),
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => QRViewExample()));
@@ -129,17 +129,17 @@ class _MyHome extends State<HomeScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
+                        padding: EdgeInsets.fromLTRB(20, 15, 0, 20),
                         child: TextButton(
                           style: TextButton.styleFrom(
                             foregroundColor: Colors.redAccent,
                             padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
+                            textStyle: const TextStyle(fontSize: 24),
                             backgroundColor: Colors.red.shade200,
                           ),
                           onPressed: () {
                             print("BBBBBBBBBBBBBBBBBBBB");
-                            Navigator.push(
+                            Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => QRViewExample()));

@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:snaphybrid/api/response/activate_application_response.dart';
-import 'package:snaphybrid/api/response/generate_token_response.dart';
+import 'package:snaphybrid/api/response/getdevice_token_response.dart';
+
+import 'response/validate_vendor_response.dart';
 
 class ApiService {
   static const String _apiBaseUrl = "https://apiqa.certify.me/";
 
-  Future<String?> getUsers(headers, bodys, sn) async {
+  Future<ActivateApplicationResponse?> getUsers(headers, bodys, sn) async {
     try {
       var url = Uri.parse('${_apiBaseUrl}ActivateApplication');
       var res = await http.post(url,
@@ -22,54 +24,65 @@ class ApiService {
           body: jsonEncode(bodys));
       print(res.body);
       if (res.statusCode == 200) {
-        ActivateApplicationResponse aaR =
-            ActivateApplicationResponse.fromJson(jsonDecode(res.body));
+        ActivateApplicationResponse activateApplicationResponse =
+        ActivateApplicationResponse.fromJson(jsonDecode(res.body));
         Fluttertoast.showToast(
-            msg: aaR.responseMessage,
+            msg: activateApplicationResponse.responseMessage,
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.green,
             textColor: Colors.white,
             fontSize: 16.0);
-
-        if (aaR.responseCode == 1) getGenerateToken(headers, bodys, sn);
+        return activateApplicationResponse;
+        // if (aaR.responseCode == 1) getGenerateToken(headers, bodys, sn);
       }
     } catch (e) {
       log(e.toString());
     }
   }
 
-  Future<String?> getGenerateToken(headers, bodys, sn) async {
+  Future<GetDeviceTokenResponse?> getGenerateToken(bodys) async {
     try {
-      var url = Uri.parse("${_apiBaseUrl}GenerateToken");
-      var res = await http.post(url, headers: {
-        "Access-Control-Allow-Origin": "*",
-        'Accept': '*/*',
-        'DeviceSN': sn
-      }, body: {});
+      var url = Uri.parse("${_apiBaseUrl}GetDeviceToken");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Accept': '*/*'
+          },
+          body: jsonEncode(bodys));
       print('GenerateToken =${res.body}');
       if (res.statusCode == 200) {
-        var resData = res.body.replaceAll('\/', '');
-       var enc = jsonEncode(resData);
-        print("1111111111=" + enc);
-        var valueMap = json.decode(enc);
-        GenerateTokenResponse aaR =
-        GenerateTokenResponse.fromJson(valueMap);
-       //  var response = jsonDecode(resData);
-       //  print(response);
-       //  dynamic jsonObject = jsonDecode(response);
-       //  print(jsonObject[0]["access_token"]);
-       //  // var encode = jsonEncode(response);
-       //  // print('GenerateToken =${}');
-       // // var response = jsonDecode(value);
-       //  print(response[0]['access_token']);
-        // GenerateTokenResponse aaR =
-        //     GenerateTokenResponse.fromJson(response);
-        print('GenerateToken =${aaR.access_token}');
+        GetDeviceTokenResponse getDeviceTokenResponse =
+            GetDeviceTokenResponse.fromJson(json.decode(res.body));
+        return getDeviceTokenResponse;
       }
     } catch (e) {
       log(e.toString());
+    }
+  }
+  Future<String?> validateVendor(accessToken,bodys) async {
+    try {
+      var url = Uri.parse("${_apiBaseUrl}validateVendor");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization':'Bearer $accessToken'
+          },
+          body: jsonEncode(bodys));
+      print('validateVendor = ${res.body}');
+      if (res.statusCode == 200) {
+        ValidateVendorResponse validateVendorResponse =
+        ValidateVendorResponse.fromJson(json.decode(res.body));
+        if (validateVendorResponse.responseCode == 1)
+          return validateVendorResponse.responseData?.vendorName;
+        else validateVendorResponse.responseMessage;
+      }
+    } catch (e) {
+      log("validateVendorvalidateVendor ="+e.toString());
+      return "Invalid QRCode";
     }
   }
 }

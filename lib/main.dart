@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:snaphybrid/api/response/activate_application_response.dart';
+import 'package:snaphybrid/api/response/getdevice_token_response.dart';
 import 'package:snaphybrid/common/sharepref.dart';
 import 'package:snaphybrid/home_screen.dart';
 
@@ -121,11 +123,7 @@ class _MyHome extends State<MyLanch> {
                           ),
                           onPressed: () {
                             print("BBBBBBBBBBBBBBBBBBBB");
-                          //  activiAPI();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeScreen()));
+                            activiAPI();
                           },
                           child: Text("Try Activation Again"),
                         ),
@@ -167,7 +165,8 @@ class _MyHome extends State<MyLanch> {
             'If you have already added the device on the '
             'portal SL NO: ${iosInfo.identifierForVendor}';
       });
-      pref.setString(Sharepref.serialNo, iosInfo.identifierForVendor.toString());
+      pref.setString(
+          Sharepref.serialNo, iosInfo.identifierForVendor.toString());
       diveInfo['osVersion'] = '${iosInfo.systemVersion}';
       diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
       diveInfo['deviceModel'] = '${iosInfo.model}';
@@ -215,6 +214,25 @@ class _MyHome extends State<MyLanch> {
     headers['device_sn'] = sn;
     // headers['Content-type'] = "application/json";
     headers['Authorization'] = '';
-    ApiService().getUsers(headers, diveInfo,sn);
+    ActivateApplicationResponse activateApplicationResponse = await ApiService()
+        .getUsers(headers, diveInfo, sn) as ActivateApplicationResponse;
+    print("activateApplicationResponse == $activateApplicationResponse");
+
+    if (activateApplicationResponse.responseCode == 1) {
+      print("activateApplicationResponse.responseCode ==1");
+
+      Map<String, dynamic> tokenBody = new HashMap();
+      tokenBody['email'] = "";
+      tokenBody['password'] = "";
+      tokenBody['deviceSN'] = sn;
+      GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
+          .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
+      if (getDeviceTokenResponse.responseCode == 1) {
+        pref.setString(Sharepref.accessToken,
+            getDeviceTokenResponse.responseData.access_token);
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      }
+    }
   }
 }
