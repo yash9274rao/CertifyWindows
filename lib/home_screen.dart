@@ -1,11 +1,16 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:intl/intl.dart';
-
-import 'QRViewExmple.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:snaphybrid/api/api_service.dart';
+import 'package:snaphybrid/api/response/activate_application_response.dart';
+import 'package:snaphybrid/common/util.dart';
+import 'common/sharepref.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -73,8 +78,7 @@ class _MyHome extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(80, 50, 80,
-                                        5),
+                                    padding: EdgeInsets.fromLTRB(80, 50, 80, 5),
                                     child: Text(
                                       '${timeTextHolderModalController}',
                                       style: TextStyle(
@@ -84,8 +88,7 @@ class _MyHome extends State<HomeScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(80, 0, 80,
-                                        50),
+                                    padding: EdgeInsets.fromLTRB(80, 0, 80, 50),
                                     child: Text(
                                       '${dateTextHolderModalController}',
                                       style: TextStyle(
@@ -111,9 +114,8 @@ class _MyHome extends State<HomeScreen> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
-
                         child: TextButton(
-                            style: TextButton.styleFrom(
+                          style: TextButton.styleFrom(
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.all(16.0),
                             textStyle: const TextStyle(fontSize: 24),
@@ -159,7 +161,7 @@ class _MyHome extends State<HomeScreen> {
   }
 
   Future<void> timeDateSet() async {
-    dataTime =  Timer.periodic(const Duration(seconds: 1), (dataTime) {
+    dataTime = Timer.periodic(const Duration(seconds: 1), (dataTime) {
       String time = DateFormat('HH:mm a').format(DateTime.now());
       String date = DateFormat('EEEEE, dd MMM yyyy').format(DateTime.now());
 
@@ -168,7 +170,51 @@ class _MyHome extends State<HomeScreen> {
         dateTextHolderModalController = date;
       });
     });
-
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(Sharepref.APP_LAUNCH_TIME,
+        DateTime.now().millisecondsSinceEpoch.toString());
+    WidgetsFlutterBinding.ensureInitialized();
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
+      diveInfo['uniqueDeviceId'] = '${androidInfo.id}';
+      diveInfo['deviceModel'] = '${androidInfo.model}';
+      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      diveInfo['osVersion'] = '${iosInfo.systemVersion}';
+      diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
+      diveInfo['deviceModel'] = '${iosInfo.model}';
+      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+      //   print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
+    } else if (defaultTargetPlatform == TargetPlatform.windows) {
+      WebBrowserInfo webBrowserDeviceInfo = await deviceInfo.webBrowserInfo;
+      // textHolderModal = 'If you have already added the device on the '
+      //     'portal SL NO:${webBrowserInfo.userAgent}';
+      diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
+      diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
+      diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
+      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+    } else if (defaultTargetPlatform == TargetPlatform.macOS) {
+      MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+    }
+    diveInfo['appVersion'] = "v3.4.232";
+    diveInfo['mobileNumber'] = "+1";
+    diveInfo['IMEINumber'] = "";
+    diveInfo['batteryStatus'] = "100";
+    diveInfo['networkStatus'] = "true";
+    diveInfo['appState'] = "Foreground";
+    Map<String, dynamic> healthCheckRequest = new HashMap();
+    healthCheckRequest['lastUpdateDateTime'] = DateFormat("yyyy-MM-dd HH:mm:ss").format( DateTime.now().toUtc()).toString();
+    healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+    healthCheckRequest['deviceInfo'] = '${diveInfo}';
+    healthCheckRequest['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    healthCheckRequest['appState'] = 'Foreground';
+    healthCheckRequest['appUpTime'] = '00:22:00';
+    healthCheckRequest['deviceUpTime'] = '01:20:10';
+     ApiService().deviceHealthCheck(pref
+        .getString(Sharepref.accessToken), healthCheckRequest, pref.getString(Sharepref.serialNo)) ;
   }
   @override
   void dispose() {

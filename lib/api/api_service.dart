@@ -11,7 +11,7 @@ import 'response/validate_vendor_response.dart';
 class ApiService {
   static const String _apiBaseUrl = "https://apiqa.certify.me/";
 
-  Future<ActivateApplicationResponse?> getUsers(headers, bodys, sn) async {
+  Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
     try {
       var url = Uri.parse('${_apiBaseUrl}ActivateApplication');
       var res = await http.post(url,
@@ -85,4 +85,35 @@ class ApiService {
       return "Invalid QRCode";
     }
   }
+  Future<String?> deviceHealthCheck(accessToken,bodys,deviceSn) async {
+    try {
+      var url = Uri.parse("${_apiBaseUrl}DeviceHealthCheck");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization':'Bearer ${accessToken}',
+            'DeviceSN':'${deviceSn}'
+          },
+          body: jsonEncode(bodys));
+      print('deviceHealthCheck request = ${res.request}');
+
+      print('deviceHealthCheck ${res.statusCode}');
+
+      print('deviceHealthCheck = ${res.body}');
+      // if (res.statusCode == 200) {
+      //   ActivateApplicationResponse validateVendorResponse =
+      //   ActivateApplicationResponse.fromJson(json.decode(res.body));
+      //   if (validateVendorResponse.responseCode == 1)
+      //     return validateVendorResponse.responseMessage;
+      //   else validateVendorResponse.responseMessage;
+      // }
+      return "";
+    } catch (e) {
+      log("validateVendorvalidateVendor ="+e.toString());
+      return "Invalid QRCode";
+    }
+  }
+
 }

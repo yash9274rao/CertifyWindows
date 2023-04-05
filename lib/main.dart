@@ -141,6 +141,8 @@ class _MyHome extends State<MyLanch> {
 
   Future<void> initPlatformState() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(Sharepref.APP_LAUNCH_TIME, DateTime.now()
+        .millisecondsSinceEpoch.toString());
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -210,12 +212,9 @@ class _MyHome extends State<MyLanch> {
     Map<String, String> createDoc = new HashMap();
     createDoc['pushAuthToken'] = "";
     createDoc['deviceInfo'] = '${diveInfo}';
-    Map<String, String> headers = new HashMap();
-    headers['device_sn'] = sn;
-    // headers['Content-type'] = "application/json";
-    headers['Authorization'] = '';
+
     ActivateApplicationResponse activateApplicationResponse = await ApiService()
-        .getUsers(headers, diveInfo, sn) as ActivateApplicationResponse;
+        .activateApplication(diveInfo, sn) as ActivateApplicationResponse;
     print("activateApplicationResponse == $activateApplicationResponse");
 
     if (activateApplicationResponse.responseCode == 1) {
@@ -230,6 +229,8 @@ class _MyHome extends State<MyLanch> {
       if (getDeviceTokenResponse.responseCode == 1) {
         pref.setString(Sharepref.accessToken,
             getDeviceTokenResponse.responseData.access_token);
+        pref.setString(Sharepref.institutionID,
+            getDeviceTokenResponse.responseData.institutionID);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       }
