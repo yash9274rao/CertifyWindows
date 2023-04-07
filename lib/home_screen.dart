@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:collection';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +7,6 @@ import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:intl/intl.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:snaphybrid/api/api_service.dart';
-import 'package:snaphybrid/api/response/activate_application_response.dart';
-import 'package:snaphybrid/common/util.dart';
 import 'common/sharepref.dart';
 
 class HomeScreen extends StatefulWidget {

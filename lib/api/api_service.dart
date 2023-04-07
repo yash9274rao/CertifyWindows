@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
+import 'package:snaphybrid/api/response/qr_data.dart';
 
 import 'response/validate_vendor_response.dart';
 
@@ -25,7 +26,7 @@ class ApiService {
       print(res.body);
       if (res.statusCode == 200) {
         ActivateApplicationResponse activateApplicationResponse =
-        ActivateApplicationResponse.fromJson(jsonDecode(res.body));
+            ActivateApplicationResponse.fromJson(jsonDecode(res.body));
         Fluttertoast.showToast(
             msg: activateApplicationResponse.responseMessage,
             toastLength: Toast.LENGTH_SHORT,
@@ -46,10 +47,7 @@ class ApiService {
     try {
       var url = Uri.parse("${_apiBaseUrl}GetDeviceToken");
       var res = await http.post(url,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            'Accept': '*/*'
-          },
+          headers: {"Access-Control-Allow-Origin": "*", 'Accept': '*/*'},
           body: jsonEncode(bodys));
       print('GenerateToken =${res.body}');
       if (res.statusCode == 200) {
@@ -61,7 +59,8 @@ class ApiService {
       log(e.toString());
     }
   }
-  Future<String?> validateVendor(accessToken,bodys) async {
+
+  Future<String?> validateVendor(accessToken, bodys) async {
     try {
       var url = Uri.parse("${_apiBaseUrl}validateVendor");
       var res = await http.post(url,
@@ -69,23 +68,30 @@ class ApiService {
             "Access-Control-Allow-Origin": "*",
             'Content-Type': 'application/json',
             'Accept': '*/*',
-            'Authorization':'Bearer $accessToken'
+            'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
       print('validateVendor = ${res.body}');
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
-        ValidateVendorResponse.fromJson(json.decode(res.body));
-        if (validateVendorResponse.responseCode == 1)
+            ValidateVendorResponse.fromJson(json.decode(res.body));
+        if (validateVendorResponse.responseCode == 1) {
+          QrData.name = validateVendorResponse.responseData?.vendorName ?? "";
+          QrData.isValid = true;
           return validateVendorResponse.responseData?.vendorName;
-        else validateVendorResponse.responseMessage;
+        } else {
+          QrData.isValid = false;
+          QrData.name = "Anonymous";
+          validateVendorResponse.responseMessage;
+        }
       }
     } catch (e) {
-      log("validateVendorvalidateVendor ="+e.toString());
+      log("validateVendorvalidateVendor =" + e.toString());
       return "Invalid QRCode";
     }
   }
-  Future<String?> deviceHealthCheck(accessToken,bodys,deviceSn) async {
+
+  Future<String?> deviceHealthCheck(accessToken, bodys, deviceSn) async {
     try {
       var url = Uri.parse("${_apiBaseUrl}DeviceHealthCheck");
       var res = await http.post(url,
@@ -93,8 +99,8 @@ class ApiService {
             "Access-Control-Allow-Origin": "*",
             'Content-Type': 'application/json',
             'Accept': '*/*',
-            'Authorization':'Bearer ${accessToken}',
-            'DeviceSN':'${deviceSn}'
+            'Authorization': 'Bearer ${accessToken}',
+            'DeviceSN': '${deviceSn}'
           },
           body: jsonEncode(bodys));
       print('deviceHealthCheck request = ${res.request}');
@@ -111,9 +117,38 @@ class ApiService {
       // }
       return "";
     } catch (e) {
-      log("validateVendorvalidateVendor ="+e.toString());
+      log("validateVendorvalidateVendor =" + e.toString());
       return "Invalid QRCode";
     }
   }
 
+  Future<String?> AccessLogs(accessToken, bodys) async {
+    try {
+      var url = Uri.parse("${_apiBaseUrl}AccessLogs");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'Bearer ${accessToken}'
+          },
+          body: jsonEncode(bodys));
+      print('deviceHealthCheck request = ${res.request}');
+
+      print('deviceHealthCheck ${res.statusCode}');
+
+      print('deviceHealthCheck = ${res.body}');
+      // if (res.statusCode == 200) {
+      //   ActivateApplicationResponse validateVendorResponse =
+      //   ActivateApplicationResponse.fromJson(json.decode(res.body));
+      //   if (validateVendorResponse.responseCode == 1)
+      //     return validateVendorResponse.responseMessage;
+      //   else validateVendorResponse.responseMessage;
+      // }
+      return "";
+    } catch (e) {
+      log("validateVendorvalidateVendor =" + e.toString());
+      return "Invalid QRCode";
+    }
+  }
 }

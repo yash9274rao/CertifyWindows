@@ -41,6 +41,7 @@ dependencies:
   http: ^0.13.5
   shared_preferences: ^2.0.20
   fluttertoast: ^8.2.1
+  dart_ipify: ^1.1.1
 
 dev_dependencies:
   flutter_test:
