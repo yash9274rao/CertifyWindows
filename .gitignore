@@ -41,3 +41,16 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/build/07bee5d3cf79e6e84c90b76402ede2be/
+/build/55dc9146123702bac63a7112a80f1ba9/
+/build/app/
+/build/device_info_plus/
+/build/flutter_assets/
+/build/fluttertoast/
+/build/permission_handler_android/
+/build/qr_code_scanner/
+/build/shared_preferences_android/
+/build/webview_flutter_android/
+/build/windows/
+/build/4f2a58af27abc49ecf55570043bbf938.cache.dill.track.dill
+/build/last_build_run.json
