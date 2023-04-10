@@ -38,6 +38,7 @@ class ConfirmLanch extends StatefulWidget {
 
 class _Confirm extends State<ConfirmLanch> {
   var textHolderModalController = "Validating QR ...";
+  QrData qrData = new QrData();
 
   @override
   void initState() {
@@ -64,7 +65,7 @@ class _Confirm extends State<ConfirmLanch> {
       Map<String, dynamic> validateVendor = new HashMap();
       validateVendor['vendorGuid'] = widget.dataStr;
       validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
-      QrData.qrCodeId = widget.dataStr;
+      qrData.setName(widget.dataStr);
       String validateVendorResponse = await ApiService().validateVendor(
           pref.get(Sharepref.accessToken), validateVendor) as String;
       updateUI(validateVendorResponse);
@@ -127,14 +128,14 @@ class _Confirm extends State<ConfirmLanch> {
     Map<String, dynamic> healthCheckRequest = new HashMap();
     healthCheckRequest['id'] = "0";
     healthCheckRequest['accessId'] = '';
-    healthCheckRequest['firstName'] = QrData.name;
+    healthCheckRequest['firstName'] = '${qrData.getName()}';
     healthCheckRequest['lastName'] = '';
     healthCheckRequest['memberId'] = '';
     healthCheckRequest['memberTypeId'] = '';
     healthCheckRequest['memberTypeName'] = '';
     healthCheckRequest['networkId'] = ""; // it removed in portal
     healthCheckRequest['temperature'] = '';
-    healthCheckRequest['qrCodeId'] = QrData.qrCodeId;
+    healthCheckRequest['qrCodeId'] = '${qrData.qrCodeId}';
     healthCheckRequest['deviceId'] = '${pref.getString(Sharepref.serialNo)}';
     healthCheckRequest['deviceName'] = 'AndroidTab2';
     healthCheckRequest['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
@@ -143,7 +144,7 @@ class _Confirm extends State<ConfirmLanch> {
     healthCheckRequest['facilityName'] = "";
     healthCheckRequest['locationName'] = '';
     healthCheckRequest['deviceTime'] = DateFormat("MM/dd/yyyy HH:mm:ss").format( DateTime.now().toUtc()).toString();
-    healthCheckRequest['timezone'] = DateTime.now().timeZoneOffset;
+    healthCheckRequest['timezone'] = '5:30';
     healthCheckRequest['sourceIP'] = ipv4;
     healthCheckRequest['deviceData'] = diveInfo;
     healthCheckRequest['guid'] = '';
@@ -156,7 +157,7 @@ class _Confirm extends State<ConfirmLanch> {
     healthCheckRequest['attendanceMode'] = 0;
     healthCheckRequest['allowAccess'] = true;
 
-    ApiService().deviceHealthCheck(pref
-        .getString(Sharepref.accessToken), healthCheckRequest, pref.getString(Sharepref.serialNo)) ;
+    ApiService().accessLogs(pref
+        .getString(Sharepref.accessToken), healthCheckRequest) ;
   }
 }

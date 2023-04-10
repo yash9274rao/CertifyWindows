@@ -1,6 +1,13 @@
 class QrData {
- static String qrCodeId = "";
- static String name = "";
- static bool isValid = false;
+  late String qrCodeId ;
+  late String name ;
+  late bool isValid ;
+
+  setName(String name){
+   this.name = name;
+  }
+ String getName(){
+   return name;
+ }
 
 }

@@ -72,16 +72,17 @@ class ApiService {
           },
           body: jsonEncode(bodys));
       print('validateVendor = ${res.body}');
+      QrData qrData = new QrData();
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
             ValidateVendorResponse.fromJson(json.decode(res.body));
         if (validateVendorResponse.responseCode == 1) {
-          QrData.name = validateVendorResponse.responseData?.vendorName ?? "";
-          QrData.isValid = true;
+          qrData.setName(validateVendorResponse.responseData?.vendorName ?? "");
+         // QrData.set = true;
           return validateVendorResponse.responseData?.vendorName;
         } else {
-          QrData.isValid = false;
-          QrData.name = "Anonymous";
+         // QrData.isValid = false;
+          qrData.setName(validateVendorResponse.responseData?.vendorName ?? "Anonymous");
           validateVendorResponse.responseMessage;
         }
       }
@@ -122,8 +123,10 @@ class ApiService {
     }
   }
 
-  Future<String?> AccessLogs(accessToken, bodys) async {
+  Future<String?> accessLogs(accessToken, bodys) async {
     try {
+      print('AccessLogs ${bodys}');
+
       var url = Uri.parse("${_apiBaseUrl}AccessLogs");
       var res = await http.post(url,
           headers: {
@@ -133,11 +136,11 @@ class ApiService {
             'Authorization': 'Bearer ${accessToken}'
           },
           body: jsonEncode(bodys));
-      print('deviceHealthCheck request = ${res.request}');
+      print('AccessLogs request = ${res.request}');
 
-      print('deviceHealthCheck ${res.statusCode}');
+      print('AccessLogs ${res.statusCode}');
 
-      print('deviceHealthCheck = ${res.body}');
+      print('AccessLogs = ${res.body}');
       // if (res.statusCode == 200) {
       //   ActivateApplicationResponse validateVendorResponse =
       //   ActivateApplicationResponse.fromJson(json.decode(res.body));
@@ -147,7 +150,7 @@ class ApiService {
       // }
       return "";
     } catch (e) {
-      log("validateVendorvalidateVendor =" + e.toString());
+      log("AccessLogs =" + e.toString());
       return "Invalid QRCode";
     }
   }
