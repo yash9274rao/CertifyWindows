@@ -146,7 +146,7 @@ class _Confirm extends State<ConfirmLanch> {
     healthCheckRequest['deviceTime'] = DateFormat("MM/dd/yyyy HH:mm:ss")
         .format(DateTime.now().toUtc())
         .toString();
-    healthCheckRequest['timezone'] = '05:30';
+    //healthCheckRequest['timezone'] = '05:30';
     healthCheckRequest['sourceIP'] = ipv4;
     healthCheckRequest['deviceData'] = diveInfo;
     healthCheckRequest['guid'] = '';
