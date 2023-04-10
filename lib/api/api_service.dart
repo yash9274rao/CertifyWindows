@@ -77,12 +77,12 @@ class ApiService {
         ValidateVendorResponse validateVendorResponse =
             ValidateVendorResponse.fromJson(json.decode(res.body));
         if (validateVendorResponse.responseCode == 1) {
-          qrData.setName(validateVendorResponse.responseData?.vendorName ?? "");
-         // QrData.set = true;
+          qrData.name = (validateVendorResponse.responseData?.vendorName ?? "");
+          qrData.isValid = true;
           return validateVendorResponse.responseData?.vendorName;
         } else {
-         // QrData.isValid = false;
-          qrData.setName(validateVendorResponse.responseData?.vendorName ?? "Anonymous");
+          qrData.isValid = false;
+          qrData.name = (validateVendorResponse.responseData?.vendorName ?? "Anonymous");
           validateVendorResponse.responseMessage;
         }
       }

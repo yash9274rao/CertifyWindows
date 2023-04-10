@@ -60,16 +60,17 @@ class _Confirm extends State<ConfirmLanch> {
   }
 
   Future<void> initPlatformState() async {
+    qrData.setQrCodeID = widget.dataStr;
     if (widget.dataStr.contains("vn_")) {
       var pref = await SharedPreferences.getInstance();
       Map<String, dynamic> validateVendor = new HashMap();
       validateVendor['vendorGuid'] = widget.dataStr;
       validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
-      qrData.setName(widget.dataStr);
       String validateVendorResponse = await ApiService().validateVendor(
           pref.get(Sharepref.accessToken), validateVendor) as String;
       updateUI(validateVendorResponse);
     } else {
+      qrData.setName = "Invalid QRCode";
       updateUI("Invalid QRCode");
       timeDateSet(false);
     }
@@ -87,6 +88,7 @@ class _Confirm extends State<ConfirmLanch> {
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     });
   }
+
   Future<void> timeDateSet(bool isValid) async {
     Map<String, dynamic> diveInfo = new HashMap();
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -96,8 +98,8 @@ class _Confirm extends State<ConfirmLanch> {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
-      diveInfo['uniqueDeviceId'] = '${androidInfo.id}';
+      diveInfo['osVersion'] = '${androidInfo.version.release}';
+      diveInfo['uniqueDeviceId'] = '${pref.getString(Sharepref.serialNo)}';
       diveInfo['deviceModel'] = '${androidInfo.model}';
       diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -128,36 +130,38 @@ class _Confirm extends State<ConfirmLanch> {
     Map<String, dynamic> healthCheckRequest = new HashMap();
     healthCheckRequest['id'] = "0";
     healthCheckRequest['accessId'] = '';
-    healthCheckRequest['firstName'] = '${qrData.getName()}';
+    healthCheckRequest['firstName'] = '${qrData.getName}';
     healthCheckRequest['lastName'] = '';
     healthCheckRequest['memberId'] = '';
-    healthCheckRequest['memberTypeId'] = '';
-    healthCheckRequest['memberTypeName'] = '';
-    healthCheckRequest['networkId'] = ""; // it removed in portal
-    healthCheckRequest['temperature'] = '';
+    healthCheckRequest['temperature'] = 0;
     healthCheckRequest['qrCodeId'] = '${qrData.qrCodeId}';
     healthCheckRequest['deviceId'] = '${pref.getString(Sharepref.serialNo)}';
     healthCheckRequest['deviceName'] = 'AndroidTab2';
-    healthCheckRequest['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    healthCheckRequest['institutionId'] =
+        '${pref.getString(Sharepref.institutionID)}';
     healthCheckRequest['facilityId'] = 0;
     healthCheckRequest['locationId'] = 0;
     healthCheckRequest['facilityName'] = "";
     healthCheckRequest['locationName'] = '';
-    healthCheckRequest['deviceTime'] = DateFormat("MM/dd/yyyy HH:mm:ss").format( DateTime.now().toUtc()).toString();
-    healthCheckRequest['timezone'] = '5:30';
+    healthCheckRequest['deviceTime'] = DateFormat("MM/dd/yyyy HH:mm:ss")
+        .format(DateTime.now().toUtc())
+        .toString();
+    healthCheckRequest['timezone'] = '05:30';
     healthCheckRequest['sourceIP'] = ipv4;
     healthCheckRequest['deviceData'] = diveInfo;
     healthCheckRequest['guid'] = '';
     healthCheckRequest['faceParameters'] = "";
     healthCheckRequest['eventType'] = '';
     healthCheckRequest['evenStatus'] = '';
-    healthCheckRequest['utcRecordDate'] = DateFormat("yyyy-MM-dd HH:mm:ss").format( DateTime.now().toUtc()).toString();
+    healthCheckRequest['utcRecordDate'] = DateFormat("yyyy-MM-dd HH:mm:ss")
+        .format(DateTime.now().toUtc())
+        .toString();
     healthCheckRequest['loggingMode'] = '3';
     healthCheckRequest['accessOption'] = 1;
     healthCheckRequest['attendanceMode'] = 0;
     healthCheckRequest['allowAccess'] = true;
 
-    ApiService().accessLogs(pref
-        .getString(Sharepref.accessToken), healthCheckRequest) ;
+    ApiService()
+        .accessLogs(pref.getString(Sharepref.accessToken), healthCheckRequest);
   }
 }
