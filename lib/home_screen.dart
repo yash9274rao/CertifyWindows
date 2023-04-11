@@ -37,64 +37,98 @@ class _MyHome extends State<HomeScreen> {
                 new Expanded(
                   flex: 1,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(25, 25, 0, 25),
+                    padding: EdgeInsets.fromLTRB(25, 0, 0, 25),
                     child: Container(
                       color: Colors.grey.shade200,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                            child: new Image(
-                              image: AssetImage('images/assets/final_logo.png'),
+                        children: [
+                          new Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                              child: new Image(
+                                image:
+                                    AssetImage('images/assets/final_logo.png'),
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(25, 20, 10, 15),
-                            child: Text(
-                              'Wellcome To RR',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 22),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                            child: Text(
-                              'You are in Home Screen',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.normal, fontSize: 18),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(25, 25, 25, 25),
-                            child: Container(
-                              color: Colors.blueGrey.shade900,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+                          new Expanded(
+                            flex: 1,
+                            child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
+                                children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(80, 50, 80, 5),
+                                    padding:
+                                        EdgeInsets.fromLTRB(50, 20, 10, 15),
                                     child: Text(
-                                      '${timeTextHolderModalController}',
+                                      'Wellcome To RR',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 22,
-                                          color: Colors.white),
+                                          fontSize: 22),
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(80, 0, 80, 50),
+                                    padding: EdgeInsets.fromLTRB(50, 0, 10, 15),
                                     child: Text(
-                                      '${dateTextHolderModalController}',
+                                      'You are in Home Screen',
                                       style: TextStyle(
                                           fontWeight: FontWeight.normal,
-                                          fontSize: 18,
-                                          color: Colors.white),
+                                          fontSize: 18),
                                     ),
                                   ),
-                                ],
+                                ]),
+                          ),
+                          new Expanded(
+                            flex: 1,
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(50, 0, 25, 25),
+                              child: Container(
+                                color: Colors.blueGrey.shade900,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                     new Image(
+                                      image:
+                                      AssetImage('images/assets/quote.png'),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(80, 20, 180, 5),
+                                      child: TextButton.icon(
+                                        // <-- TextButton
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          color: Colors.white,
+                                          Icons.access_time,
+                                          size: 24.0,
+                                        ),
+                                        label: Text(
+                                          '${timeTextHolderModalController}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 24,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.fromLTRB(80, 0, 180, 50),
+                                      child: Text(
+                                        '${dateTextHolderModalController}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 18,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -124,7 +158,9 @@ class _MyHome extends State<HomeScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => QRViewExample()));
                           },
-                          child: Text(" Check-In "),
+                          child: Text(
+                            "       Check-In       ",
+                          ),
                         ),
                       ),
                       Padding(
@@ -143,7 +179,7 @@ class _MyHome extends State<HomeScreen> {
                                 MaterialPageRoute(
                                     builder: (context) => QRViewExample()));
                           },
-                          child: Text("Check-Out"),
+                          child: Text("      Check-Out      "),
                         ),
                       ),
                     ],
@@ -193,9 +229,10 @@ class _MyHome extends State<HomeScreen> {
       diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
       diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
       diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    } else if (defaultTargetPlatform == TargetPlatform.macOS) {
-      MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
     }
+    // else if (defaultTargetPlatform == TargetPlatform.macOS) {
+    //   MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
+    // }
     diveInfo['appVersion'] = "v1.0";
     diveInfo['mobileNumber'] = "+1";
     diveInfo['IMEINumber'] = "";
@@ -203,19 +240,23 @@ class _MyHome extends State<HomeScreen> {
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
     Map<String, dynamic> healthCheckRequest = new HashMap();
-    healthCheckRequest['lastUpdateDateTime'] = DateFormat("yyyy-MM-dd HH:mm:ss").format( DateTime.now().toUtc()).toString();
+    healthCheckRequest['lastUpdateDateTime'] = DateFormat("yyyy-MM-dd HH:mm:ss")
+        .format(DateTime.now().toUtc())
+        .toString();
     healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    healthCheckRequest['deviceInfo'] = '${diveInfo}';//
-    healthCheckRequest['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    healthCheckRequest['deviceInfo'] = '${diveInfo}'; //
+    healthCheckRequest['institutionId'] =
+        '${pref.getString(Sharepref.institutionID)}';
     //healthCheckRequest['appState'] = 'Foreground';
     //healthCheckRequest['appUpTime'] = '00:22:00';
-   // healthCheckRequest['deviceUpTime'] = '01:20:10';
-     ApiService().deviceHealthCheck(pref
-        .getString(Sharepref.accessToken), healthCheckRequest, pref.getString(Sharepref.serialNo)) ;
+    // healthCheckRequest['deviceUpTime'] = '01:20:10';
+    ApiService().deviceHealthCheck(pref.getString(Sharepref.accessToken),
+        healthCheckRequest, pref.getString(Sharepref.serialNo));
   }
+
   @override
   void dispose() {
     super.dispose();
-    dataTime?.cancel();
+    dataTime.cancel();
   }
 }
