@@ -5,7 +5,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
-import 'package:snaphybrid/api/response/qr_data.dart';
+import 'package:snaphybrid/api/response/validate_qrcode_response.dart';
+import 'package:snaphybrid/common/qr_data.dart';
 
 import 'response/validate_vendor_response.dart';
 
@@ -60,7 +61,10 @@ class ApiService {
     }
   }
 
-  Future<String?> validateVendor(accessToken, bodys) async {
+  Future<QrData?> validateVendor(accessToken, bodys) async {
+    QrData qrData = new QrData();
+    qrData.isValid = false;
+    qrData.firstName = "Anonymous";
     try {
       var url = Uri.parse("${_apiBaseUrl}validateVendor");
       var res = await http.post(url,
@@ -77,23 +81,25 @@ class ApiService {
         ValidateVendorResponse validateVendorResponse =
             ValidateVendorResponse.fromJson(json.decode(res.body));
         if (validateVendorResponse.responseCode == 1) {
-          qrData.name = (validateVendorResponse.responseData?.vendorName ?? "");
+          qrData.setFirstName = (validateVendorResponse.responseData?.vendorName ?? "");
           qrData.isValid = true;
-          return validateVendorResponse.responseData?.vendorName;
+          return qrData;
         } else {
           qrData.isValid = false;
-          qrData.name = (validateVendorResponse.responseData?.vendorName ?? "Anonymous");
-          validateVendorResponse.responseMessage;
+          qrData.setFirstName = "Anonymous";
+          return qrData;
         }
       }
     } catch (e) {
       log("validateVendorvalidateVendor =" + e.toString());
-      return "Invalid QRCode";
+      return qrData;
     }
   }
 
   Future<String?> deviceHealthCheck(accessToken, bodys, deviceSn) async {
     try {
+      print('deviceHealthCheck ${jsonEncode(bodys)}');
+
       var url = Uri.parse("${_apiBaseUrl}DeviceHealthCheck");
       var res = await http.post(url,
           headers: {
@@ -152,6 +158,55 @@ class ApiService {
     } catch (e) {
       log("AccessLogs =" + e.toString());
       return "Invalid QRCode";
+    }
+  }
+
+  Future<QrData?> validateQRCode(accessToken, bodys) async {
+    QrData qrData = new QrData();
+    qrData.isValid = false;
+    qrData.firstName = "Anonymous";
+
+    try {
+      var url = Uri.parse("${_apiBaseUrl}ValidateQRCode");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'Bearer $accessToken'
+          },
+          body: jsonEncode(bodys));
+      print('validateQRCode = ${res.body}');
+      QrData qrData = new QrData();
+      if (res.statusCode == 200) {
+        ValidateQrCodeResponse validateVendorResponse =
+            ValidateQrCodeResponse.fromJson(json.decode(res.body));
+        if (validateVendorResponse.responseCode == 1) {
+          qrData.firstName =
+              validateVendorResponse.responseData?.firstName ?? "";
+          qrData.lastName = validateVendorResponse.responseData?.lastName ?? "";
+          qrData.id = validateVendorResponse.responseData?.id ?? "";
+          qrData.memberId = validateVendorResponse.responseData?.memberId ?? "";
+          qrData.accessId = validateVendorResponse.responseData?.accessId ?? "";
+          qrData.trqStatus =
+              validateVendorResponse.responseData?.trqStatus ?? 0;
+          qrData.memberTypeId =
+              validateVendorResponse.responseData?.memberTypeId ?? 0;
+          qrData.isValid = true;
+          qrData.memberTypeName =
+              validateVendorResponse.responseData?.memberTypeName ?? "";
+          qrData.faceTemplate =
+              validateVendorResponse.responseData?.faceTemplate ?? "";
+          qrData.isVisitor =
+              validateVendorResponse.responseData?.isVisitor ?? 0;
+          return qrData;
+        } else {
+          return qrData;
+        }
+      }
+    } catch (e) {
+      log("validateVendorvalidateVendor =" + e.toString());
+      return qrData;
     }
   }
 }

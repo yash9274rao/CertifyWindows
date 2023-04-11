@@ -174,8 +174,8 @@ class _MyHome extends State<HomeScreen> {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
-      diveInfo['uniqueDeviceId'] = '${androidInfo.id}';
+      diveInfo['osVersion'] = 'Android-12';
+      diveInfo['uniqueDeviceId'] = '${pref.getString(Sharepref.serialNo)}';
       diveInfo['deviceModel'] = '${androidInfo.model}';
       diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
@@ -196,7 +196,7 @@ class _MyHome extends State<HomeScreen> {
     } else if (defaultTargetPlatform == TargetPlatform.macOS) {
       MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
     }
-    diveInfo['appVersion'] = "v3.4.232";
+    diveInfo['appVersion'] = "v1.0";
     diveInfo['mobileNumber'] = "+1";
     diveInfo['IMEINumber'] = "";
     diveInfo['batteryStatus'] = "100";
@@ -205,11 +205,11 @@ class _MyHome extends State<HomeScreen> {
     Map<String, dynamic> healthCheckRequest = new HashMap();
     healthCheckRequest['lastUpdateDateTime'] = DateFormat("yyyy-MM-dd HH:mm:ss").format( DateTime.now().toUtc()).toString();
     healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    healthCheckRequest['deviceInfo'] = '${diveInfo}';
+    healthCheckRequest['deviceInfo'] = '${diveInfo}';//
     healthCheckRequest['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
-    healthCheckRequest['appState'] = 'Foreground';
-    healthCheckRequest['appUpTime'] = '00:22:00';
-    healthCheckRequest['deviceUpTime'] = '01:20:10';
+    //healthCheckRequest['appState'] = 'Foreground';
+    //healthCheckRequest['appUpTime'] = '00:22:00';
+   // healthCheckRequest['deviceUpTime'] = '01:20:10';
      ApiService().deviceHealthCheck(pref
         .getString(Sharepref.accessToken), healthCheckRequest, pref.getString(Sharepref.serialNo)) ;
   }
