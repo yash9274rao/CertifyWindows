@@ -209,4 +209,37 @@ class ApiService {
       return qrData;
     }
   }
+  Future<String?> deviceSetting(accessToken, bodys) async {
+    try {
+      print('deviceSetting ${bodys}');
+
+      var url = Uri.parse("${_apiBaseUrl}GetDeviceConfiguration");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'bearer ${accessToken}'
+          },
+          body: jsonEncode(bodys));
+      print('deviceSetting request = ${res.request}');
+      print('deviceSetting body request = ${res.body}');
+
+
+      print('deviceSetting ${res.statusCode}');
+
+      print('deviceSetting = ${res.body}');
+      // if (res.statusCode == 200) {
+      //   ActivateApplicationResponse validateVendorResponse =
+      //   ActivateApplicationResponse.fromJson(json.decode(res.body));
+      //   if (validateVendorResponse.responseCode == 1)
+      //     return validateVendorResponse.responseMessage;
+      //   else validateVendorResponse.responseMessage;
+      // }
+      return "";
+    } catch (e) {
+      log("deviceSetting =" + e.toString());
+      return "Invalid QRCode";
+    }
+  }
 }

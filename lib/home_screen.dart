@@ -252,6 +252,16 @@ class _MyHome extends State<HomeScreen> {
     // healthCheckRequest['deviceUpTime'] = '01:20:10';
     ApiService().deviceHealthCheck(pref.getString(Sharepref.accessToken),
         healthCheckRequest, pref.getString(Sharepref.serialNo));
+    deviceSetting();
+  }
+
+  Future<void> deviceSetting() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    Map<String, dynamic> deviceSetting = new HashMap();
+    deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+    deviceSetting['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    ApiService().deviceSetting(pref.getString(Sharepref.accessToken), deviceSetting);
   }
 
   @override
