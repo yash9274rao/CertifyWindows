@@ -223,7 +223,6 @@ class ApiService {
           },
           body: jsonEncode(bodys));
       print('deviceSetting request = ${res.request}');
-      print('deviceSetting body request = ${res.body}');
 
 
       print('deviceSetting ${res.statusCode}');
