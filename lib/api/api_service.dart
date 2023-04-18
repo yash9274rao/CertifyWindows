@@ -1,5 +1,7 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +9,8 @@ import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
 import 'package:snaphybrid/api/response/validate_qrcode_response.dart';
 import 'package:snaphybrid/common/qr_data.dart';
-
+import '../common/sharepref.dart';
+import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
 
 class ApiService {
@@ -81,7 +84,8 @@ class ApiService {
         ValidateVendorResponse validateVendorResponse =
             ValidateVendorResponse.fromJson(json.decode(res.body));
         if (validateVendorResponse.responseCode == 1) {
-          qrData.setFirstName = (validateVendorResponse.responseData?.vendorName ?? "");
+          qrData.setFirstName =
+              (validateVendorResponse.responseData?.vendorName ?? "");
           qrData.isValid = true;
           return qrData;
         } else {
@@ -209,9 +213,14 @@ class ApiService {
       return qrData;
     }
   }
-  Future<String?> deviceSetting(accessToken, bodys) async {
+
+  Future<String?> deviceSetting(pref) async {
+    // SettingsResponse settingsResponse = new SettingsResponse(responseCode: responseCode, responseSubCode: responseSubCode, responseMessage: responseMessage, responseData: responseData)
     try {
-      print('deviceSetting ${bodys}');
+      Map<String, dynamic> deviceSetting = new HashMap();
+      deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+      deviceSetting['institutionId'] =
+          '${pref.getString(Sharepref.institutionID)}';
 
       var url = Uri.parse("${_apiBaseUrl}GetDeviceConfiguration");
       var res = await http.post(url,
@@ -219,26 +228,49 @@ class ApiService {
             "Access-Control-Allow-Origin": "*",
             'Content-Type': 'application/json',
             'Accept': '*/*',
-            'Authorization': 'bearer ${accessToken}'
+            'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
-          body: jsonEncode(bodys));
+          body: jsonEncode(deviceSetting));
       print('deviceSetting request = ${res.request}');
-
 
       print('deviceSetting ${res.statusCode}');
 
       print('deviceSetting = ${res.body}');
-      // if (res.statusCode == 200) {
-      //   ActivateApplicationResponse validateVendorResponse =
-      //   ActivateApplicationResponse.fromJson(json.decode(res.body));
-      //   if (validateVendorResponse.responseCode == 1)
-      //     return validateVendorResponse.responseMessage;
-      //   else validateVendorResponse.responseMessage;
-      // }
-      return "";
+      if (res.statusCode == 200) {
+        SettingsResponse settingsResponse =
+            SettingsResponse.fromJson(json.decode(res.body));
+        if (settingsResponse.responseCode == 1) {
+          pref.setString(
+              Sharepref.deviceName, settingsResponse.responseData?.deviceName);
+          pref.setString(Sharepref.settingName,
+              settingsResponse.responseData?.settingName);
+          pref.setString(
+              Sharepref.line1HomePageView,
+              settingsResponse
+                  .responseData?.jsonValue?.homePageSettings?.line1);
+          pref.setString(
+              Sharepref.line2HomePageView,
+              settingsResponse
+                  .responseData?.jsonValue?.homePageSettings?.line2);
+          pref.setString(Sharepref.logoHomePageView,
+              settingsResponse.responseData?.jsonValue?.homePageSettings?.logo);
+          pref.setString(
+              Sharepref.line1ConfirmationView,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.normalViewLine1);
+          pref.setString(
+              Sharepref.line2ConfirmationView,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.normalViewLine2);
+          // pref.setString(
+          //     Sharepref.line1HomePageView, Sharepref.line1HomePageView);
+          return "1";
+        }
+      }
+      return "0";
     } catch (e) {
       log("deviceSetting =" + e.toString());
-      return "Invalid QRCode";
+      return "0";
     }
   }
 }

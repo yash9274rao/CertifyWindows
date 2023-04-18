@@ -68,8 +68,8 @@ class _QRViewExampleState extends State<QRViewExample> {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
-        ? 450.0
-        : 500.0;
+        ? MediaQuery.of(context).size.width
+        : MediaQuery.of(context).size.height;
     // To ensure the Scanner view is properly sizes after rotation
     // we need to listen for Flutter SizeChanged notification and update controller
     return QRView(
@@ -81,7 +81,8 @@ class _QRViewExampleState extends State<QRViewExample> {
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
-          cutOutSize: scanArea),
+          cutOutWidth: MediaQuery.of(context).size.width,
+          cutOutHeight: MediaQuery.of(context).size.height),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }

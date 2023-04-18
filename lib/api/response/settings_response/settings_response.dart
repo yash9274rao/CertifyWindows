@@ -1,10 +1,11 @@
-import 'package:snaphybrid/api/response/response_data_qrcode.dart';
+import 'device_settings.dart';
+import 'json_value.dart';
 
 class SettingsResponse {
   final int responseCode;
   final int responseSubCode;
   final String? responseMessage;
-  final ResponseDataQrCode? responseData;
+  final JsonValue? responseData;
 
   const SettingsResponse(
       {required this.responseCode,
@@ -17,7 +18,6 @@ class SettingsResponse {
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
         responseMessage: json['responseMessage'] ?? "Invalid QRCode",
-        responseData:
-        ResponseDataQrCode.fromJson(json['responseData'] ?? {}));
+        responseData: JsonValue.fromJson(json['responseData'] ?? {}));
   }
 }

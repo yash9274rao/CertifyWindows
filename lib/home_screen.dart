@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
-import 'package:intl/intl.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:snaphybrid/api/api_service.dart';
+
 import 'common/sharepref.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,9 +18,16 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHome extends State<HomeScreen> {
-  var timeTextHolderModalController = "", dateTextHolderModalController = "";
+  var timeTextHolderModalController = "",
+      dateTextHolderModalController = "",
+      lineOneText = "",
+      lineTwoText = "";
+  var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
   late Timer dataTime;
-  Map<String, dynamic> diveInfo = new HashMap();
+
+  //SharedPreferences pref = SharedPreferences.getInstance() as SharedPreferences;
+
+  Map<String, dynamic> diveInfo = HashMap();
 
   @override
   void initState() {
@@ -28,165 +38,152 @@ class _MyHome extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new Scaffold(
+      home: Scaffold(
         body: Container(
           color: Colors.white,
-          child: Container(
-            child: Row(
-              children: [
-                new Expanded(
-                  flex: 1,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(25, 0, 0, 25),
-                    child: Container(
-                      color: Colors.grey.shade200,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          new Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                              child: new Image(
-                                image:
-                                    AssetImage('images/assets/final_logo.png'),
-                              ),
-                            ),
-                          ),
-                          new Expanded(
-                            flex: 1,
-                            child: Column(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 0, 0, 25),
+                  child: Container(
+                    color: Colors.grey.shade200,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 0, 10, 15),
+                              child: _imageToShow),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(50, 20, 10, 15),
+                                  child: Text(
+                                    lineOneText,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(50, 0, 10, 15),
+                                  child: Text(
+                                    lineTwoText,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 18),
+                                  ),
+                                ),
+                              ]),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(50, 0, 25, 25),
+                            child: Container(
+                              color: Colors.blueGrey.shade900,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
+                                children: <Widget>[
+                                  const Image(
+                                    image:
+                                        AssetImage('images/assets/quote.png'),
+                                  ),
                                   Padding(
                                     padding:
-                                        EdgeInsets.fromLTRB(50, 20, 10, 15),
-                                    child: Text(
-                                      'Wellcome To RR',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 22),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.fromLTRB(50, 0, 10, 15),
-                                    child: Text(
-                                      'You are in Home Screen',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 18),
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                          new Expanded(
-                            flex: 1,
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(50, 0, 25, 25),
-                              child: Container(
-                                color: Colors.blueGrey.shade900,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                     new Image(
-                                      image:
-                                      AssetImage('images/assets/quote.png'),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(80, 20, 180, 5),
-                                      child: TextButton.icon(
-                                        // <-- TextButton
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          color: Colors.white,
-                                          Icons.access_time,
-                                          size: 24.0,
-                                        ),
-                                        label: Text(
-                                          '${timeTextHolderModalController}',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 24,
-                                              color: Colors.white),
-                                        ),
+                                        const EdgeInsets.fromLTRB(80, 20, 180, 5),
+                                    child: TextButton.icon(
+                                      // <-- TextButton
+                                      onPressed: () {},
+                                      icon: const Icon(
+                                        color: Colors.white,
+                                        Icons.access_time,
+                                        size: 24.0,
                                       ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.fromLTRB(80, 0, 180, 50),
-                                      child: Text(
-                                        '${dateTextHolderModalController}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 18,
+                                      label: Text(
+                                        timeTextHolderModalController,
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24,
                                             color: Colors.white),
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(80, 0, 180, 50),
+                                    child: Text(
+                                      dateTextHolderModalController,
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 18,
+                                          color: Colors.white),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                new Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 0, 0, 20),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 24),
-                            backgroundColor: Colors.green,
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QRViewExample()));
-                          },
-                          child: Text(
-                            "       Check-In       ",
-                          ),
+              ),
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.all(16.0),
+                          textStyle: const TextStyle(fontSize: 24),
+                          backgroundColor: Colors.green,
                         ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const QRViewExample()));
+                        },
+                        child: Text("       Check-In       ",),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(20, 15, 0, 20),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.redAccent,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 24),
-                            backgroundColor: Colors.red.shade200,
-                          ),
-                          onPressed: () {
-                            print("BBBBBBBBBBBBBBBBBBBB");
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QRViewExample()));
-                          },
-                          child: Text("      Check-Out      "),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.redAccent,
+                          padding: const EdgeInsets.all(16.0),
+                          textStyle: const TextStyle(fontSize: 24),
+                          backgroundColor: Colors.red.shade200,
                         ),
+                        onPressed: () {
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const QRViewExample()));
+                        },
+                        child: Text("      Check-Out      "),
                       ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -194,6 +191,7 @@ class _MyHome extends State<HomeScreen> {
   }
 
   Future<void> timeDateSet() async {
+    updateUI();
     dataTime = Timer.periodic(const Duration(seconds: 1), (dataTime) {
       String time = DateFormat('HH:mm a').format(DateTime.now());
       String date = DateFormat('EEEEE, dd MMM yyyy').format(DateTime.now());
@@ -212,7 +210,7 @@ class _MyHome extends State<HomeScreen> {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       diveInfo['osVersion'] = 'Android-12';
       diveInfo['uniqueDeviceId'] = '${pref.getString(Sharepref.serialNo)}';
-      diveInfo['deviceModel'] = '${androidInfo.model}';
+      diveInfo['deviceModel'] = androidInfo.model;
       diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
@@ -239,12 +237,12 @@ class _MyHome extends State<HomeScreen> {
     diveInfo['batteryStatus'] = "100";
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
-    Map<String, dynamic> healthCheckRequest = new HashMap();
+    Map<String, dynamic> healthCheckRequest = HashMap();
     healthCheckRequest['lastUpdateDateTime'] = DateFormat("yyyy-MM-dd HH:mm:ss")
         .format(DateTime.now().toUtc())
         .toString();
     healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    healthCheckRequest['deviceInfo'] = '${diveInfo}'; //
+    healthCheckRequest['deviceInfo'] = '$diveInfo'; //
     healthCheckRequest['institutionId'] =
         '${pref.getString(Sharepref.institutionID)}';
     //healthCheckRequest['appState'] = 'Foreground';
@@ -258,10 +256,26 @@ class _MyHome extends State<HomeScreen> {
   Future<void> deviceSetting() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
-    Map<String, dynamic> deviceSetting = new HashMap();
+    Map<String, dynamic> deviceSetting = HashMap();
     deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    deviceSetting['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
-    ApiService().deviceSetting(pref.getString(Sharepref.accessToken), deviceSetting);
+    deviceSetting['institutionId'] =
+        '${pref.getString(Sharepref.institutionID)}';
+    String req = await ApiService().deviceSetting(pref) as String;
+    if (req == "1") updateUI();
+  }
+
+  Future<void> updateUI() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      lineOneText = pref.getString(Sharepref.line1HomePageView)!;
+      lineTwoText = pref.getString(Sharepref.line2HomePageView)!;
+      String? base64 = pref.getString(Sharepref.logoHomePageView);
+      if (base64 != null && base64.isNotEmpty) {
+        _imageToShow = Image.memory(const Base64Decoder().convert(base64));
+      } else {
+        _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
+      }
+    });
   }
 
   @override
