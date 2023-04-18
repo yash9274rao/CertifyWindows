@@ -1,6 +1,6 @@
 class QrData {
   late String qrCodeId = "";
-  late bool isValid;
+  late bool isValid = false;
   late String id = "0";
   late String firstName;
   late String lastName ="";

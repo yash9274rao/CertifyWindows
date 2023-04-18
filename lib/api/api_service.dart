@@ -86,11 +86,11 @@ class ApiService {
         if (validateVendorResponse.responseCode == 1) {
           qrData.setFirstName =
               (validateVendorResponse.responseData?.vendorName ?? "");
-          qrData.isValid = true;
+          qrData.setIsValid = true;
           return qrData;
         } else {
-          qrData.isValid = false;
           qrData.setFirstName = "Anonymous";
+          qrData.setIsValid = false;
           return qrData;
         }
       }

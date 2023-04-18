@@ -9,8 +9,8 @@ import 'confirm_screen.dart';
 typedef StringValue = String Function(String);
 
 class QRViewExample extends StatefulWidget {
-  const QRViewExample({Key? key}) : super(key: key);
-
+  const QRViewExample({Key? key,required this.attendanceMode}) : super(key: key);
+  final String attendanceMode;
   @override
   State<StatefulWidget> createState() => _QRViewExampleState();
 }
@@ -101,7 +101,7 @@ class _QRViewExampleState extends State<QRViewExample> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ConfirmScreen(dataStr: '${result!.code}')));
+                      ConfirmScreen(dataStr: '${result!.code}',attendanceMode : widget.attendanceMode)));
           if (defaultTargetPlatform == TargetPlatform.android) {
             controller!.pauseCamera();
           }

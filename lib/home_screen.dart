@@ -46,19 +46,15 @@ class _MyHome extends State<HomeScreen> {
               Expanded(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 0, 0, 25),
+                  padding: const EdgeInsets.fromLTRB(25, 55, 25, 25),
                   child: Container(
                     color: Colors.grey.shade200,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Padding(
-                              padding: const EdgeInsets.fromLTRB(25, 0, 10, 15),
                               child: _imageToShow),
-                        ),
                         Expanded(
                           flex: 1,
                           child: Column(
@@ -66,7 +62,7 @@ class _MyHome extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(50, 20, 10, 15),
+                                  padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
                                   child: Text(
                                     lineOneText,
                                     style: const TextStyle(
@@ -75,7 +71,7 @@ class _MyHome extends State<HomeScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(50, 0, 10, 15),
+                                  padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
                                   child: Text(
                                     lineTwoText,
                                     style: const TextStyle(
@@ -88,11 +84,12 @@ class _MyHome extends State<HomeScreen> {
                         Expanded(
                           flex: 1,
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(50, 0, 25, 25),
+                            padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
                             child: Container(
                               color: Colors.blueGrey.shade900,
+                              width:double.infinity,
                               child: Column(
-                                mainAxisSize: MainAxisSize.max,
+
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -102,7 +99,7 @@ class _MyHome extends State<HomeScreen> {
                                   ),
                                   Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(80, 20, 180, 5),
+                                        const EdgeInsets.fromLTRB(80, 20, 0, 5),
                                     child: TextButton.icon(
                                       // <-- TextButton
                                       onPressed: () {},
@@ -160,7 +157,7 @@ class _MyHome extends State<HomeScreen> {
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const QRViewExample()));
+                                  builder: (context) => const QRViewExample(attendanceMode:"1")));
                         },
                         child: Text("       Check-In       ",),
                       ),
@@ -175,7 +172,7 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.red.shade200,
                         ),
                         onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const QRViewExample()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const QRViewExample(attendanceMode:"2")));
                         },
                         child: Text("      Check-Out      "),
                       ),

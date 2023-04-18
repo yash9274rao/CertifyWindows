@@ -14,22 +14,25 @@ import 'common/sharepref.dart';
 typedef StringValue = String Function(String);
 
 class ConfirmScreen extends StatelessWidget {
-  const ConfirmScreen({Key? key, required this.dataStr}) : super(key: key);
+  const ConfirmScreen(
+      {Key? key, required this.dataStr, required this.attendanceMode})
+      : super(key: key);
   final String dataStr;
+  final String attendanceMode;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ConfirmLanch(dataStr),
+      home: ConfirmLanch(dataStr, attendanceMode),
     );
   }
 }
 
 class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.dataStr);
+  ConfirmLanch(this.dataStr, this.attendanceMode);
 
-  final String dataStr;
+  final String dataStr, attendanceMode;
 
   @override
   _Confirm createState() => _Confirm();
@@ -46,11 +49,11 @@ class _Confirm extends State<ConfirmLanch> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       body: Center(
         child: Text(
-          '${textHolderModalController}',
-          style: TextStyle(
+          textHolderModalController,
+          style: const TextStyle(
               fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
         ),
       ),
@@ -82,6 +85,7 @@ class _Confirm extends State<ConfirmLanch> {
       qrData.isValid = false;
       qrData.firstName = "Anonymous";
       qrData.setQrCodeID = widget.dataStr;
+      qrData.setIsValid = false;
       updateUI(qrData);
     }
   }
@@ -102,14 +106,17 @@ class _Confirm extends State<ConfirmLanch> {
     Map<String, dynamic> diveInfo = new HashMap();
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime.now().millisecondsSinceEpoch.toString());
+        DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString());
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      diveInfo['osVersion'] = '${androidInfo.version.release}';
+      diveInfo['osVersion'] = androidInfo.version.release;
       diveInfo['uniqueDeviceId'] = '${pref.getString(Sharepref.serialNo)}';
-      diveInfo['deviceModel'] = '${androidInfo.model}';
+      diveInfo['deviceModel'] = androidInfo.model;
       diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
@@ -136,18 +143,17 @@ class _Confirm extends State<ConfirmLanch> {
     diveInfo['batteryStatus'] = "100";
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
-    Map<String, dynamic> accessLogs = new HashMap();
-    accessLogs['id'] = '${qrData.getId}';
-    accessLogs['accessId'] = '${qrData.accessId}';
-    accessLogs['firstName'] = '${qrData.getFirstName}';
-    accessLogs['lastName'] = '${qrData.getLastName}';
-    accessLogs['memberId'] = '${qrData.getMemberId}';
+    Map<String, dynamic> accessLogs = HashMap();
+    accessLogs['id'] = qrData.getId;
+    accessLogs['accessId'] = qrData.accessId;
+    accessLogs['firstName'] = qrData.getFirstName;
+    accessLogs['lastName'] = qrData.getLastName;
+    accessLogs['memberId'] = qrData.getMemberId;
     accessLogs['temperature'] = 0;
-    accessLogs['qrCodeId'] = '${qrData.getQrCodeID}';
-    accessLogs['deviceId'] = '${pref.getString(Sharepref.serialNo)}';
-    accessLogs['deviceName'] = 'AndroidTab2';
-    accessLogs['institutionId'] =
-        '${pref.getString(Sharepref.institutionID)}';
+    accessLogs['qrCodeId'] = qrData.getQrCodeID;
+    accessLogs['deviceId'] = pref.getString(Sharepref.serialNo);
+    accessLogs['deviceName'] = pref.getString(Sharepref.deviceName);
+    accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
     accessLogs['facilityId'] = 0;
     accessLogs['locationId'] = 0;
     accessLogs['facilityName'] = "";
@@ -165,12 +171,15 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['utcRecordDate'] = DateFormat("yyyy-MM-dd HH:mm:ss")
         .format(DateTime.now().toUtc())
         .toString();
-    accessLogs['loggingMode'] = '3';
+    accessLogs['loggingMode'] = '2';
     accessLogs['accessOption'] = 1;
-    accessLogs['attendanceMode'] = 0;
-    accessLogs['allowAccess'] = true;
+    accessLogs['attendanceMode'] = widget.attendanceMode;
+    accessLogs['allowAccess'] = qrData.getIsValid;
 
-    ApiService()
-        .accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
+    ApiService().accessLogs(pref.getString(Sharepref.accessToken
+    )
+    ,
+    accessLogs
+    );
   }
 }
