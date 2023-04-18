@@ -31,14 +31,14 @@ class ApiService {
       if (res.statusCode == 200) {
         ActivateApplicationResponse activateApplicationResponse =
             ActivateApplicationResponse.fromJson(jsonDecode(res.body));
-        Fluttertoast.showToast(
-            msg: activateApplicationResponse.responseMessage,
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.green,
-            textColor: Colors.white,
-            fontSize: 16.0);
+        // Fluttertoast.showToast(
+        //     msg: activateApplicationResponse.responseMessage,
+        //     toastLength: Toast.LENGTH_SHORT,
+        //     gravity: ToastGravity.CENTER,
+        //     timeInSecForIosWeb: 1,
+        //     backgroundColor: Colors.green,
+        //     textColor: Colors.white,
+        //     fontSize: 16.0);
         return activateApplicationResponse;
         // if (aaR.responseCode == 1) getGenerateToken(headers, bodys, sn);
       }

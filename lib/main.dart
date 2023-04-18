@@ -39,7 +39,8 @@ class MyLanch extends StatefulWidget {
 
 class _MyHome extends State<MyLanch> {
   var textHolderModalController = "";
-  Map<String, dynamic> diveInfo = new HashMap();
+  Map<String, dynamic> diveInfo = HashMap();
+  var _isVisibility = false;
 
   @override
   void initState() {
@@ -50,27 +51,26 @@ class _MyHome extends State<MyLanch> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new Scaffold(
+      home: Scaffold(
         body: Container(
           color: Colors.white,
-          child: Container(
+          child: Visibility(
+            visible: _isVisibility,
             child: Row(
               children: [
-                new Expanded(
+                const Expanded(
                   flex: 1,
-                  child: new Container(
-                    child: new Image(
-                      image: AssetImage('images/assets/image.png'),
-                    ),
+                  child: Image(
+                    image: AssetImage('images/assets/image.png'),
                   ),
                 ),
-                new Expanded(
+                Expanded(
                   flex: 1,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                         child: Text(
                           'Register Device',
@@ -78,14 +78,14 @@ class _MyHome extends State<MyLanch> {
                               fontWeight: FontWeight.bold, fontSize: 22),
                         ),
                       ),
-                      Padding(
+                      const Padding(
                           padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                           child: Divider(color: Colors.grey)),
-                      Padding(
+                      const Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                         child: Text(
                             'This device is not configured to work online. If'
-                            ' you already have a cloud account'),
+                                ' you already have a cloud account'),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
@@ -141,8 +141,11 @@ class _MyHome extends State<MyLanch> {
 
   Future<void> initPlatformState() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString(Sharepref.APP_LAUNCH_TIME, DateTime.now()
-        .millisecondsSinceEpoch.toString());
+    pref.setString(Sharepref.APP_LAUNCH_TIME,
+        DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString());
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -151,7 +154,7 @@ class _MyHome extends State<MyLanch> {
       var sn = androidInfo.id.replaceAll(".", "").replaceAll("/", "");
       setState(() {
         textHolderModalController =
-            'If you have already added the device on the '
+        'If you have already added the device on the '
             'portal SL NO: ${sn}';
       });
       pref.setString(Sharepref.serialNo, sn);
@@ -164,7 +167,7 @@ class _MyHome extends State<MyLanch> {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       setState(() {
         textHolderModalController =
-            'If you have already added the device on the '
+        'If you have already added the device on the '
             'portal SL NO: ${iosInfo.identifierForVendor}';
       });
       pref.setString(
@@ -180,7 +183,7 @@ class _MyHome extends State<MyLanch> {
       //     'portal SL NO:${webBrowserInfo.userAgent}';
       setState(() {
         textHolderModalController =
-            'If you have already added the device on the '
+        'If you have already added the device on the '
             'portal SL NO: ${webBrowserDeviceInfo.productSub}';
       });
       pref.setString(
@@ -193,7 +196,7 @@ class _MyHome extends State<MyLanch> {
       MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
       setState(() {
         textHolderModalController =
-            'If you have already added the device on the '
+        'If you have already added the device on the '
             'portal SL NO: ${macOsDeviceInfo.systemGUID}';
       });
     }
@@ -233,7 +236,15 @@ class _MyHome extends State<MyLanch> {
             getDeviceTokenResponse.responseData.institutionID);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      } else {
+        setState(() {
+          _isVisibility = true;
+        });
       }
+    } else {
+      setState(() {
+        _isVisibility = true;
+      });
     }
   }
-}
+  }
