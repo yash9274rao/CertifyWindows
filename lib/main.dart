@@ -3,14 +3,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
 import 'package:snaphybrid/common/sharepref.dart';
+import 'package:snaphybrid/common/util.dart';
 import 'package:snaphybrid/home_screen.dart';
 
 import 'QRViewExmple.dart';
 import 'api/api_service.dart';
+import 'common/connection_util.dart';
 import 'login.dart';
 
 void main() {
@@ -41,7 +44,6 @@ class _MyHome extends State<MyLanch> {
   var textHolderModalController = "";
   Map<String, dynamic> diveInfo = HashMap();
   var _isVisibility = false;
-
   @override
   void initState() {
     super.initState();
@@ -85,7 +87,7 @@ class _MyHome extends State<MyLanch> {
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                         child: Text(
                             'This device is not configured to work online. If'
-                                ' you already have a cloud account'),
+                            ' you already have a cloud account'),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
@@ -142,10 +144,7 @@ class _MyHome extends State<MyLanch> {
   Future<void> initPlatformState() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime
-            .now()
-            .millisecondsSinceEpoch
-            .toString());
+        DateTime.now().millisecondsSinceEpoch.toString());
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -154,7 +153,7 @@ class _MyHome extends State<MyLanch> {
       var sn = androidInfo.id.replaceAll(".", "").replaceAll("/", "");
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${sn}';
       });
       pref.setString(Sharepref.serialNo, sn);
@@ -167,7 +166,7 @@ class _MyHome extends State<MyLanch> {
       IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${iosInfo.identifierForVendor}';
       });
       pref.setString(
@@ -183,7 +182,7 @@ class _MyHome extends State<MyLanch> {
       //     'portal SL NO:${webBrowserInfo.userAgent}';
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${webBrowserDeviceInfo.productSub}';
       });
       pref.setString(
@@ -196,7 +195,7 @@ class _MyHome extends State<MyLanch> {
       MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
       setState(() {
         textHolderModalController =
-        'If you have already added the device on the '
+            'If you have already added the device on the '
             'portal SL NO: ${macOsDeviceInfo.systemGUID}';
       });
     }
@@ -215,36 +214,41 @@ class _MyHome extends State<MyLanch> {
     Map<String, String> createDoc = new HashMap();
     createDoc['pushAuthToken'] = "";
     createDoc['deviceInfo'] = '${diveInfo}';
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result) {
+      ActivateApplicationResponse activateApplicationResponse =
+          await ApiService().activateApplication(diveInfo, sn)
+              as ActivateApplicationResponse;
+      print("activateApplicationResponse == $activateApplicationResponse");
 
-    ActivateApplicationResponse activateApplicationResponse = await ApiService()
-        .activateApplication(diveInfo, sn) as ActivateApplicationResponse;
-    print("activateApplicationResponse == $activateApplicationResponse");
+      if (activateApplicationResponse.responseCode == 1) {
+        print("activateApplicationResponse.responseCode ==1");
 
-    if (activateApplicationResponse.responseCode == 1) {
-      print("activateApplicationResponse.responseCode ==1");
-
-      Map<String, dynamic> tokenBody = new HashMap();
-      tokenBody['email'] = "";
-      tokenBody['password'] = "";
-      tokenBody['deviceSN'] = sn;
-      GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
-          .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
-      if (getDeviceTokenResponse.responseCode == 1) {
-        pref.setString(Sharepref.accessToken,
-            getDeviceTokenResponse.responseData.access_token);
-        pref.setString(Sharepref.institutionID,
-            getDeviceTokenResponse.responseData.institutionID);
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        Map<String, dynamic> tokenBody = HashMap();
+        tokenBody['email'] = "";
+        tokenBody['password'] = "";
+        tokenBody['deviceSN'] = sn;
+        GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
+            .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
+        if (getDeviceTokenResponse.responseCode == 1) {
+          pref.setString(Sharepref.accessToken,
+              getDeviceTokenResponse.responseData.access_token);
+          pref.setString(Sharepref.institutionID,
+              getDeviceTokenResponse.responseData.institutionID);
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        } else {
+          setState(() {
+            _isVisibility = true;
+          });
+        }
       } else {
         setState(() {
           _isVisibility = true;
         });
       }
     } else {
-      setState(() {
-        _isVisibility = true;
-      });
+      Util.showToastError("No Internet");
     }
   }
-  }
+}

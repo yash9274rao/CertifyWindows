@@ -160,7 +160,7 @@ class ApiService {
       // }
       return "";
     } catch (e) {
-      log("AccessLogs =" + e.toString());
+      log("AccessLogs =$e");
       return "Invalid QRCode";
     }
   }
@@ -168,7 +168,7 @@ class ApiService {
   Future<QrData?> validateQRCode(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;
-    qrData.setFirstName = "Anonymous";
+    qrData.setFirstName = "InValid QR Code";
 
     try {
       var url = Uri.parse("${_apiBaseUrl}ValidateQRCode");

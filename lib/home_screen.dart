@@ -5,12 +5,14 @@ import 'dart:convert';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:snaphybrid/api/api_service.dart';
 
 import 'common/sharepref.dart';
+import 'common/util.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -153,18 +155,22 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () async {
-                          SharedPreferences pref =
-                              await SharedPreferences.getInstance();
-                          pref.setBool(Sharepref.isQrCodeScan, true);
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const QRViewExample(
-                                      attendanceMode: "1")));
+                          bool result =
+                              await InternetConnectionChecker().hasConnection;
+                          if (result) {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            pref.setBool(Sharepref.isQrCodeScan, true);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const QRViewExample(
+                                        attendanceMode: "1")));
+                          } else {
+                            Util.showToastError("No Internet");
+                          }
                         },
-                        child: Text(
-                          "       Check-In       ",
-                        ),
+                        child: const Text("       Check-In       ",),
                       ),
                     ),
                     Padding(
@@ -177,16 +183,22 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.red.shade200,
                         ),
                         onPressed: () async {
-                          SharedPreferences pref =
-                          await SharedPreferences.getInstance();
-                          pref.setBool(Sharepref.isQrCodeScan, true);
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const QRViewExample(
-                                      attendanceMode: "2")));
+                          bool result =
+                              await InternetConnectionChecker().hasConnection;
+                          if (result) {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
+                            pref.setBool(Sharepref.isQrCodeScan, true);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const QRViewExample(
+                                        attendanceMode: "2")));
+                          } else {
+                            Util.showToastError("No Internet");
+                          }
                         },
-                        child: Text("      Check-Out      "),
+                        child: const Text("      Check-Out      "),
                       ),
                     ),
                   ],
