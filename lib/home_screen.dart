@@ -52,9 +52,7 @@ class _MyHome extends State<HomeScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          flex: 1,
-                              child: _imageToShow),
+                        Expanded(flex: 1, child: _imageToShow),
                         Expanded(
                           flex: 1,
                           child: Column(
@@ -62,7 +60,8 @@ class _MyHome extends State<HomeScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(25, 20, 25, 15),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 20, 25, 15),
                                   child: Text(
                                     lineOneText,
                                     style: const TextStyle(
@@ -71,7 +70,8 @@ class _MyHome extends State<HomeScreen> {
                                   ),
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 0, 25, 0),
                                   child: Text(
                                     lineTwoText,
                                     style: const TextStyle(
@@ -87,9 +87,8 @@ class _MyHome extends State<HomeScreen> {
                             padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
                             child: Container(
                               color: Colors.blueGrey.shade900,
-                              width:double.infinity,
+                              width: double.infinity,
                               child: Column(
-
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -118,8 +117,8 @@ class _MyHome extends State<HomeScreen> {
                                     ),
                                   ),
                                   Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(80, 0, 180, 50),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        80, 0, 180, 50),
                                     child: Text(
                                       dateTextHolderModalController,
                                       style: const TextStyle(
@@ -153,13 +152,19 @@ class _MyHome extends State<HomeScreen> {
                           textStyle: const TextStyle(fontSize: 24),
                           backgroundColor: Colors.green,
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          pref.setBool(Sharepref.isQrCodeScan, true);
                           Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const QRViewExample(attendanceMode:"1")));
+                                  builder: (context) => const QRViewExample(
+                                      attendanceMode: "1")));
                         },
-                        child: Text("       Check-In       ",),
+                        child: Text(
+                          "       Check-In       ",
+                        ),
                       ),
                     ),
                     Padding(
@@ -171,8 +176,15 @@ class _MyHome extends State<HomeScreen> {
                           textStyle: const TextStyle(fontSize: 24),
                           backgroundColor: Colors.red.shade200,
                         ),
-                        onPressed: () {
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const QRViewExample(attendanceMode:"2")));
+                        onPressed: () async {
+                          SharedPreferences pref =
+                          await SharedPreferences.getInstance();
+                          pref.setBool(Sharepref.isQrCodeScan, true);
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const QRViewExample(
+                                      attendanceMode: "2")));
                         },
                         child: Text("      Check-Out      "),
                       ),
@@ -270,7 +282,8 @@ class _MyHome extends State<HomeScreen> {
       if (base64 != null && base64.isNotEmpty) {
         _imageToShow = Image.memory(const Base64Decoder().convert(base64));
       } else {
-        _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
+        _imageToShow =
+            const Image(image: AssetImage('images/assets/quote.png'));
       }
     });
   }

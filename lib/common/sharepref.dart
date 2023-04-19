@@ -30,4 +30,6 @@ class Sharepref {
   static String allowAnonymous = "allowAnonymous";
   static String attendanceMode = "showNonVaccinationIndicator";
   static String loggingMode = "loggingMode";
+  static String isQrCodeScan = "isQrCodeScan";
+
 }

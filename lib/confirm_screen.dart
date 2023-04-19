@@ -81,9 +81,9 @@ class _Confirm extends State<ConfirmLanch> {
       qrData.setQrCodeID = widget.dataStr;
       updateUI(qrData);
     } else {
-      QrData qrData = new QrData();
-      qrData.isValid = false;
-      qrData.firstName = "Anonymous";
+      QrData qrData = QrData();
+      qrData.setIsValid = false;
+      qrData.setFirstName = "Anonymous";
       qrData.setQrCodeID = widget.dataStr;
       qrData.setIsValid = false;
       updateUI(qrData);
@@ -106,10 +106,7 @@ class _Confirm extends State<ConfirmLanch> {
     Map<String, dynamic> diveInfo = new HashMap();
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime
-            .now()
-            .millisecondsSinceEpoch
-            .toString());
+        DateTime.now().millisecondsSinceEpoch.toString());
     WidgetsFlutterBinding.ensureInitialized();
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -145,7 +142,7 @@ class _Confirm extends State<ConfirmLanch> {
     diveInfo['appState'] = "Foreground";
     Map<String, dynamic> accessLogs = HashMap();
     accessLogs['id'] = qrData.getId;
-    accessLogs['accessId'] = qrData.accessId;
+    accessLogs['accessId'] = qrData.getQrCodeID;
     accessLogs['firstName'] = qrData.getFirstName;
     accessLogs['lastName'] = qrData.getLastName;
     accessLogs['memberId'] = qrData.getMemberId;
@@ -159,8 +156,7 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['facilityName'] = "";
     accessLogs['locationName'] = '';
     accessLogs['deviceTime'] = DateFormat("MM/dd/yyyy HH:mm:ss")
-        .format(DateTime.now().toUtc())
-        .toString();
+        .format(DateTime.now().toUtc()).toString();
     //healthCheckRequest['timezone'] = '05:30';
     accessLogs['sourceIP'] = ipv4;
     accessLogs['deviceData'] = diveInfo;
@@ -176,10 +172,6 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['attendanceMode'] = widget.attendanceMode;
     accessLogs['allowAccess'] = qrData.getIsValid;
 
-    ApiService().accessLogs(pref.getString(Sharepref.accessToken
-    )
-    ,
-    accessLogs
-    );
+    ApiService().accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
   }
 }

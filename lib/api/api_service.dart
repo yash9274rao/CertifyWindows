@@ -67,7 +67,7 @@ class ApiService {
   Future<QrData?> validateVendor(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;
-    qrData.firstName = "Anonymous";
+    qrData.setFirstName = "Anonymous";
     try {
       var url = Uri.parse("${_apiBaseUrl}validateVendor");
       var res = await http.post(url,
@@ -79,7 +79,7 @@ class ApiService {
           },
           body: jsonEncode(bodys));
       print('validateVendor = ${res.body}');
-      QrData qrData = new QrData();
+      QrData qrData = QrData();
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
             ValidateVendorResponse.fromJson(json.decode(res.body));
@@ -168,7 +168,7 @@ class ApiService {
   Future<QrData?> validateQRCode(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;
-    qrData.firstName = "Anonymous";
+    qrData.setFirstName = "Anonymous";
 
     try {
       var url = Uri.parse("${_apiBaseUrl}ValidateQRCode");

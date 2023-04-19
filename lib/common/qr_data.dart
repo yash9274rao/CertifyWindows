@@ -40,7 +40,7 @@ class QrData {
     this.lastName = lastName;
   }
 
-  String get getLastName => firstName;
+  String get getLastName => lastName;
 
   set setMemberId(String memberId) {
     this.memberId = memberId;
