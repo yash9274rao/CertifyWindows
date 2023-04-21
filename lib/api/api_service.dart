@@ -49,6 +49,7 @@ class ApiService {
 
   Future<GetDeviceTokenResponse?> getGenerateToken(bodys) async {
     try {
+      print('jsonEncode =${jsonEncode(bodys)}');
       var url = Uri.parse("${_apiBaseUrl}GetDeviceToken");
       var res = await http.post(url,
           headers: {"Access-Control-Allow-Origin": "*", 'Accept': '*/*'},
@@ -273,4 +274,5 @@ class ApiService {
       return "0";
     }
   }
+
 }
