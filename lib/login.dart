@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             onPressed: () {
                               print("efewfewfwefe");
-                              Navigator.pop(context);
+                              Navigator.of(context, rootNavigator: true).pop(context);
                             }),
                         // Expanded(flex:1,child:  ImageIcon(
                         //   AssetImage("images/assets/aerrow.png"),

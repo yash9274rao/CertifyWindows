@@ -1,10 +1,9 @@
 import 'dart:collection';
+
 import 'package:client_information/client_information.dart';
-import 'package:flutter/foundation.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
@@ -12,9 +11,7 @@ import 'package:snaphybrid/common/sharepref.dart';
 import 'package:snaphybrid/common/util.dart';
 import 'package:snaphybrid/home_screen.dart';
 
-import 'QRViewExmple.dart';
 import 'api/api_service.dart';
-import 'common/connection_util.dart';
 import 'login.dart';
 
 void main() {
@@ -152,9 +149,9 @@ class _MyHome extends State<MyLanch> {
     setState(() {
       textHolderModalController =
       'If you have already added the device on the '
-          'portal SL NO: ${_clientInfo.deviceId}';
+          'portal SL NO: ${_clientInfo.deviceId.toUpperCase()}';
     });
-    pref.setString(Sharepref.serialNo, _clientInfo.deviceId);
+    pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());
     if( _clientInfo.osName =='Android') {
       pref.setString(Sharepref.platform, "Android Tablet");
       pref.setString(Sharepref.platformId, "4");

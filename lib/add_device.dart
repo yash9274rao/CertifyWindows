@@ -1,8 +1,6 @@
 import 'dart:collection';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/response/register_device_response.dart';
 import 'package:snaphybrid/main.dart';
@@ -105,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               // color: Colors.red,
                             ),
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.of(context, rootNavigator: true).pop(context);
                             }),
                       ),
                       // Spacer(),
@@ -172,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.of(context, rootNavigator: true).pop(context);
                               },
                               style: const ButtonStyle(
                                 visualDensity: VisualDensity(
