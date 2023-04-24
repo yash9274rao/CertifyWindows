@@ -274,6 +274,9 @@ class _MyHomePageState extends State<MyHomePage> {
         context,
         MaterialPageRoute(builder: (context) => const AddDevice()),
       );
+    }else{
+      Util.showToastError(getDeviceTokenResponse.responseMessage);
+
     }
   }
 
