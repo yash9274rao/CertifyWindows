@@ -288,14 +288,14 @@ class _MyHome extends State<HomeScreen> {
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      lineOneText = pref.getString(Sharepref.line1HomePageView)!;
-      lineTwoText = pref.getString(Sharepref.line2HomePageView)!;
-      String? base64 = pref.getString(Sharepref.logoHomePageView);
-      if (base64 != null && base64.isNotEmpty) {
+      lineOneText = pref.getString(Sharepref.line1HomePageView)?? "";
+      lineTwoText = pref.getString(Sharepref.line2HomePageView)?? "";
+      String? base64 = pref.getString(Sharepref.logoHomePageView)?? "";
+      if (base64.isNotEmpty) {
         _imageToShow = Image.memory(const Base64Decoder().convert(base64));
       } else {
         _imageToShow =
-            const Image(image: AssetImage('images/assets/quote.png'));
+            const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
   }
