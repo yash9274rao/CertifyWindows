@@ -61,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formGlobalKey = GlobalKey<FormState>();
   String _email = "";
   String _password = "";
+  bool _isVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -150,10 +151,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           labelText: "Email",
                           // hintText: 'your-email@domain.com',
                           labelStyle: TextStyle(color: Colors.black26),
-                          // suffixIcon: IconButton(
-                          //     onPressed: () {},
-                          //     icon: Icon(Icons.close,
-                          //         color: Colors.purple))
                         ),
                       ),
                     ),
@@ -173,8 +170,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         //   return null;
                         // },
                         obscuringCharacter: '*',
-                        obscureText: true,
-                        decoration: const InputDecoration(
+                        obscureText: !_isVisible,
+                        decoration:  InputDecoration(
                           border: UnderlineInputBorder(),
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
@@ -193,11 +190,16 @@ class _MyHomePageState extends State<MyHomePage> {
                           labelText: "Password",
                           // hintText: 'your-email@domain.com',
                           labelStyle: TextStyle(color: Colors.black26),
-                          suffixIcon: Icon(Icons.remove_red_eye_outlined),
-                          // suffixIcon: IconButton(
-                          //     onPressed: () {},
-                          //     icon: Icon(Icons.close,
-                          //         color: Colors.purple))
+
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isVisible = !_isVisible;
+                              });
+                            },
+                            icon: _isVisible ? Icon(Icons.visibility, color: Colors.black,):
+                            Icon(Icons.visibility_off, color: Colors.grey,),
+                          ),
                         ),
                       ),
                     ),
