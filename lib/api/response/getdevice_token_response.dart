@@ -16,7 +16,7 @@ class GetDeviceTokenResponse {
     return GetDeviceTokenResponse(
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
-        responseMessage: json['responseMessage'],
-        responseData: ResponseDataToken.fromJson(json['responseData']));
+        responseMessage: json['responseMessage'] ?? "Invalid Login Credentials",
+        responseData: ResponseDataToken.fromJson(json['responseData'] ?? {}));
   }
 }

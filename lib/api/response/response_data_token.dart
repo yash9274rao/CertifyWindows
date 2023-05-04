@@ -19,8 +19,8 @@ class ResponseDataToken {
       access_token: json['access_token'],
       token_type: json['token_type'],
       expires_in: json['expires_in'],
-      institutionID: json['InstitutionID'],
-      command: json['command'],
+      institutionID: json['InstitutionID'] ?? "",
+      command: json['command'] ?? "",
       expiryTime: json['.expires'],
     );
   }

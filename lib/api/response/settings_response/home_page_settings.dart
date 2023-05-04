@@ -25,7 +25,7 @@ class HomePageSettings {
 
         logo: json['logo'],
         line1: json['line1'] ?? "",
-        line2: json['line2'],
+        line2: json['line2'] ?? "",
         enableHomeScreen: json['enableHomeScreen'] ?? "1",
         viewIntervalDelay: json['viewIntervalDelay'] ?? "2",
         enableTextOnly: json['enableTextOnly'] ?? "",

@@ -7,6 +7,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
+import 'package:snaphybrid/api/response/register_device_response.dart';
+import 'package:snaphybrid/api/response/response_data_token.dart';
 import 'package:snaphybrid/api/response/validate_qrcode_response.dart';
 import 'package:snaphybrid/common/qr_data.dart';
 import '../common/sharepref.dart';
@@ -31,14 +33,6 @@ class ApiService {
       if (res.statusCode == 200) {
         ActivateApplicationResponse activateApplicationResponse =
             ActivateApplicationResponse.fromJson(jsonDecode(res.body));
-        // Fluttertoast.showToast(
-        //     msg: activateApplicationResponse.responseMessage,
-        //     toastLength: Toast.LENGTH_SHORT,
-        //     gravity: ToastGravity.CENTER,
-        //     timeInSecForIosWeb: 1,
-        //     backgroundColor: Colors.green,
-        //     textColor: Colors.white,
-        //     fontSize: 16.0);
         return activateApplicationResponse;
         // if (aaR.responseCode == 1) getGenerateToken(headers, bodys, sn);
       }
@@ -49,6 +43,7 @@ class ApiService {
 
   Future<GetDeviceTokenResponse?> getGenerateToken(bodys) async {
     try {
+      print('jsonEncode =${jsonEncode(bodys)}');
       var url = Uri.parse("${_apiBaseUrl}GetDeviceToken");
       var res = await http.post(url,
           headers: {"Access-Control-Allow-Origin": "*", 'Accept': '*/*'},
@@ -61,6 +56,17 @@ class ApiService {
       }
     } catch (e) {
       log(e.toString());
+      return const GetDeviceTokenResponse(
+          responseCode: 0,
+          responseSubCode: 0,
+          responseMessage: "Invalid Login Credentials",
+          responseData: ResponseDataToken(
+              access_token: "",
+              token_type: "",
+              expires_in: 454,
+              institutionID: "",
+              command: "",
+              expiryTime: ""));
     }
   }
 
@@ -95,7 +101,7 @@ class ApiService {
         }
       }
     } catch (e) {
-      log("validateVendorvalidateVendor =" + e.toString());
+      log("validateVendorvalidateVendor =$e");
       return qrData;
     }
   }
@@ -269,8 +275,38 @@ class ApiService {
       }
       return "0";
     } catch (e) {
-      log("deviceSetting =" + e.toString());
+      log("deviceSetting =$e");
       return "0";
+    }
+  }
+
+  Future<RegisterDeviceResponse?> registerDeviceForApp(pref, bodys) async {
+    try {
+      print('registerDeviceForApp ${jsonEncode(bodys)}');
+
+      var url = Uri.parse("${_apiBaseUrl}RegisterDeviceForApp");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
+          },
+          body: jsonEncode(bodys));
+      print('registerDeviceForApp request = ${res.request}');
+
+      print('registerDeviceForApp ${res.statusCode}');
+
+      print('registerDeviceForApp = ${res.body}');
+      if (res.statusCode == 200) {
+        RegisterDeviceResponse registerDeviceResponse =
+        RegisterDeviceResponse.fromJson(json.decode(res.body));
+          return registerDeviceResponse;
+      }
+      return const RegisterDeviceResponse(responseCode: 0, responseSubCode: 0, responseMessage: "Pleace Try agin");
+    } catch (e) {
+      log("registerDeviceForApp =$e");
+      return const RegisterDeviceResponse(responseCode: 0, responseSubCode: 0, responseMessage: "");
     }
   }
 }

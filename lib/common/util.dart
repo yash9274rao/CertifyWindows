@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -73,10 +71,14 @@ class Util {
     // return String.format(Locale.getDefault(), "%d:%02d:%02d", totalHours, minutes, seconds);
     return "";
   }
+
   static Future<String> getUTCDate() async {
-    return DateFormat("yyyy-MM-dd HH:mm:ss").format( DateTime.now().toUtc()).toString();
+    return DateFormat("yyyy-MM-dd HH:mm:ss")
+        .format(DateTime.now().toUtc())
+        .toString();
   }
-  static Future<void> showToastError(String message) async{
+
+  static Future<void> showToastError(String message) async {
     Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
@@ -86,4 +88,6 @@ class Util {
         textColor: Colors.white,
         fontSize: 16.0);
   }
+
+
 }
