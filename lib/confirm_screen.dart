@@ -9,7 +9,9 @@ import 'package:snaphybrid/common/qr_data.dart';
 import 'package:snaphybrid/home_screen.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:intl/intl.dart';
+import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
+import 'common/util.dart';
 
 typedef StringValue = String Function(String);
 
@@ -39,8 +41,8 @@ class ConfirmLanch extends StatefulWidget {
 }
 
 class _Confirm extends State<ConfirmLanch> {
-  var textHolderModalController = "Validating QR ...";
-
+  var textHolderModalController = "";
+  bool _isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -51,16 +53,37 @@ class _Confirm extends State<ConfirmLanch> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text(
-          textHolderModalController,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
-        ),
+        child : new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              // padding: const EdgeInsets.all(100),
+              // margin:const EdgeInsets.all(100) ,
+
+              // color: Colors.blue[100],
+              child: Center(
+                child: !_isLoading
+                    ?const Text("")
+                    :const CircularProgressIndicator(),
+              ),
+            ),
+            Text(
+              textHolderModalController,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 40, color: Colors.black),
+            ),
+          ],
+        )
       ),
     );
   }
 
   Future<void> initPlatformState() async {
+    setState(() {
+      _isLoading=true;
+
+    });
     var pref = await SharedPreferences.getInstance();
     if (widget.dataStr.contains("vn_")) {
       Map<String, dynamic> validateVendor = new HashMap();
@@ -68,6 +91,8 @@ class _Confirm extends State<ConfirmLanch> {
       validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
       QrData qrData = await ApiService().validateVendor(
           pref.get(Sharepref.accessToken), validateVendor) as QrData;
+
+      // await Future.delayed(const Duration(seconds: 5));
       qrData.setQrCodeID = widget.dataStr;
       updateUI(qrData);
     } else if (widget.dataStr.contains("tr")) {
@@ -78,6 +103,8 @@ class _Confirm extends State<ConfirmLanch> {
 
       QrData qrData = await ApiService().validateQRCode(
           pref.get(Sharepref.accessToken), qrValidation) as QrData;
+
+      // await Future.delayed(const Duration(seconds: 5));
       qrData.setQrCodeID = widget.dataStr;
       updateUI(qrData);
     } else {
@@ -87,12 +114,14 @@ class _Confirm extends State<ConfirmLanch> {
       qrData.setQrCodeID = widget.dataStr;
       qrData.setIsValid = false;
       updateUI(qrData);
+
     }
   }
 
   Future<void> updateUI(QrData qrData) async {
     timeDateSet(qrData);
     setState(() {
+      _isLoading = false;
       textHolderModalController = qrData.getFirstName;
     });
     Future.delayed(Duration(milliseconds: 5000), () {
@@ -145,6 +174,7 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['accessId'] = qrData.getQrCodeID;
     accessLogs['firstName'] = qrData.getFirstName;
     accessLogs['lastName'] = qrData.getLastName;
+    accessLogs['middleName'] = qrData.getMiddleName;
     accessLogs['memberId'] = qrData.getMemberId;
     accessLogs['temperature'] = 0;
     accessLogs['qrCodeId'] = qrData.getQrCodeID;
@@ -172,6 +202,19 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['attendanceMode'] = widget.attendanceMode;
     accessLogs['allowAccess'] = qrData.getIsValid;
 
-    ApiService().accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
+    AccesslogsResponse accesslogsResponse = await ApiService().accessLogs(pref.getString(Sharepref.accessToken),accessLogs);
+ if(accesslogsResponse.responseSubCode == 0 && int.parse(widget.attendanceMode) == 1 && qrData.isValid == true){
+   Util.showToastErrorAccessLogs("Check In");
+ }else if (accesslogsResponse.responseSubCode == 0 && int.parse(widget.attendanceMode) == 2 && qrData.isValid == true){
+   Util.showToastErrorAccessLogs("Check Out");
+ }else if (accesslogsResponse.responseSubCode == 103 && int.parse(widget.attendanceMode) == 1 && qrData.isValid == true) {
+   Util.showToastErrorAccessLogs("Already Check In");
+ }else if (accesslogsResponse.responseSubCode == 103 && int.parse(widget.attendanceMode) == 2 && qrData.isValid == true){
+   Util.showToastErrorAccessLogs("Already Check Out");
+ }
+    Future.delayed(Duration(milliseconds: 50), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    });
   }
 }

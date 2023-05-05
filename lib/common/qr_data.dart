@@ -11,6 +11,9 @@ class QrData {
   late String faceTemplate ="";
   late String memberTypeName="";
   late int isVisitor = 0;
+  String? middleName = "";
+
+
 
   set setQrCodeID(String qrCodeId) {
     this.qrCodeId = qrCodeId;
@@ -41,6 +44,12 @@ class QrData {
   }
 
   String get getLastName => lastName;
+
+  set setMiddleName(String lastName) {
+    this.middleName = middleName;
+  }
+
+  String? get getMiddleName => middleName;
 
   set setMemberId(String memberId) {
     this.memberId = memberId;

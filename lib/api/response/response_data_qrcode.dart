@@ -2,6 +2,7 @@ class ResponseDataQrCode {
   final String id;
   final String firstName;
   final String lastName;
+  final String middleName;
   final String memberId;
   final String accessId;
   final int trqStatus;
@@ -14,6 +15,7 @@ class ResponseDataQrCode {
       {required this.id,
       required this.firstName,
       required this.lastName,
+        required this.middleName,
       required this.memberId,
       required this.accessId,
       required this.trqStatus,
@@ -27,6 +29,7 @@ class ResponseDataQrCode {
         id: json['id'] ?? "",
         firstName: json['firstName'] ?? "",
         lastName: json['lastName'] ?? "",
+        middleName: json['middleName'] ?? "",
         memberId: json['memberId'] ?? "",
         accessId: json['accessId'] ?? "",
         trqStatus: json['trqStatus'] ?? "",
