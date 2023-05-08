@@ -89,5 +89,15 @@ class Util {
         fontSize: 16.0);
   }
 
+  static Future<void> showToastErrorAccessLogs(String message) async {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.blue,
+        textColor: Colors.black,
+        fontSize: 20.0);
+  }
 
 }
