@@ -255,7 +255,7 @@ class _MyHome extends State<HomeScreen> {
         .format(DateTime.now().toUtc())
         .toString();
     healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    healthCheckRequest['deviceInfo'] = '$diveInfo'; //
+    healthCheckRequest['deviceInfo'] = diveInfo; //
     healthCheckRequest['institutionId'] =
     '${pref.getString(Sharepref.institutionID)}';
     //healthCheckRequest['appState'] = 'Foreground';
