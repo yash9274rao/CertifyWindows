@@ -283,6 +283,10 @@ class ApiService {
               settingsResponse.responseData?.jsonValue?.confirmationViewSettings
                   ?.mainText);
           pref.setString(
+              Sharepref.subText,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.subText);
+          pref.setString(
               Sharepref.allowAnonymous,
               settingsResponse.responseData?.jsonValue?.identificationSettings
                   ?.enableAnonymousQRCode);

@@ -10,6 +10,7 @@ class ConfirmationViewSettings {
   final String? viewDelayAboveThreshold;
   final String? viewDelay;
   final String? mainText;
+  final String? subText;
   const ConfirmationViewSettings(
       {
         required this.enableConfirmationScreen,
@@ -20,6 +21,7 @@ class ConfirmationViewSettings {
       required this.enableHomeScreen,
       required this.showVaccinationIndicator,
         required this.mainText,
+        required this.subText,
       required this.showNonVaccinationIndicator});
 
   factory ConfirmationViewSettings.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class ConfirmationViewSettings {
         showVaccinationIndicator: json['showVaccinationIndicator'] ?? "2",
         viewDelay:json['viewDelay'] ?? "",
         mainText:json['MainText'] ?? "",
+        subText:json['SubText'] ?? "",
         showNonVaccinationIndicator: json['showNonVaccinationIndicator'] ?? "");
 
   }

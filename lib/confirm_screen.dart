@@ -45,6 +45,7 @@ class _Confirm extends State<ConfirmLanch> {
   var textHolderModalController = "";
   bool _isLoading = false;
   var confirmationText = "";
+  var confirmationSubText = "";
   var screenDelayValue = "120";
 
   @override
@@ -89,6 +90,11 @@ class _Confirm extends State<ConfirmLanch> {
             ),
             Text(
              confirmationText,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
+            ),
+            Text(
+              confirmationSubText,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
             ),
@@ -150,11 +156,14 @@ class _Confirm extends State<ConfirmLanch> {
         textHolderModalController = qrData.getFirstName;
         confirmationText =
             pref.getString(Sharepref.mainText) ?? "";
+        confirmationSubText = pref.getString(Sharepref.subText) ?? "";
       }else {
         if (pref.getString(Sharepref.allowAnonymous) == "1") {
           textHolderModalController = qrData.getFirstName;
           confirmationText =
               pref.getString(Sharepref.mainText) ?? "";
+          confirmationSubText =
+              pref.getString(Sharepref.subText) ?? "";
           // qrData.lastName = "Invalid QRCode";
         } else {
           textHolderModalController = "";
