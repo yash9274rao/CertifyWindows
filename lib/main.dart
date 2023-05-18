@@ -49,6 +49,7 @@ class _MyHome extends State<MyLanch> {
   var textHolderModalController = "";
   Map<String, dynamic> diveInfo = HashMap();
   var _isVisibility = false;
+ 
   @override
   void initState() {
     super.initState();
@@ -148,7 +149,12 @@ class _MyHome extends State<MyLanch> {
   }
   Future<void> getDeviceToken() async {
     await Firebase.initializeApp();
-    String? deviceToken = await FirebaseMessaging.instance.getToken();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if(pref.getString(Sharepref.firebaseToken) == null || pref.getString(Sharepref.firebaseToken) == ""){
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      pref.setString(Sharepref.firebaseToken, deviceToken ?? "");
+    }
+    
   }
 
 
@@ -259,9 +265,9 @@ class _MyHome extends State<MyLanch> {
     diveInfo['batteryStatus'] = "100";
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
-    Map<String, String> createDoc = new HashMap();
-    createDoc['pushAuthToken'] = "";
-    createDoc['deviceInfo'] = '${diveInfo}';
+    Map<String, dynamic> createDoc = new HashMap();
+    createDoc['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
+    createDoc['deviceData'] = diveInfo;
    // bool result = await InternetConnectionChecker().hasConnection;
     if (true) {
       ActivateApplicationResponse activateApplicationResponse =

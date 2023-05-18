@@ -8,6 +8,7 @@ class Sharepref {
 
 
 
+
   static String accessToken = "accessToken";
   static String institutionID = "institutionID";
 
@@ -45,6 +46,6 @@ class Sharepref {
 
 
 //DeviceToken
-  static String deviceToken = "deviceToken";
+  static String firebaseToken = "firebaseToken";
 
 }

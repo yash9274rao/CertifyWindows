@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "319119188350",
+    "project_id": "snapxt-hybrid",
+    "storage_bucket": "snapxt-hybrid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319119188350:android:95fe1abf5a40870fa2d32f",
+        "android_client_info": {
+          "package_name": "com.certify.snaphybrid.snaphybrid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319119188350-e2dg5h3pb5rvm137c97kn8edki9mdoq9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEH2scAZjsDmh3hMH8iA5SmCDdZRu2cUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319119188350-e2dg5h3pb5rvm137c97kn8edki9mdoq9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
