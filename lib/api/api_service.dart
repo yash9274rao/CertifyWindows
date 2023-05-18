@@ -270,6 +270,35 @@ class ApiService {
               Sharepref.line2ConfirmationView,
               settingsResponse.responseData?.jsonValue?.confirmationViewSettings
                   ?.normalViewLine2);
+          pref.setString(
+              Sharepref.enableConfirmationScreen,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.enableConfirmationScreen);
+          pref.setString(
+              Sharepref.viewDelay,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.viewDelay);
+          pref.setString(
+              Sharepref.mainText,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.mainText);
+          pref.setString(
+              Sharepref.allowAnonymous,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableAnonymousQRCode);
+          pref.setString(
+              Sharepref.enableVendorQR,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVendorQR);
+          pref.setString(
+              Sharepref.enableVisitorQR,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVisitorQR);
+          pref.setString(
+              Sharepref.enableVisitorCheckout,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVisitorCheckout);
+
           return "1";
         }
       }

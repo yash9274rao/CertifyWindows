@@ -13,6 +13,7 @@ import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
 import 'common/util.dart';
 
+
 typedef StringValue = String Function(String);
 
 class ConfirmScreen extends StatelessWidget {
@@ -43,11 +44,24 @@ class ConfirmLanch extends StatefulWidget {
 class _Confirm extends State<ConfirmLanch> {
   var textHolderModalController = "";
   bool _isLoading = false;
+  var confirmationText = "";
+  var screenDelayValue = "120";
+
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    screenDelay();
+
   }
+  Future<void> screenDelay()async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getString(Sharepref.viewDelay) == ""){
+      screenDelayValue;
+    }else{
+      screenDelayValue = Sharepref.viewDelay;
+    }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +86,11 @@ class _Confirm extends State<ConfirmLanch> {
               textHolderModalController,
               style: const TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 40, color: Colors.black),
+            ),
+            Text(
+             confirmationText,
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
             ),
           ],
         )
@@ -118,11 +137,47 @@ class _Confirm extends State<ConfirmLanch> {
     }
   }
 
+
+
+
+
   Future<void> updateUI(QrData qrData) async {
     timeDateSet(qrData);
+    SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       _isLoading = false;
-      textHolderModalController = qrData.getFirstName;
+      if (pref.getString(Sharepref.enableConfirmationScreen) == "1" && qrData.isValid) {
+        textHolderModalController = qrData.getFirstName;
+        confirmationText =
+            pref.getString(Sharepref.mainText) ?? "";
+      }else {
+        if (pref.getString(Sharepref.allowAnonymous) == "1") {
+          textHolderModalController = qrData.getFirstName;
+          confirmationText =
+              pref.getString(Sharepref.mainText) ?? "";
+          // qrData.lastName = "Invalid QRCode";
+        } else {
+          textHolderModalController = "";
+          Util.showToastError("Invalid QRCode");
+
+        }
+      }
+
+
+      // if (pref.getString(Sharepref.enableVendorQR) == "1" && qrData.isValid){
+      //   confirmationText =
+      //       pref.getString(Sharepref.mainText) ?? "";
+      // }
+
+      if(pref.getString(Sharepref.enableVisitorQR) == "1" && qrData.isValid){
+        confirmationText =
+            pref.getString(Sharepref.mainText) ?? "";
+      }
+
+
+
+
+
     });
     Future.delayed(Duration(milliseconds: 5000), () {
       // Your code
@@ -130,6 +185,7 @@ class _Confirm extends State<ConfirmLanch> {
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     });
   }
+
 
   Future<void> timeDateSet(QrData qrData) async {
     Map<String, dynamic> diveInfo = new HashMap();

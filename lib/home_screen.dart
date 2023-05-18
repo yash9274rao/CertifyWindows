@@ -28,6 +28,7 @@ class _MyHome extends State<HomeScreen> {
   var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
   late Timer dataTime;
   late Timer timer;
+  bool _isVisible = true;
 
   //SharedPreferences pref = SharedPreferences.getInstance() as SharedPreferences;
 
@@ -177,9 +178,12 @@ class _MyHome extends State<HomeScreen> {
                         child: const Text("       Check-In       ",),
                       ),
                     ),
+
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
-                      child: TextButton(
+                      child: Visibility(
+                        visible: _isVisible,
+                        child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.redAccent,
                           padding: const EdgeInsets.all(16.0),
@@ -206,7 +210,9 @@ class _MyHome extends State<HomeScreen> {
                         child: const Text("      Check-Out      "),
                       ),
                     ),
+                    ),
                   ],
+
                 ),
               )
             ],
@@ -289,6 +295,13 @@ class _MyHome extends State<HomeScreen> {
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
+    if (pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
+      setState(() {
+        _isVisible = !_isVisible;
+    }
+      );
+    }
+
   }
 
   @override

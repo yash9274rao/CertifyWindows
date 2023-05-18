@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,11 +14,18 @@ import 'package:snaphybrid/home_screen.dart';
 
 import 'api/api_service.dart';
 import 'login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
-void main() {
+
+
+Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
   runApp(MyApp());
 }
 
@@ -45,6 +53,7 @@ class _MyHome extends State<MyLanch> {
   void initState() {
     super.initState();
     initPlatformState();
+    getDeviceToken();
   }
 
   @override
@@ -137,6 +146,12 @@ class _MyHome extends State<MyLanch> {
       ),
     );
   }
+  Future<void> getDeviceToken() async {
+    await Firebase.initializeApp();
+    String? deviceToken = await FirebaseMessaging.instance.getToken();
+  }
+
+
 
   Future<void> initPlatformState() async {
     SharedPreferences pref = await SharedPreferences.getInstance();

@@ -46,6 +46,12 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   client_information: ^2.0.3+1
   background_fetch: ^1.1.5
+  firebase_core: ^1.24.0
+  firebase_messaging: ^10.0.0
+  firebase_in_app_messaging: ^0.6.0+27
+  firebase_core_platform_interface: 4.5.1
+
+
 
 dev_dependencies:
   flutter_test:
