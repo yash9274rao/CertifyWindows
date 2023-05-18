@@ -25,7 +25,7 @@ class _MyHome extends State<HomeScreen> {
   var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
   late Timer dataTime;
   late Timer timer;
-  bool _isVisible = true;
+  bool _isVisible = false;
 
   //SharedPreferences pref = SharedPreferences.getInstance() as SharedPreferences;
 
@@ -286,7 +286,12 @@ class _MyHome extends State<HomeScreen> {
     setState(() {
       if (pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
         setState(() {
-          _isVisible = !_isVisible;
+          _isVisible = false;
+        }
+        );
+      }else {
+        setState(() {
+          _isVisible = true;
         }
         );
       }
