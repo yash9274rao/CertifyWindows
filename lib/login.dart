@@ -84,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Form(
           key: _formGlobalKey,
           child: Container(
-              margin: EdgeInsets.fromLTRB(180, 80, 180, 80),
+              margin: const EdgeInsets.fromLTRB(180, 80, 180, 80),
               // padding: EdgeInsets.all(50),
               color: Colors.white,
               child: Column(
@@ -172,16 +172,16 @@ class _MyHomePageState extends State<MyHomePage> {
                         obscuringCharacter: '*',
                         obscureText: !_isVisible,
                         decoration:  InputDecoration(
-                          border: UnderlineInputBorder(),
-                          focusedBorder: UnderlineInputBorder(
+                          border: const UnderlineInputBorder(),
+                          focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.grey),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
-                          enabledBorder: UnderlineInputBorder(
+                          enabledBorder: const UnderlineInputBorder(
                               // borderSide: BorderSide.none,
                               borderRadius:
                                   BorderRadius.all(Radius.circular(5))),
-                          prefixIcon: Icon(
+                          prefixIcon: const Icon(
                             Icons.lock,
                             color: Colors.black26,
                           ),
@@ -189,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           fillColor: Colors.white,
                           labelText: "Password",
                           // hintText: 'your-email@domain.com',
-                          labelStyle: TextStyle(color: Colors.black26),
+                          labelStyle: const TextStyle(color: Colors.black26),
 
                           suffixIcon: IconButton(
                             onPressed: () {
@@ -197,8 +197,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _isVisible = !_isVisible;
                               });
                             },
-                            icon: _isVisible ? Icon(Icons.visibility, color: Colors.black,):
-                            Icon(Icons.visibility_off, color: Colors.grey,),
+                            icon: _isVisible ? const Icon(Icons.visibility, color: Colors.black,):
+                            const Icon(Icons.visibility_off, color: Colors.grey,),
                           ),
                         ),
                       ),

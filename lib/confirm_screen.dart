@@ -68,20 +68,14 @@ class _Confirm extends State<ConfirmLanch> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child : new Column(
+        child : Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              // padding: const EdgeInsets.all(100),
-              // margin:const EdgeInsets.all(100) ,
-
-              // color: Colors.blue[100],
-              child: Center(
-                child: !_isLoading
-                    ?const Text("")
-                    :const CircularProgressIndicator(),
-              ),
+            Center(
+              child: !_isLoading
+                  ?const Text("")
+                  :const CircularProgressIndicator(),
             ),
             Text(
               textHolderModalController,
@@ -143,10 +137,6 @@ class _Confirm extends State<ConfirmLanch> {
     }
   }
 
-
-
-
-
   Future<void> updateUI(QrData qrData) async {
     timeDateSet(qrData);
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -172,21 +162,10 @@ class _Confirm extends State<ConfirmLanch> {
         }
       }
 
-
-      // if (pref.getString(Sharepref.enableVendorQR) == "1" && qrData.isValid){
-      //   confirmationText =
-      //       pref.getString(Sharepref.mainText) ?? "";
-      // }
-
       if(pref.getString(Sharepref.enableVisitorQR) == "1" && qrData.isValid){
         confirmationText =
             pref.getString(Sharepref.mainText) ?? "";
       }
-
-
-
-
-
     });
     Future.delayed(Duration(milliseconds: 5000), () {
       // Your code
@@ -199,41 +178,17 @@ class _Confirm extends State<ConfirmLanch> {
   Future<void> timeDateSet(QrData qrData) async {
     Map<String, dynamic> diveInfo = new HashMap();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime.now().millisecondsSinceEpoch.toString());
-    WidgetsFlutterBinding.ensureInitialized();
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      diveInfo['osVersion'] = androidInfo.version.release;
-      diveInfo['uniqueDeviceId'] = '${pref.getString(Sharepref.serialNo)}';
-      diveInfo['deviceModel'] = androidInfo.model;
-      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      diveInfo['osVersion'] = '${iosInfo.systemVersion}';
-      diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
-      diveInfo['deviceModel'] = '${iosInfo.model}';
-      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-      //   print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      WebBrowserInfo webBrowserDeviceInfo = await deviceInfo.webBrowserInfo;
-      // textHolderModal = 'If you have already added the device on the '
-      //     'portal SL NO:${webBrowserInfo.userAgent}';
-      diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
-      diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
-      diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
-      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    } else if (defaultTargetPlatform == TargetPlatform.macOS) {
-      MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
-    }
-    final ipv4 = await Ipify.ipv4();
-    diveInfo['appVersion'] = "v3.4.232";
+    diveInfo['osVersion'] = pref.getString(Sharepref.osVersion);
+    diveInfo['uniqueDeviceId'] = pref.getString(Sharepref.serialNo);
+    diveInfo['deviceModel'] = pref.getString(Sharepref.deviceModel);
+    diveInfo['deviceSN'] = pref.getString(Sharepref.serialNo);
+    diveInfo['appVersion'] = pref.getString(Sharepref.appVersion);
     diveInfo['mobileNumber'] = "+1";
     diveInfo['IMEINumber'] = "";
     diveInfo['batteryStatus'] = "100";
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
+    final ipv4 = await Ipify.ipv4();
     Map<String, dynamic> accessLogs = HashMap();
     accessLogs['id'] = qrData.getId;
     accessLogs['accessId'] = qrData.getQrCodeID;

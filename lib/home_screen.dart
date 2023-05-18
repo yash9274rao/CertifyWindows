@@ -2,15 +2,12 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:snaphybrid/api/api_service.dart';
-import 'package:background_fetch/background_fetch.dart';
 
 import 'common/sharepref.dart';
 import 'common/util.dart';
