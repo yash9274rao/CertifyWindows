@@ -186,69 +186,6 @@ class _MyHome extends State<MyLanch> {
     pref.setString(Sharepref.appVersion, _clientInfo.applicationVersion);
     pref.setString(Sharepref.osVersion, '${_clientInfo.osName} - ${_clientInfo.osVersion}');
 
-    // if (defaultTargetPlatform == TargetPlatform.android) {
-    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   print('Running on ${androidInfo.serialNumber}'); // e.g. "Moto G (4)"
-    //   var sn = androidInfo.id.replaceAll(".", "").replaceAll("/", "");
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${sn}';
-    //   });
-    //   pref.setString(Sharepref.serialNo, sn);
-    //   pref.setString(Sharepref.platform, "Android Tablet");
-    //   pref.setString(Sharepref.platformId, "4");
-    //   pref.setString(Sharepref.deviceModel, androidInfo.model);
-    //   pref.setString(Sharepref.osVersion, "4");
-    //
-    //   diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
-    //   diveInfo['uniqueDeviceId'] = sn;
-    //   diveInfo['deviceModel'] = '${androidInfo.model}';
-    //   diveInfo['deviceSN'] = sn;
-    // } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${iosInfo.identifierForVendor}';
-    //   });
-    //   pref.setString(
-    //       Sharepref.serialNo, iosInfo.identifierForVendor.toString());
-    //   pref.setString(Sharepref.platform, "IOS Tablet");
-    //   pref.setString(Sharepref.platformId, "3");
-    //
-    //   diveInfo['osVersion'] = '${iosInfo.systemVersion}';
-    //   diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
-    //   diveInfo['deviceModel'] = '${iosInfo.model}';
-    //   diveInfo['deviceSN'] = '${iosInfo.identifierForVendor}';
-    //   //   print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
-    // } else if (defaultTargetPlatform == TargetPlatform.windows) {
-    //   WebBrowserInfo webBrowserDeviceInfo = await deviceInfo.webBrowserInfo;
-    //   // textHolderModal = 'If you have already added the device on the '
-    //   //     'portal SL NO:${webBrowserInfo.userAgent}';
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${webBrowserDeviceInfo.productSub}';
-    //   });
-    //   pref.setString(
-    //       Sharepref.serialNo, webBrowserDeviceInfo.productSub.toString());
-    //   pref.setString(Sharepref.platform, "Browser");
-    //   pref.setString(Sharepref.platformId, "1");
-    //   diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
-    //   diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
-    //   diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
-    //   diveInfo['deviceSN'] = '${webBrowserDeviceInfo.productSub}';
-    // } else if (defaultTargetPlatform == TargetPlatform.macOS) {
-    //   MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${macOsDeviceInfo.systemGUID}';
-    //   });
-    //   pref.setString(Sharepref.platform, "IOS Tablet");
-    //   pref.setString(Sharepref.platformId, "3");
-    // }
     activiAPI();
   }
 
