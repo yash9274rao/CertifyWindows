@@ -281,11 +281,18 @@ class _MyHome extends State<HomeScreen> {
         '${pref.getString(Sharepref.institutionID)}';
     String req = await ApiService().deviceSetting(pref) as String;
     if (req == "1") updateUI();
+
   }
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
+      if (pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
+        setState(() {
+          _isVisible = !_isVisible;
+        }
+        );
+      }
       lineOneText = pref.getString(Sharepref.line1HomePageView)?? "";
       lineTwoText = pref.getString(Sharepref.line2HomePageView)?? "";
       String? base64 = pref.getString(Sharepref.logoHomePageView)?? "";
@@ -295,13 +302,8 @@ class _MyHome extends State<HomeScreen> {
         _imageToShow =
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
+
     });
-    if (pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
-      setState(() {
-        _isVisible = !_isVisible;
-    }
-      );
-    }
 
   }
 
