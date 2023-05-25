@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+// import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -8,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:snaphybrid/api/api_service.dart';
+import 'package:snaphybrid/pinView.dart';
 
 import 'common/sharepref.dart';
 import 'common/util.dart';
@@ -26,6 +28,7 @@ class _MyHome extends State<HomeScreen> {
   late Timer dataTime;
   late Timer timer;
   bool _isVisible = false;
+  bool QrcodeVisible = false;
 
   //SharedPreferences pref = SharedPreferences.getInstance() as SharedPreferences;
 
@@ -148,6 +151,8 @@ class _MyHome extends State<HomeScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                      child:Visibility(
+                        visible: _isVisible,
                       child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -156,24 +161,27 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () async {
-                          bool result =
-                          await InternetConnectionChecker().hasConnection;
-                          if (result) {
-                            SharedPreferences pref =
-                            await SharedPreferences.getInstance();
-                            pref.setBool(Sharepref.isQrCodeScan, true);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const QRViewExample(
-                                        attendanceMode: "1")));
-                          } else {
-                            Util.showToastError("No Internet");
-                          }
+                          _isVisible = false;
+                          QrcodeVisible = true;
+                          // bool result =
+                          // await InternetConnectionChecker().hasConnection;
+                          // if (result) {
+                          //   SharedPreferences pref =
+                          //   await SharedPreferences.getInstance();
+                          //   pref.setBool(Sharepref.isQrCodeScan, true);
+                          //   Navigator.pushReplacement(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) =>
+                          //           const QRViewExample(
+                          //               attendanceMode: "1")));
+                          // } else {
+                          //   Util.showToastError("No Internet");
+                          // }
                         },
                         child: const Text("       Check-In       ",),
                       ),
+                    ),
                     ),
 
                     Padding(
@@ -188,6 +196,8 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.red.shade200,
                         ),
                         onPressed: () async {
+                          _isVisible = false;
+                          QrcodeVisible = true;
                           bool result =
                           await InternetConnectionChecker().hasConnection;
                           if (result) {
@@ -208,7 +218,59 @@ class _MyHome extends State<HomeScreen> {
                       ),
                     ),
                     ),
-                  ],
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+              child:Visibility(
+              visible:QrcodeVisible,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.all(16.0),
+                  textStyle: const TextStyle(fontSize: 24),
+                  backgroundColor: Colors.blue,
+
+                ),
+                onPressed: () async {
+                  bool result =
+                  await InternetConnectionChecker().hasConnection;
+                if (result) {
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  pref.setBool(Sharepref.isQrCodeScan, true);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                          const QRViewExample(
+                              attendanceMode: "1")));
+                } else {
+                  Util.showToastError("No Internet");
+                }
+              }, child: const Text("        QrCode        "),
+              ),
+          ),
+          ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+                      child:Visibility(
+                        visible:QrcodeVisible,
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.all(16.0),
+                          textStyle: const TextStyle(fontSize: 24),
+                          backgroundColor: Colors.blue,
+                        ), onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const PinView()),
+                        );
+                      }, child: const Text("            PIN            "),
+                      ),
+                    ),
+                    ),
+            ],
+
 
                 ),
               )
