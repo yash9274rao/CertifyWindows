@@ -311,6 +311,23 @@ class ApiService {
               Sharepref.enableVolunteerQR,
               settingsResponse.responseData?.jsonValue?.identificationSettings
                   ?.enableVolunteerQR);
+          pref.setString(
+              Sharepref.enableBufferTime,
+              settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableBufferTime);
+          pref.setString(
+              Sharepref.allowBufferTime,
+              settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.allowBufferTime);
+          pref.setString(
+              Sharepref.enableMembersVisitors,
+              settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableMembersVisitors);
+          pref.setString(
+              Sharepref.enableVendors,
+              settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableVendors);
+          pref.setString(
+              Sharepref.enableVolunteers,
+              settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableVolunteers);
+
+
 
           return "1";
         }

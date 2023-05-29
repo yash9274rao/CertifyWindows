@@ -1,3 +1,5 @@
+import 'package:snaphybrid/api/response/settings_response/bufferSettings.dart';
+
 import 'access_control_settings.dart';
 import 'confirmation_view_settings.dart';
 import 'device_settings_data.dart';
@@ -12,13 +14,17 @@ class DeviceSettings {
   final IdentificationSettings identificationSettings;
   final AccessControlSettings? accessControlSettings;
   final PrinterSettings? printerSettings;
+  final BufferTimeSettings? bufferTimeSettings;
+
 
   const DeviceSettings({required this.deviceSettings,
     required this.homePageSettings,
     required this.confirmationViewSettings,
     required this.identificationSettings,
     required this.accessControlSettings,
-    required this.printerSettings});
+    required this.printerSettings,
+    required this.bufferTimeSettings
+  });
 
   factory DeviceSettings.fromJson(Map<String, dynamic> json) {
     return DeviceSettings(
@@ -33,6 +39,9 @@ class DeviceSettings {
         accessControlSettings:
         AccessControlSettings.fromJson(json['AccessControl'] ?? {}),
         printerSettings:
-        PrinterSettings.fromJson(json['PrinterSettings'] ?? {}));
+        PrinterSettings.fromJson(json['PrinterSettings'] ?? {}),
+      bufferTimeSettings: 
+       BufferTimeSettings.fromJson(json['BufferTime'] ?? {})
+    );
   }
 }

@@ -46,6 +46,12 @@ class Sharepref {
   static String checkInMode = "CheckinMode";
   static String enableVolunteerQR = "enableVolunteerQR";
 
+  //BufferTime Settings
+  static String enableBufferTime = "enableBufferTime";
+  static String allowBufferTime = "allowBufferTime";
+  static String enableMembersVisitors = "enableMembersVisitors";
+  static String enableVendors = "enableVendors";
+  static String enableVolunteers = "enableVolunteers";
 
 //DeviceToken
   static String firebaseToken = "firebaseToken";
