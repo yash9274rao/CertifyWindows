@@ -229,6 +229,7 @@ class ApiService {
       deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
       deviceSetting['institutionId'] =
       '${pref.getString(Sharepref.institutionID)}';
+      deviceSetting['settingType'] = 10;
 
       var url = Uri.parse("${_apiBaseUrl}GetDeviceConfiguration");
       var res = await http.post(url,
@@ -302,6 +303,14 @@ class ApiService {
               Sharepref.enableVisitorCheckout,
               settingsResponse.responseData?.jsonValue?.identificationSettings
                   ?.enableVisitorCheckout);
+          pref.setString(
+              Sharepref.checkInMode,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.checkInMode);
+          pref.setString(
+              Sharepref.enableVolunteerQR,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVolunteerQR);
 
           return "1";
         }

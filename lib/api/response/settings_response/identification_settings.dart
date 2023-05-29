@@ -10,7 +10,8 @@ class IdentificationSettings {
   final String? enableVisitorQR;
   final String? visitorMode;
   final String? enableVisitorCheckout;
-
+  final String? checkInMode;
+  final String? enableVolunteerQR;
 
   const IdentificationSettings(
       {
@@ -23,7 +24,9 @@ class IdentificationSettings {
         required this.enableVendorQR,
         required this.enableVisitorQR,
         required this.visitorMode,
-        required this.enableVisitorCheckout
+        required this.enableVisitorCheckout,
+        required this.checkInMode,
+        required this.enableVolunteerQR
       });
 
   factory IdentificationSettings.fromJson(Map<String, dynamic> json) {
@@ -38,6 +41,9 @@ class IdentificationSettings {
         enableVendorQR: json['enableVendorQR'] ?? "",
         enableVisitorQR: json['enableVisitorQR'],
         visitorMode: json['visitorMode'] ?? "",
-        enableVisitorCheckout: json['enableVisitorCheckout'] );
+        checkInMode: json['CheckinMode'] ?? "",
+        enableVolunteerQR: json['enableVolunteerQR'] ?? "",
+        enableVisitorCheckout: json['enableVisitorCheckout']
+    );
   }
 }

@@ -42,7 +42,9 @@ class Sharepref {
   static String attendanceMode = "showNonVaccinationIndicator";
   static String loggingMode = "loggingMode";
   static String isQrCodeScan = "isQrCodeScan";
-
+  static String isPin = "isPin";
+  static String checkInMode = "CheckinMode";
+  static String enableVolunteerQR = "enableVolunteerQR";
 
 
 //DeviceToken

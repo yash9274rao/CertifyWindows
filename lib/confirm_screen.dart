@@ -18,24 +18,27 @@ typedef StringValue = String Function(String);
 
 class ConfirmScreen extends StatelessWidget {
   const ConfirmScreen(
-      {Key? key, required this.dataStr, required this.attendanceMode})
+      {Key? key, required this.dataStr, required this.attendanceMode, required this.type})
       : super(key: key);
   final String dataStr;
   final String attendanceMode;
+  final String type;
 
-  @override
+
+
+@override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ConfirmLanch(dataStr, attendanceMode),
+      home: ConfirmLanch(dataStr, attendanceMode, type),
     );
   }
 }
 
 class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.dataStr, this.attendanceMode);
+  ConfirmLanch(this.dataStr, this.attendanceMode, this.type);
 
-  final String dataStr, attendanceMode;
+  final String dataStr, attendanceMode, type;
 
   @override
   _Confirm createState() => _Confirm();
@@ -47,6 +50,7 @@ class _Confirm extends State<ConfirmLanch> {
   var confirmationText = "";
   var confirmationSubText = "";
   var screenDelayValue = "120";
+
 
   @override
   void initState() {
@@ -104,37 +108,46 @@ class _Confirm extends State<ConfirmLanch> {
 
     });
     var pref = await SharedPreferences.getInstance();
-    if (widget.dataStr.contains("vn_")) {
-      Map<String, dynamic> validateVendor = new HashMap();
-      validateVendor['vendorGuid'] = widget.dataStr;
-      validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
-      QrData qrData = await ApiService().validateVendor(
-          pref.get(Sharepref.accessToken), validateVendor) as QrData;
+      if (widget.type == "qr") {
+        if (widget.dataStr.contains("vn_")) {
+          Map<String, dynamic> validateVendor = new HashMap();
+          validateVendor['vendorGuid'] = widget.dataStr;
+          validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
+          QrData qrData = await ApiService().validateVendor(
+              pref.get(Sharepref.accessToken), validateVendor) as QrData;
 
-      // await Future.delayed(const Duration(seconds: 5));
-      qrData.setQrCodeID = widget.dataStr;
-      updateUI(qrData);
-    } else if (widget.dataStr.contains("tr")) {
-      Map<String, dynamic> qrValidation = new HashMap();
-      qrValidation['qrCodeID'] = widget.dataStr;
-      qrValidation['institutionId'] = pref.getString(Sharepref.institutionID);
-      qrValidation['deviceSNo'] = pref.getString(Sharepref.serialNo);
+          // await Future.delayed(const Duration(seconds: 5));
+          qrData.setQrCodeID = widget.dataStr;
+          updateUI(qrData);
+        } else if (widget.dataStr.contains("tr")) {
+          Map<String, dynamic> qrValidation = new HashMap();
+          qrValidation['qrCodeID'] = widget.dataStr;
+          qrValidation['institutionId'] =
+              pref.getString(Sharepref.institutionID);
+          qrValidation['deviceSNo'] = pref.getString(Sharepref.serialNo);
 
-      QrData qrData = await ApiService().validateQRCode(
-          pref.get(Sharepref.accessToken), qrValidation) as QrData;
+          QrData qrData = await ApiService().validateQRCode(
+              pref.get(Sharepref.accessToken), qrValidation) as QrData;
 
-      // await Future.delayed(const Duration(seconds: 5));
-      qrData.setQrCodeID = widget.dataStr;
-      updateUI(qrData);
-    } else {
-      QrData qrData = QrData();
-      qrData.setIsValid = false;
-      qrData.setFirstName = "Anonymous";
-      qrData.setQrCodeID = widget.dataStr;
-      qrData.setIsValid = false;
-      updateUI(qrData);
-
-    }
+          // await Future.delayed(const Duration(seconds: 5));
+          qrData.setQrCodeID = widget.dataStr;
+          updateUI(qrData);
+        } else {
+          QrData qrData = QrData();
+          qrData.setIsValid = false;
+          qrData.setFirstName = "Anonymous";
+          qrData.setQrCodeID = widget.dataStr;
+          qrData.setIsValid = false;
+          updateUI(qrData);
+        }
+      }else if (widget.type == "pin"){
+        QrData qrData = QrData();
+        qrData.setIsValid = false;
+        qrData.setFirstName = "Anonymous";
+        qrData.setQrCodeID = widget.dataStr;
+        updateUI(qrData);
+      }
+    //pin
   }
 
   Future<void> updateUI(QrData qrData) async {
@@ -162,10 +175,7 @@ class _Confirm extends State<ConfirmLanch> {
         }
       }
 
-      if(pref.getString(Sharepref.enableVisitorQR) == "1" && qrData.isValid){
-        confirmationText =
-            pref.getString(Sharepref.mainText) ?? "";
-      }
+
     });
     Future.delayed(Duration(milliseconds: 5000), () {
       // Your code

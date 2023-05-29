@@ -27,10 +27,12 @@ class _MyHome extends State<HomeScreen> {
   var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
   late Timer dataTime;
   late Timer timer;
-  bool _isVisible = false;
-  bool QrcodeVisible = false;
+  String attendanceMode = "0";
+  bool checkInVisiable = true;
+  bool checkOutVisiable = true;
+  bool qrAndpinVisiable = false;
 
-  //SharedPreferences pref = SharedPreferences.getInstance() as SharedPreferences;
+
 
   Map<String, dynamic> diveInfo = HashMap();
 
@@ -152,7 +154,7 @@ class _MyHome extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
                       child:Visibility(
-                        visible: _isVisible,
+                        visible: checkInVisiable,
                       child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -161,23 +163,37 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () async {
-                          _isVisible = false;
-                          QrcodeVisible = true;
-                          // bool result =
-                          // await InternetConnectionChecker().hasConnection;
-                          // if (result) {
-                          //   SharedPreferences pref =
-                          //   await SharedPreferences.getInstance();
-                          //   pref.setBool(Sharepref.isQrCodeScan, true);
-                          //   Navigator.pushReplacement(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //           builder: (context) =>
-                          //           const QRViewExample(
-                          //               attendanceMode: "1")));
-                          // } else {
-                          //   Util.showToastError("No Internet");
-                          // }
+                          SharedPreferences pref = await SharedPreferences.getInstance();
+                          bool result =
+                          await InternetConnectionChecker().hasConnection;
+                          if (result) {
+                            attendanceMode = "1";
+                            SharedPreferences pref =
+                            await SharedPreferences.getInstance();
+                            if(pref.getString(Sharepref.checkInMode) == "0"){
+                              pref.setBool(Sharepref.isQrCodeScan, true);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                       QRViewExample(
+                                          attendanceMode: attendanceMode)));
+
+                          }else if(pref.getString(Sharepref.checkInMode) == "1"){
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PinViewPage(
+                                              attendanceMode: attendanceMode)));
+                          }else if (pref.getString(Sharepref.checkInMode) == "2") {
+                              checkInVisiable = false;
+                              checkOutVisiable = false;
+                              qrAndpinVisiable = true;
+                          }
+                          } else {
+                            Util.showToastError("No Internet");
+                          }
                         },
                         child: const Text("       Check-In       ",),
                       ),
@@ -187,7 +203,7 @@ class _MyHome extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
                       child: Visibility(
-                        visible: _isVisible,
+                        visible: checkOutVisiable,
                         child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.redAccent,
@@ -196,20 +212,30 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.red.shade200,
                         ),
                         onPressed: () async {
-                          _isVisible = false;
-                          QrcodeVisible = true;
+
+                          SharedPreferences pref = await SharedPreferences.getInstance();
                           bool result =
                           await InternetConnectionChecker().hasConnection;
                           if (result) {
-                            SharedPreferences pref =
-                            await SharedPreferences.getInstance();
-                            pref.setBool(Sharepref.isQrCodeScan, true);
-                            Navigator.pushReplacement(
+                            attendanceMode = "2";
+                            if(pref.getString(Sharepref.checkInMode) == "0") {
+                              pref.setBool(Sharepref.isQrCodeScan, true);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          QRViewExample(
+                                              attendanceMode: attendanceMode)));
+                            }else if(pref.getString(Sharepref.checkInMode) == "1") {
+                              Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                    const QRViewExample(
-                                        attendanceMode: "2")));
+                                MaterialPageRoute(builder: (context) => PinViewPage(attendanceMode: attendanceMode)),
+                              );
+                            }else if (pref.getString(Sharepref.checkInMode) == "2"){
+                              checkInVisiable = false;
+                              checkOutVisiable = false;
+                              qrAndpinVisiable = true;
+                            }
                           } else {
                             Util.showToastError("No Internet");
                           }
@@ -221,7 +247,7 @@ class _MyHome extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
               child:Visibility(
-              visible:QrcodeVisible,
+              visible:qrAndpinVisiable,// false qrbox hidden
               child: TextButton(
                 style: TextButton.styleFrom(
                   foregroundColor: Colors.black,
@@ -241,8 +267,8 @@ class _MyHome extends State<HomeScreen> {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                          const QRViewExample(
-                              attendanceMode: "1")));
+                           QRViewExample(
+                              attendanceMode: attendanceMode)));
                 } else {
                   Util.showToastError("No Internet");
                 }
@@ -253,18 +279,26 @@ class _MyHome extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
                       child:Visibility(
-                        visible:QrcodeVisible,
+                        visible:qrAndpinVisiable,// false pin box hidden
                       child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.black,
                           padding: const EdgeInsets.all(16.0),
                           textStyle: const TextStyle(fontSize: 24),
                           backgroundColor: Colors.blue,
-                        ), onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const PinView()),
-                        );
+                        ), onPressed: () async {
+                        bool result =
+                            await InternetConnectionChecker().hasConnection;
+                        if (result) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                 PinViewPage(
+                                          attendanceMode: attendanceMode)));
+                        } else {
+                          Util.showToastError("No Internet");
+                        }
                       }, child: const Text("            PIN            "),
                       ),
                     ),
@@ -338,6 +372,7 @@ class _MyHome extends State<HomeScreen> {
     deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     deviceSetting['institutionId'] =
         '${pref.getString(Sharepref.institutionID)}';
+    deviceSetting['settingType'] = 10;
     String req = await ApiService().deviceSetting(pref) as String;
     if (req == "1") updateUI();
 
@@ -348,12 +383,12 @@ class _MyHome extends State<HomeScreen> {
     setState(() {
       if (pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
         setState(() {
-          _isVisible = false;
+          checkOutVisiable = false;
         }
         );
       }else {
         setState(() {
-          _isVisible = true;
+          checkOutVisiable = true;
         }
         );
       }
