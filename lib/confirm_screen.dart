@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/api_service.dart';
+import 'package:snaphybrid/api/response/VoluntearResponse.dart';
 import 'package:snaphybrid/common/qr_data.dart';
 import 'package:snaphybrid/home_screen.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -64,7 +65,7 @@ class _Confirm extends State<ConfirmLanch> {
     if (pref.getString(Sharepref.viewDelay) == ""){
       screenDelayValue;
     }else{
-      screenDelayValue = Sharepref.viewDelay;
+      screenDelayValue = pref.getString(Sharepref.viewDelay).toString();
     }
     }
 
@@ -109,7 +110,10 @@ class _Confirm extends State<ConfirmLanch> {
     });
     var pref = await SharedPreferences.getInstance();
       if (widget.type == "qr") {
-        if (widget.dataStr.contains("vn_")) {
+        if(widget.dataStr.startsWith("vm") && (pref.getString(Sharepref.enableVolunteerQR) != "1") && (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
+
+        }else
+        if (widget.dataStr.contains("vn")) {
           Map<String, dynamic> validateVendor = new HashMap();
           validateVendor['vendorGuid'] = widget.dataStr;
           validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
@@ -119,7 +123,10 @@ class _Confirm extends State<ConfirmLanch> {
           // await Future.delayed(const Duration(seconds: 5));
           qrData.setQrCodeID = widget.dataStr;
           updateUI(qrData);
-        } else if (widget.dataStr.contains("tr")) {
+        }
+        // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
+       else if ( widget.dataStr.contains("tr")  || widget.dataStr.startsWith("vm"))
+        {
           Map<String, dynamic> qrValidation = new HashMap();
           qrValidation['qrCodeID'] = widget.dataStr;
           qrValidation['institutionId'] =
@@ -132,7 +139,25 @@ class _Confirm extends State<ConfirmLanch> {
           // await Future.delayed(const Duration(seconds: 5));
           qrData.setQrCodeID = widget.dataStr;
           updateUI(qrData);
-        } else {
+        }
+        // else if (widget.dataStr.contains("vm") && pref.get(Sharepref.enableVolunteerQR) == "1"){
+        //   Map<String, dynamic> volunteerValidation = new HashMap();
+        //   String currentString = widget.dataStr;
+        //   var arr = currentString.split('/');
+        //   if(arr.length>2) {
+        //
+        //     volunteerValidation['guidId'] = arr[0];
+        //     // volunteerValidation['pin'] = "";
+        //
+        //     //comparing timestamp
+        //
+        //     VolunteerResponse result = await ApiService().volunteerApiCall(
+        //         pref.get(Sharepref.accessToken),
+        //         volunteerValidation) as VolunteerResponse;
+        //     print(result);
+        //   }
+        // }
+        else {
           QrData qrData = QrData();
           qrData.setIsValid = false;
           qrData.setFirstName = "Anonymous";
@@ -201,7 +226,7 @@ class _Confirm extends State<ConfirmLanch> {
     final ipv4 = await Ipify.ipv4();
     Map<String, dynamic> accessLogs = HashMap();
     accessLogs['id'] = qrData.getId;
-    accessLogs['accessId'] = qrData.getQrCodeID;
+    accessLogs['accessId'] = "";
     accessLogs['firstName'] = qrData.getFirstName;
     accessLogs['lastName'] = qrData.getLastName;
     accessLogs['middleName'] = qrData.getMiddleName;
@@ -216,7 +241,7 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['facilityName'] = "";
     accessLogs['locationName'] = '';
     accessLogs['deviceTime'] = DateFormat("MM/dd/yyyy HH:mm:ss")
-        .format(DateTime.now().toUtc()).toString();
+        .format(DateTime.now()).toString();
     //healthCheckRequest['timezone'] = '05:30';
     accessLogs['sourceIP'] = ipv4;
     accessLogs['deviceData'] = diveInfo;

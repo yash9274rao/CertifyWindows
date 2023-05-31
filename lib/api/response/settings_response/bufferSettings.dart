@@ -21,9 +21,9 @@ class BufferTimeSettings {
 
         enableBufferTime: json['enableBufferTime'] ?? "",
         allowBufferTime:json['allowBufferTime'] ?? "",
-        enableMembersVisitors:json['enableMembersVisitors'] ?? "",
-      enableVendors:json['enableVendors'] ?? "",
-      enableVolunteers:json['enableVolunteers'] ?? "",
+        enableMembersVisitors:json['enableMembersVisitors'] ?? false,
+      enableVendors:json['enableVendors'] ?? false,
+      enableVolunteers:json['enableVolunteers'] ?? false,
     );
 
 

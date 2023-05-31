@@ -32,8 +32,8 @@ class ResponseDataQrCode {
         middleName: json['middleName'] ?? "",
         memberId: json['memberId'] ?? "",
         accessId: json['accessId'] ?? "",
-        trqStatus: json['trqStatus'] ?? "",
-        memberTypeId: json['memberTypeId'] ?? "",
+        trqStatus: json['trqStatus'] ?? 0,
+        memberTypeId: json['memberTypeId'] ?? 0,
         faceTemplate: json['faceTemplate'] ?? "",
         memberTypeName: json['memberTypeName'] ?? "",
         isVisitor: json['isVisitor'] ?? "");

@@ -29,7 +29,7 @@ class ConfirmationViewSettings {
         viewDelayAboveThreshold:json['viewDelayAboveThreshold'] ?? "",
         enableConfirmationScreen: json['enableConfirmationScreen'],
         normalViewLine1: json['normalViewLine1'] ?? "",
-        normalViewLine2: json['normalViewLine2'],
+        normalViewLine2: json['normalViewLine2'] ?? "",
         enableHomeScreen: json['enableHomeScreen'] ?? "1",
         showVaccinationIndicator: json['showVaccinationIndicator'] ?? "2",
         viewDelay:json['viewDelay'] ?? "",

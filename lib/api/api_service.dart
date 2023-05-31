@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:snaphybrid/api/response/VoluntearResponse.dart';
 import 'package:snaphybrid/api/response/accesslogs_Response.dart';
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
@@ -189,35 +190,35 @@ class ApiService {
       print('validateQRCode = ${res.body}');
       QrData qrData = new QrData();
       if (res.statusCode == 200) {
-        ValidateQrCodeResponse validateVendorResponse =
+        ValidateQrCodeResponse validateQrCodeResponse =
         ValidateQrCodeResponse.fromJson(json.decode(res.body));
-        if (validateVendorResponse.responseCode == 1) {
+        if (validateQrCodeResponse.responseCode == 1) {
           qrData.firstName =
-              validateVendorResponse.responseData?.firstName ?? "";
-          qrData.lastName = validateVendorResponse.responseData?.lastName ?? "";
+              validateQrCodeResponse.responseData?.firstName ?? "";
+          qrData.lastName = validateQrCodeResponse.responseData?.lastName ?? "";
           qrData.middleName =
-              validateVendorResponse.responseData?.middleName ?? "";
-          qrData.id = validateVendorResponse.responseData?.id ?? "";
-          qrData.memberId = validateVendorResponse.responseData?.memberId ?? "";
-          qrData.accessId = validateVendorResponse.responseData?.accessId ?? "";
+              validateQrCodeResponse.responseData?.middleName ?? "";
+          qrData.id = validateQrCodeResponse.responseData?.id ?? "";
+          qrData.memberId = validateQrCodeResponse.responseData?.memberId ?? "";
+          qrData.accessId = validateQrCodeResponse.responseData?.accessId ?? "";
           qrData.trqStatus =
-              validateVendorResponse.responseData?.trqStatus ?? 0;
+              validateQrCodeResponse.responseData?.trqStatus ?? 0;
           qrData.memberTypeId =
-              validateVendorResponse.responseData?.memberTypeId ?? 0;
+              validateQrCodeResponse.responseData?.memberTypeId ?? 0;
           qrData.isValid = true;
           qrData.memberTypeName =
-              validateVendorResponse.responseData?.memberTypeName ?? "";
+              validateQrCodeResponse.responseData?.memberTypeName ?? "";
           qrData.faceTemplate =
-              validateVendorResponse.responseData?.faceTemplate ?? "";
+              validateQrCodeResponse.responseData?.faceTemplate ?? "";
           qrData.isVisitor =
-              validateVendorResponse.responseData?.isVisitor ?? 0;
+              validateQrCodeResponse.responseData?.isVisitor ?? 0;
           return qrData;
         } else {
           return qrData;
         }
       }
     } catch (e) {
-      log("validateVendorvalidateVendor =" + e.toString());
+      log("validateQrCodeResponse =" + e.toString());
       return qrData;
     }
   }
@@ -366,10 +367,32 @@ class ApiService {
           responseSubCode: 0,
           responseMessage: "Pleace Try agin");
     } catch (e) {
-      log("registerDeviceForApp =$e");
+      log("registerDeviceForApp ="+e.toString());
+
       return const RegisterDeviceResponse(
           responseCode: 0, responseSubCode: 0, responseMessage: "");
     }
   }
 
+  Future<VolunteerResponse?> volunteerApiCall(accessToken, bodys) async {
+    try {
+      var url = Uri.parse("${_apiBaseUrl}VolunteerValidation");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'Bearer $accessToken'
+          },
+          body: jsonEncode(bodys));
+      print('Volunteer =${res.body}');
+      if (res.statusCode == 200) {
+        VolunteerResponse volunteerResponse =
+            VolunteerResponse.fromJson(json.decode(res.body));
+        return volunteerResponse;
+      }
+    } catch (e) {
+      log(e.toString());
+    }
+  }
 }
