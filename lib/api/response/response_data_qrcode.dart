@@ -36,6 +36,6 @@ class ResponseDataQrCode {
         memberTypeId: json['memberTypeId'] ?? 0,
         faceTemplate: json['faceTemplate'] ?? "",
         memberTypeName: json['memberTypeName'] ?? "",
-        isVisitor: json['isVisitor'] ?? "");
+        isVisitor: json['isVisitor'] ?? 0);
   }
 }

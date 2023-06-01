@@ -14,7 +14,7 @@ class DeviceSettings {
   final IdentificationSettings identificationSettings;
   final AccessControlSettings? accessControlSettings;
   final PrinterSettings? printerSettings;
-  final BufferTimeSettings? bufferTimeSettings;
+ // final BufferTimeSettings? bufferTimeSettings;
 
 
   const DeviceSettings({required this.deviceSettings,
@@ -23,7 +23,7 @@ class DeviceSettings {
     required this.identificationSettings,
     required this.accessControlSettings,
     required this.printerSettings,
-    required this.bufferTimeSettings
+  //  required this.bufferTimeSettings
   });
 
   factory DeviceSettings.fromJson(Map<String, dynamic> json) {
@@ -39,9 +39,9 @@ class DeviceSettings {
         accessControlSettings:
         AccessControlSettings.fromJson(json['AccessControl'] ?? {}),
         printerSettings:
-        PrinterSettings.fromJson(json['PrinterSettings'] ?? {}),
-      bufferTimeSettings: 
-       BufferTimeSettings.fromJson(json['BufferTime'] ?? {})
+        PrinterSettings.fromJson(json['PrinterSettings'] ?? {})
+       //  bufferTimeSettings:
+       // BufferTimeSettings.fromJson(json['BufferTime'] ?? {})
     );
   }
 }
