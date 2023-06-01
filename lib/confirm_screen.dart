@@ -51,6 +51,8 @@ class _Confirm extends State<ConfirmLanch> {
   var confirmationText = "";
   var confirmationSubText = "";
   var screenDelayValue = "120";
+  var result;
+  QrData qrData = QrData();
 
 
   @override
@@ -109,20 +111,24 @@ class _Confirm extends State<ConfirmLanch> {
 
     });
     var pref = await SharedPreferences.getInstance();
+    qrData.setIsValid = false;
+    qrData.setFirstName = "Anonymous";
+    qrData.setQrCodeID = widget.dataStr;
+
       if (widget.type == "qr") {
         if(widget.dataStr.startsWith("vm") && (pref.getString(Sharepref.enableVolunteerQR) != "1") && (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
+
 
         }else
         if (widget.dataStr.contains("vn")) {
           Map<String, dynamic> validateVendor = new HashMap();
           validateVendor['vendorGuid'] = widget.dataStr;
           validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
-          QrData qrData = await ApiService().validateVendor(
+           qrData = await ApiService().validateVendor(
               pref.get(Sharepref.accessToken), validateVendor) as QrData;
 
           // await Future.delayed(const Duration(seconds: 5));
           qrData.setQrCodeID = widget.dataStr;
-          updateUI(qrData);
         }
         // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
        else if ( widget.dataStr.contains("tr")  || widget.dataStr.startsWith("vm"))
@@ -132,13 +138,11 @@ class _Confirm extends State<ConfirmLanch> {
           qrValidation['institutionId'] =
               pref.getString(Sharepref.institutionID);
           qrValidation['deviceSNo'] = pref.getString(Sharepref.serialNo);
-
-          QrData qrData = await ApiService().validateQRCode(
+           qrData = await ApiService().validateQRCode(
               pref.get(Sharepref.accessToken), qrValidation) as QrData;
 
           // await Future.delayed(const Duration(seconds: 5));
           qrData.setQrCodeID = widget.dataStr;
-          updateUI(qrData);
         }
         // else if (widget.dataStr.contains("vm") && pref.get(Sharepref.enableVolunteerQR) == "1"){
         //   Map<String, dynamic> volunteerValidation = new HashMap();
@@ -157,26 +161,21 @@ class _Confirm extends State<ConfirmLanch> {
         //     print(result);
         //   }
         // }
-        else {
-          QrData qrData = QrData();
-          qrData.setIsValid = false;
-          qrData.setFirstName = "Anonymous";
-          qrData.setQrCodeID = widget.dataStr;
-          qrData.setIsValid = false;
-          updateUI(qrData);
-        }
+
       }else if (widget.type == "pin"){
-        QrData qrData = QrData();
+         qrData = QrData();
         qrData.setIsValid = false;
         qrData.setFirstName = "Anonymous";
         qrData.setQrCodeID = widget.dataStr;
         updateUI(qrData);
       }
     //pin
+    timeDateSet(qrData);
+
   }
 
   Future<void> updateUI(QrData qrData) async {
-    timeDateSet(qrData);
+   // timeDateSet(qrData);
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       _isLoading = false;
@@ -193,7 +192,8 @@ class _Confirm extends State<ConfirmLanch> {
           confirmationSubText =
               pref.getString(Sharepref.subText) ?? "";
           // qrData.lastName = "Invalid QRCode";
-        } else {
+        }
+        else {
           textHolderModalController = "";
           Util.showToastError("Invalid QRCode");
 
@@ -202,7 +202,7 @@ class _Confirm extends State<ConfirmLanch> {
 
 
     });
-    Future.delayed(Duration(milliseconds: 5000), () {
+    Future.delayed(Duration(milliseconds: 500), () {
       // Your code
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
@@ -258,16 +258,26 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['allowAccess'] = qrData.getIsValid;
 
     AccesslogsResponse accesslogsResponse = await ApiService().accessLogs(pref.getString(Sharepref.accessToken),accessLogs);
+    // updateUI(qrData);
  if(accesslogsResponse.responseSubCode == 0 && int.parse(widget.attendanceMode) == 1 && qrData.isValid == true){
+   updateUI(qrData);
    Util.showToastErrorAccessLogs("Check In");
  }else if (accesslogsResponse.responseSubCode == 0 && int.parse(widget.attendanceMode) == 2 && qrData.isValid == true){
+   updateUI(qrData);
    Util.showToastErrorAccessLogs("Check Out");
  }else if (accesslogsResponse.responseSubCode == 103 && int.parse(widget.attendanceMode) == 1 && qrData.isValid == true) {
    Util.showToastErrorAccessLogs("Already Check In");
+
  }else if (accesslogsResponse.responseSubCode == 103 && int.parse(widget.attendanceMode) == 2 && qrData.isValid == true){
    Util.showToastErrorAccessLogs("Already Check Out");
  }
-    Future.delayed(Duration(milliseconds: 50), () {
+ else if(qrData.isValid == false){
+   Util.showToastErrorAccessLogs("Invalid QRCode");
+ }
+ else{
+   updateUI(qrData);
+ }
+    Future.delayed(Duration(milliseconds: 500), () {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     });
