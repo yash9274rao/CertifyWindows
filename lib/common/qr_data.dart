@@ -11,6 +11,7 @@ class QrData {
   late String faceTemplate ="";
   late String memberTypeName="";
   late int isVisitor = 0;
+  late int scheduleId = 0;
   String? middleName = "";
 
 
@@ -92,4 +93,9 @@ class QrData {
   }
 
   int get getisVisitor => isVisitor;
+
+  set setscheduleId(int scheduleId) {
+    this.scheduleId = scheduleId;
+  }
+  int get getscheduleId => scheduleId;
 }

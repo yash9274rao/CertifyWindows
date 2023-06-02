@@ -19,6 +19,6 @@ class ValidateQrCodeResponse {
         responseMessage: json['responseMessage'] ?? "Invalid QRCode",
         responseData:
         ResponseDataQrCode.fromJson(json['responseData'] ??  ResponseDataQrCode(id: "", firstName: "", lastName: "", middleName: "", memberId: "", accessId: ""
-            "", trqStatus: 0, memberTypeId: 0, faceTemplate: "", memberTypeName: "", isVisitor: 0)));
+            "", trqStatus: 0, memberTypeId: 0, faceTemplate: "", memberTypeName: "", isVisitor: 0, scheduleId: 0)));
   }
 }

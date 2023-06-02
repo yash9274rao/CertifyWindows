@@ -212,6 +212,8 @@ class ApiService {
               validateQrCodeResponse.responseData?.faceTemplate ?? "";
           qrData.isVisitor =
               validateQrCodeResponse.responseData?.isVisitor ?? 0;
+          qrData.scheduleId =
+          validateQrCodeResponse.responseData?.scheduleId ?? 0;
           return qrData;
         } else {
           return qrData;

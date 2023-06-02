@@ -177,13 +177,25 @@ class _Confirm extends State<ConfirmLanch> {
         textHolderModalController = qrData.getFirstName;
         confirmationText = pref.getString(Sharepref.mainText) ?? "";
         confirmationSubText = pref.getString(Sharepref.subText) ?? "";
-      } else {
+      }else if(pref.getString(Sharepref.enableVisitorQR) == "1" &&
+          qrData.isValid){
+        textHolderModalController = qrData.getFirstName;
+        confirmationText = pref.getString(Sharepref.mainText) ?? "";
+        confirmationSubText = pref.getString(Sharepref.subText) ?? "";
+
+      }
+
+      else {
         if (pref.getString(Sharepref.allowAnonymous) == "1") {
           textHolderModalController = qrData.getFirstName;
           confirmationText = pref.getString(Sharepref.mainText) ?? "";
           confirmationSubText = pref.getString(Sharepref.subText) ?? "";
           // qrData.lastName = "Invalid QRCode";
-        } else {
+        }
+
+
+
+        else {
           textHolderModalController = "";
           Util.showToastError("Invalid QRCode");
         }
@@ -242,7 +254,7 @@ class _Confirm extends State<ConfirmLanch> {
     accessLogs['accessOption'] = 1;
     accessLogs['attendanceMode'] = widget.attendanceMode;
     accessLogs['allowAccess'] = qrData.getIsValid;
-
+    accessLogs['scheduleId'] = qrData.scheduleId;
     AccesslogsResponse accesslogsResponse = await ApiService()
         .accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
     // updateUI(qrData);
