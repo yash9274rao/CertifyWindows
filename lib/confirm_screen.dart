@@ -207,6 +207,14 @@ class _Confirm extends State<ConfirmLanch> {
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     });
   }
+  Future<void> navigationHome() async {
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+
+  }
 
   Future<void> timeDateSet(QrData qrData) async {
     Map<String, dynamic> diveInfo = new HashMap();
@@ -288,13 +296,5 @@ class _Confirm extends State<ConfirmLanch> {
     //   Navigator.pushReplacement(
     //       context, MaterialPageRoute(builder: (context) => HomeScreen()));
     // });
-  }
-  Future<void> navigationHome() async {
-    setState(() {
-      _isLoading = false;
-    });
-    Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
-
   }
 }
