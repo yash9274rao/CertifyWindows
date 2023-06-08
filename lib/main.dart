@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
@@ -14,8 +14,14 @@ import 'package:snaphybrid/home_screen.dart';
 
 import 'api/api_service.dart';
 import 'login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
-void main() {
+
+
+Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
@@ -43,10 +49,12 @@ class _MyHome extends State<MyLanch> {
   var textHolderModalController = "";
   Map<String, dynamic> diveInfo = HashMap();
   var _isVisibility = false;
+ 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    getDeviceToken();
   }
 
   @override
@@ -139,6 +147,17 @@ class _MyHome extends State<MyLanch> {
       ),
     );
   }
+  Future<void> getDeviceToken() async {
+    await Firebase.initializeApp();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if(pref.getString(Sharepref.firebaseToken) == null || pref.getString(Sharepref.firebaseToken) == ""){
+      String? deviceToken = await FirebaseMessaging.instance.getToken();
+      pref.setString(Sharepref.firebaseToken, deviceToken ?? "");
+    }
+    
+  }
+
+
 
   Future<void> initPlatformState() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -167,69 +186,6 @@ class _MyHome extends State<MyLanch> {
     pref.setString(Sharepref.appVersion, _clientInfo.applicationVersion);
     pref.setString(Sharepref.osVersion, '${_clientInfo.osName} - ${_clientInfo.osVersion}');
 
-    // if (defaultTargetPlatform == TargetPlatform.android) {
-    //   AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    //   print('Running on ${androidInfo.serialNumber}'); // e.g. "Moto G (4)"
-    //   var sn = androidInfo.id.replaceAll(".", "").replaceAll("/", "");
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${sn}';
-    //   });
-    //   pref.setString(Sharepref.serialNo, sn);
-    //   pref.setString(Sharepref.platform, "Android Tablet");
-    //   pref.setString(Sharepref.platformId, "4");
-    //   pref.setString(Sharepref.deviceModel, androidInfo.model);
-    //   pref.setString(Sharepref.osVersion, "4");
-    //
-    //   diveInfo['osVersion'] = '${androidInfo.version.baseOS}';
-    //   diveInfo['uniqueDeviceId'] = sn;
-    //   diveInfo['deviceModel'] = '${androidInfo.model}';
-    //   diveInfo['deviceSN'] = sn;
-    // } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-    //   IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${iosInfo.identifierForVendor}';
-    //   });
-    //   pref.setString(
-    //       Sharepref.serialNo, iosInfo.identifierForVendor.toString());
-    //   pref.setString(Sharepref.platform, "IOS Tablet");
-    //   pref.setString(Sharepref.platformId, "3");
-    //
-    //   diveInfo['osVersion'] = '${iosInfo.systemVersion}';
-    //   diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
-    //   diveInfo['deviceModel'] = '${iosInfo.model}';
-    //   diveInfo['deviceSN'] = '${iosInfo.identifierForVendor}';
-    //   //   print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
-    // } else if (defaultTargetPlatform == TargetPlatform.windows) {
-    //   WebBrowserInfo webBrowserDeviceInfo = await deviceInfo.webBrowserInfo;
-    //   // textHolderModal = 'If you have already added the device on the '
-    //   //     'portal SL NO:${webBrowserInfo.userAgent}';
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${webBrowserDeviceInfo.productSub}';
-    //   });
-    //   pref.setString(
-    //       Sharepref.serialNo, webBrowserDeviceInfo.productSub.toString());
-    //   pref.setString(Sharepref.platform, "Browser");
-    //   pref.setString(Sharepref.platformId, "1");
-    //   diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
-    //   diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
-    //   diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
-    //   diveInfo['deviceSN'] = '${webBrowserDeviceInfo.productSub}';
-    // } else if (defaultTargetPlatform == TargetPlatform.macOS) {
-    //   MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
-    //   setState(() {
-    //     textHolderModalController =
-    //         'If you have already added the device on the '
-    //         'portal SL NO: ${macOsDeviceInfo.systemGUID}';
-    //   });
-    //   pref.setString(Sharepref.platform, "IOS Tablet");
-    //   pref.setString(Sharepref.platformId, "3");
-    // }
     activiAPI();
   }
 
@@ -246,9 +202,9 @@ class _MyHome extends State<MyLanch> {
     diveInfo['batteryStatus'] = "100";
     diveInfo['networkStatus'] = "true";
     diveInfo['appState'] = "Foreground";
-    Map<String, String> createDoc = new HashMap();
-    createDoc['pushAuthToken'] = "";
-    createDoc['deviceInfo'] = '${diveInfo}';
+    Map<String, dynamic> createDoc = new HashMap();
+    createDoc['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
+    createDoc['deviceData'] = diveInfo;
    // bool result = await InternetConnectionChecker().hasConnection;
     if (true) {
       ActivateApplicationResponse activateApplicationResponse =

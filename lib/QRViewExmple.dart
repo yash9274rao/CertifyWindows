@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'common/sharepref.dart';
 import 'confirm_screen.dart';
+import 'home_screen.dart';
 
 typedef StringValue = String Function(String);
 
@@ -67,6 +68,7 @@ class _QRViewExampleState extends State<QRViewExample> {
           cutOutWidth: MediaQuery.of(context).size.width,
           cutOutHeight: MediaQuery.of(context).size.height),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+
     );
   }
 
@@ -79,6 +81,7 @@ class _QRViewExampleState extends State<QRViewExample> {
       await SharedPreferences.getInstance();
       setState(() {
         result = scanData;
+
 //                             await controller?.pauseCamera();
         if (result != null && pref.getBool(Sharepref.isQrCodeScan) as bool) {
           pref.setBool(Sharepref.isQrCodeScan, false);
@@ -86,23 +89,29 @@ class _QRViewExampleState extends State<QRViewExample> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ConfirmScreen(dataStr: '${result!.code}',attendanceMode : widget.attendanceMode)));
+                      ConfirmScreen(dataStr: '${result!.code}',attendanceMode : widget.attendanceMode,type:"qr")));
           if (defaultTargetPlatform == TargetPlatform.android) {
             controller!.pauseCamera();
           }
           controller!.resumeCamera();
         }
+
       });
     });
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+
     if (!p) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('no Permission')),
       );
     }
+    Future.delayed(Duration(seconds: 15), () {
+       Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+    });
   }
 
   @override

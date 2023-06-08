@@ -8,6 +8,7 @@ class Sharepref {
 
 
 
+
   static String accessToken = "accessToken";
   static String institutionID = "institutionID";
 
@@ -21,11 +22,14 @@ class Sharepref {
   static String logoHomePageView = "logo";
   static String line1HomePageView = "line1";
   static String line2HomePageView = "line2";
-  static String line1ConfirmationView = "normalViewLine2";
+  static String line1ConfirmationView = "normalViewLine1";
   static String line2ConfirmationView = "normalViewLine2";
   static String showVaccinationIndicator = "showVaccinationIndicator";
   static String showNonVaccinationIndicator = "showNonVaccinationIndicator";
-
+  static String enableConfirmationScreen = "enableConfirmationScreen";
+  static String mainText = "mainText";
+  static String subText = "SubText";
+  static String viewDelay = "viewDelay";
   static String enableQRCodeScanner = "enableQRCodeScanner";
   static String enableAnonymousQRCode = "enableAnonymousQRCode";
   static String enableConfirmationNameAndImage = "enableConfirmationNameAndImage";
@@ -38,5 +42,18 @@ class Sharepref {
   static String attendanceMode = "showNonVaccinationIndicator";
   static String loggingMode = "loggingMode";
   static String isQrCodeScan = "isQrCodeScan";
+  static String isPin = "isPin";
+  static String checkInMode = "CheckinMode";
+  static String enableVolunteerQR = "enableVolunteerQR";
+
+  //BufferTime Settings
+  static String enableBufferTime = "enableBufferTime";
+  static String allowBufferTime = "allowBufferTime";
+  static String enableMembersVisitors = "enableMembersVisitors";
+  static String enableVendors = "enableVendors";
+  static String enableVolunteers = "enableVolunteers";
+
+//DeviceToken
+  static String firebaseToken = "firebaseToken";
 
 }
