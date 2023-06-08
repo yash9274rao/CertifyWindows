@@ -117,14 +117,10 @@ class _Confirm extends State<ConfirmLanch> {
       if (widget.dataStr.startsWith("vm") &&
           (pref.getString(Sharepref.enableVolunteerQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-
-      }
-      else if (widget.dataStr.startsWith("vi") &&
+      } else if (widget.dataStr.startsWith("vi") &&
           (pref.getString(Sharepref.enableVisitorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-
-      }
-      else if (widget.dataStr.contains("vn")) {
+      } else if (widget.dataStr.contains("vn")) {
         Map<String, dynamic> validateVendor = new HashMap();
         validateVendor['vendorGuid'] = widget.dataStr;
         validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
@@ -136,7 +132,8 @@ class _Confirm extends State<ConfirmLanch> {
       }
       // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
       else if (widget.dataStr.contains("tr") ||
-          widget.dataStr.startsWith("vm") ||  (widget.dataStr.startsWith("vi") )) {
+          widget.dataStr.startsWith("vm") ||
+          (widget.dataStr.startsWith("vi"))) {
         Map<String, dynamic> qrValidation = new HashMap();
         qrValidation['qrCodeID'] = widget.dataStr;
         qrValidation['institutionId'] = pref.getString(Sharepref.institutionID);
@@ -145,7 +142,7 @@ class _Confirm extends State<ConfirmLanch> {
             pref.get(Sharepref.accessToken), qrValidation) as QrData;
         // await Future.delayed(const Duration(seconds: 5));
         qrData.setQrCodeID = widget.dataStr;
-      } else if(pref.getString(Sharepref.enableAnonymousQRCode) == "1") {
+      } else if (pref.getString(Sharepref.enableAnonymousQRCode) == "1") {
         qrData = QrData();
         qrData.setIsValid = true;
         qrData.setFirstName = "Anonymous";
@@ -192,17 +189,21 @@ class _Confirm extends State<ConfirmLanch> {
       _isLoading = false;
       if (pref.getString(Sharepref.enableConfirmationScreen) == "1" &&
           qrData.isValid) {
-        if (pref.getString(Sharepref.enableAnonymousQRCode) == "1" && qrData.getFirstName == "Anonymous"){
+        if (pref.getString(Sharepref.enableAnonymousQRCode) == "1" &&
+            qrData.getFirstName == "Anonymous") {
           textHolderModalController = "";
-        }else textHolderModalController = qrData.getFirstName;
+        } else
+          textHolderModalController = qrData.getFirstName;
 
         confirmationText = pref.getString(Sharepref.mainText) ?? "";
         confirmationSubText = pref.getString(Sharepref.subText) ?? "";
       } else {
-          textHolderModalController = "";
-          Util.showToastError("Invalid QRCode");
-        }
-
+        textHolderModalController = "";
+        if (widget.type == "pin")
+          Util.showToastErrorAccessLogs("Invalid Pin");
+        else
+          Util.showToastErrorAccessLogs("Invalid QRCode");
+      }
     });
     Future.delayed(Duration(milliseconds: 5000), () {
       // Your code
@@ -210,13 +211,13 @@ class _Confirm extends State<ConfirmLanch> {
           context, MaterialPageRoute(builder: (context) => HomeScreen()));
     });
   }
+
   Future<void> navigationHome() async {
     setState(() {
       _isLoading = false;
     });
     Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
-
+        context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
   Future<void> timeDateSet(QrData qrData) async {
@@ -291,7 +292,10 @@ class _Confirm extends State<ConfirmLanch> {
       Util.showToastErrorAccessLogs("Already Check Out");
     } else if (qrData.isValid == false) {
       navigationHome();
-      Util.showToastErrorAccessLogs("Invalid QRCode");
+      if (widget.type == "pin")
+        Util.showToastErrorAccessLogs("Invalid Pin");
+      else
+        Util.showToastErrorAccessLogs("Invalid QRCode");
     } else {
       updateUI(qrData);
     }
