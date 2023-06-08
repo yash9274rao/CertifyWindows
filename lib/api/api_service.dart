@@ -212,6 +212,8 @@ class ApiService {
               validateQrCodeResponse.responseData?.faceTemplate ?? "";
           qrData.isVisitor =
               validateQrCodeResponse.responseData?.isVisitor ?? 0;
+          qrData.scheduleId =
+          validateQrCodeResponse.responseData?.scheduleId ?? 0;
           return qrData;
         } else {
           return qrData;
@@ -289,7 +291,7 @@ class ApiService {
               settingsResponse.responseData?.jsonValue?.confirmationViewSettings
                   ?.subText);
           pref.setString(
-              Sharepref.allowAnonymous,
+              Sharepref.enableAnonymousQRCode,
               settingsResponse.responseData?.jsonValue?.identificationSettings
                   ?.enableAnonymousQRCode);
           pref.setString(

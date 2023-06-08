@@ -318,7 +318,7 @@ class _MyHome extends State<HomeScreen> {
   Future<void> timeDateSet() async {
     updateUI();
     dataTime = Timer.periodic(const Duration(seconds: 1), (dataTime) {
-      String time = DateFormat('HH:mm a').format(DateTime.now());
+      String time = DateFormat('hh:mm a').format(DateTime.now());
       String date = DateFormat('EEEEE, dd MMM yyyy').format(DateTime.now());
 
       setState(() {
@@ -381,7 +381,10 @@ class _MyHome extends State<HomeScreen> {
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      if (pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
+      if(qrAndpinVisiable){
+        checkOutVisiable = false;
+      }else
+      if ( pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
         setState(() {
           checkOutVisiable = false;
         }

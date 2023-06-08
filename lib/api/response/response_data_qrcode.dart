@@ -10,6 +10,7 @@ class ResponseDataQrCode {
   final String faceTemplate;
   final String memberTypeName;
   final int isVisitor;
+  final int scheduleId;
 
   const ResponseDataQrCode(
       {required this.id,
@@ -22,7 +23,9 @@ class ResponseDataQrCode {
       required this.memberTypeId,
       required this.faceTemplate,
       required this.memberTypeName,
-      required this.isVisitor});
+      required this.isVisitor,
+        required this.scheduleId,
+      });
 
   factory ResponseDataQrCode.fromJson(Map<String, dynamic> json) {
     return ResponseDataQrCode(
@@ -36,6 +39,7 @@ class ResponseDataQrCode {
         memberTypeId: json['memberTypeId'] ?? 0,
         faceTemplate: json['faceTemplate'] ?? "",
         memberTypeName: json['memberTypeName'] ?? "",
-        isVisitor: json['isVisitor'] ?? 0);
+        isVisitor: json['isVisitor'] ?? 0,
+        scheduleId: json['scheduleId'] ?? 0);
   }
 }
