@@ -109,8 +109,8 @@ class _QRViewExampleState extends State<QRViewExample> {
       );
     }
     Future.delayed(Duration(seconds: 15), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+       Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
     });
   }
 

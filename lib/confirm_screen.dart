@@ -117,7 +117,14 @@ class _Confirm extends State<ConfirmLanch> {
       if (widget.dataStr.startsWith("vm") &&
           (pref.getString(Sharepref.enableVolunteerQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-      } else if (widget.dataStr.contains("vn")) {
+
+      }
+      else if (widget.dataStr.startsWith("vi") &&
+          (pref.getString(Sharepref.enableVisitorQR) != "1") &&
+          (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
+
+      }
+      else if (widget.dataStr.contains("vn")) {
         Map<String, dynamic> validateVendor = new HashMap();
         validateVendor['vendorGuid'] = widget.dataStr;
         validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
@@ -129,7 +136,7 @@ class _Confirm extends State<ConfirmLanch> {
       }
       // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
       else if (widget.dataStr.contains("tr") ||
-          widget.dataStr.startsWith("vm")) {
+          widget.dataStr.startsWith("vm") ||  (widget.dataStr.startsWith("vi") )) {
         Map<String, dynamic> qrValidation = new HashMap();
         qrValidation['qrCodeID'] = widget.dataStr;
         qrValidation['institutionId'] = pref.getString(Sharepref.institutionID);
@@ -138,7 +145,18 @@ class _Confirm extends State<ConfirmLanch> {
             pref.get(Sharepref.accessToken), qrValidation) as QrData;
         // await Future.delayed(const Duration(seconds: 5));
         qrData.setQrCodeID = widget.dataStr;
+      } else if(pref.getString(Sharepref.enableAnonymousQRCode) == "1") {
+        qrData = QrData();
+        qrData.setIsValid = true;
+        qrData.setFirstName = "Anonymous";
+        qrData.setQrCodeID = widget.dataStr;
       }
+      // }else{
+      //   qrData = QrData();
+      //   qrData.setIsValid = false;
+      //   qrData.setFirstName = "Anonymous";
+      //   qrData.setQrCodeID = widget.dataStr;
+      // }
       // else if (widget.dataStr.contains("vm") && pref.get(Sharepref.enableVolunteerQR) == "1"){
       //   Map<String, dynamic> volunteerValidation = new HashMap();
       //   String currentString = widget.dataStr;
@@ -161,7 +179,7 @@ class _Confirm extends State<ConfirmLanch> {
       qrData.setIsValid = false;
       qrData.setFirstName = "Anonymous";
       qrData.setQrCodeID = widget.dataStr;
-      updateUI(qrData);
+      //updateUI(qrData);
     }
     //pin
     timeDateSet(qrData);
@@ -174,32 +192,17 @@ class _Confirm extends State<ConfirmLanch> {
       _isLoading = false;
       if (pref.getString(Sharepref.enableConfirmationScreen) == "1" &&
           qrData.isValid) {
-        textHolderModalController = qrData.getFirstName;
+        if (pref.getString(Sharepref.enableAnonymousQRCode) == "1" && qrData.getFirstName == "Anonymous"){
+          textHolderModalController = "";
+        }else textHolderModalController = qrData.getFirstName;
+
         confirmationText = pref.getString(Sharepref.mainText) ?? "";
         confirmationSubText = pref.getString(Sharepref.subText) ?? "";
-      }else if(pref.getString(Sharepref.enableVisitorQR) == "1" &&
-          qrData.isValid){
-        textHolderModalController = qrData.getFirstName;
-        confirmationText = pref.getString(Sharepref.mainText) ?? "";
-        confirmationSubText = pref.getString(Sharepref.subText) ?? "";
-
-      }
-
-      else {
-        if (pref.getString(Sharepref.allowAnonymous) == "1") {
-          textHolderModalController = qrData.getFirstName;
-          confirmationText = pref.getString(Sharepref.mainText) ?? "";
-          confirmationSubText = pref.getString(Sharepref.subText) ?? "";
-          // qrData.lastName = "Invalid QRCode";
-        }
-
-
-
-        else {
+      } else {
           textHolderModalController = "";
           Util.showToastError("Invalid QRCode");
         }
-      }
+
     });
     Future.delayed(Duration(milliseconds: 5000), () {
       // Your code
