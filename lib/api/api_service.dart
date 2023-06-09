@@ -1,10 +1,13 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
+// import 'dart:js' ;
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
+import 'package:snaphybrid/api/response/VoluntearResponse.dart';
+import 'package:snaphybrid/api/response/accesslogs_Response.dart';
 import 'package:snaphybrid/api/response/activate_application_response.dart';
 import 'package:snaphybrid/api/response/getdevice_token_response.dart';
 import 'package:snaphybrid/api/response/register_device_response.dart';
@@ -12,11 +15,13 @@ import 'package:snaphybrid/api/response/response_data_token.dart';
 import 'package:snaphybrid/api/response/validate_qrcode_response.dart';
 import 'package:snaphybrid/common/qr_data.dart';
 import '../common/sharepref.dart';
+import '../confirm_screen.dart';
 import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
 
 class ApiService {
   static const String _apiBaseUrl = "https://apiqa.certify.me/";
+  String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
     try {
@@ -32,7 +37,7 @@ class ApiService {
       print(res.body);
       if (res.statusCode == 200) {
         ActivateApplicationResponse activateApplicationResponse =
-            ActivateApplicationResponse.fromJson(jsonDecode(res.body));
+        ActivateApplicationResponse.fromJson(jsonDecode(res.body));
         return activateApplicationResponse;
         // if (aaR.responseCode == 1) getGenerateToken(headers, bodys, sn);
       }
@@ -51,7 +56,7 @@ class ApiService {
       print('GenerateToken =${res.body}');
       if (res.statusCode == 200) {
         GetDeviceTokenResponse getDeviceTokenResponse =
-            GetDeviceTokenResponse.fromJson(json.decode(res.body));
+        GetDeviceTokenResponse.fromJson(json.decode(res.body));
         return getDeviceTokenResponse;
       }
     } catch (e) {
@@ -73,7 +78,8 @@ class ApiService {
   Future<QrData?> validateVendor(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;
-    qrData.setFirstName = "Anonymous";
+    qrData.setFirstName = "InValid QR Code";
+
     try {
       var url = Uri.parse("${_apiBaseUrl}validateVendor");
       var res = await http.post(url,
@@ -88,14 +94,14 @@ class ApiService {
       QrData qrData = QrData();
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
-            ValidateVendorResponse.fromJson(json.decode(res.body));
+        ValidateVendorResponse.fromJson(json.decode(res.body));
         if (validateVendorResponse.responseCode == 1) {
           qrData.setFirstName =
-              (validateVendorResponse.responseData?.vendorName ?? "");
+          (validateVendorResponse.responseData?.vendorName ?? "");
           qrData.setIsValid = true;
           return qrData;
         } else {
-          qrData.setFirstName = "Anonymous";
+          qrData.setFirstName = "InValid QR Code";
           qrData.setIsValid = false;
           return qrData;
         }
@@ -109,6 +115,7 @@ class ApiService {
   Future<String?> deviceHealthCheck(accessToken, bodys, deviceSn) async {
     try {
       print('deviceHealthCheck ${jsonEncode(bodys)}');
+
 
       var url = Uri.parse("${_apiBaseUrl}DeviceHealthCheck");
       var res = await http.post(url,
@@ -125,13 +132,6 @@ class ApiService {
       print('deviceHealthCheck ${res.statusCode}');
 
       print('deviceHealthCheck = ${res.body}');
-      // if (res.statusCode == 200) {
-      //   ActivateApplicationResponse validateVendorResponse =
-      //   ActivateApplicationResponse.fromJson(json.decode(res.body));
-      //   if (validateVendorResponse.responseCode == 1)
-      //     return validateVendorResponse.responseMessage;
-      //   else validateVendorResponse.responseMessage;
-      // }
       return "";
     } catch (e) {
       log("validateVendorvalidateVendor =" + e.toString());
@@ -139,7 +139,8 @@ class ApiService {
     }
   }
 
-  Future<String?> accessLogs(accessToken, bodys) async {
+
+  Future<AccesslogsResponse> accessLogs(accessToken, bodys) async {
     try {
       print('AccessLogs ${bodys}');
 
@@ -155,19 +156,19 @@ class ApiService {
       print('AccessLogs request = ${res.request}');
 
       print('AccessLogs ${res.statusCode}');
-
       print('AccessLogs = ${res.body}');
-      // if (res.statusCode == 200) {
-      //   ActivateApplicationResponse validateVendorResponse =
-      //   ActivateApplicationResponse.fromJson(json.decode(res.body));
-      //   if (validateVendorResponse.responseCode == 1)
-      //     return validateVendorResponse.responseMessage;
-      //   else validateVendorResponse.responseMessage;
-      // }
-      return "";
+      if (res.statusCode == 200) {
+        AccesslogsResponse accesslogsResponse =
+        AccesslogsResponse.fromJson(json.decode(res.body));
+        return accesslogsResponse;
+      }
+      return const AccesslogsResponse(responseCode: 0,
+          responseSubCode: 0,
+          responseMessage: "Pleace Try agin");
     } catch (e) {
       log("AccessLogs =$e");
-      return "Invalid QRCode";
+      return const AccesslogsResponse(
+          responseCode: 0, responseSubCode: 0, responseMessage: "");
     }
   }
 
@@ -189,33 +190,37 @@ class ApiService {
       print('validateQRCode = ${res.body}');
       QrData qrData = new QrData();
       if (res.statusCode == 200) {
-        ValidateQrCodeResponse validateVendorResponse =
-            ValidateQrCodeResponse.fromJson(json.decode(res.body));
-        if (validateVendorResponse.responseCode == 1) {
+        ValidateQrCodeResponse validateQrCodeResponse =
+        ValidateQrCodeResponse.fromJson(json.decode(res.body));
+        if (validateQrCodeResponse.responseCode == 1) {
           qrData.firstName =
-              validateVendorResponse.responseData?.firstName ?? "";
-          qrData.lastName = validateVendorResponse.responseData?.lastName ?? "";
-          qrData.id = validateVendorResponse.responseData?.id ?? "";
-          qrData.memberId = validateVendorResponse.responseData?.memberId ?? "";
-          qrData.accessId = validateVendorResponse.responseData?.accessId ?? "";
+              validateQrCodeResponse.responseData?.firstName ?? "";
+          qrData.lastName = validateQrCodeResponse.responseData?.lastName ?? "";
+          qrData.middleName =
+              validateQrCodeResponse.responseData?.middleName ?? "";
+          qrData.id = validateQrCodeResponse.responseData?.id ?? "";
+          qrData.memberId = validateQrCodeResponse.responseData?.memberId ?? "";
+          qrData.accessId = validateQrCodeResponse.responseData?.accessId ?? "";
           qrData.trqStatus =
-              validateVendorResponse.responseData?.trqStatus ?? 0;
+              validateQrCodeResponse.responseData?.trqStatus ?? 0;
           qrData.memberTypeId =
-              validateVendorResponse.responseData?.memberTypeId ?? 0;
+              validateQrCodeResponse.responseData?.memberTypeId ?? 0;
           qrData.isValid = true;
           qrData.memberTypeName =
-              validateVendorResponse.responseData?.memberTypeName ?? "";
+              validateQrCodeResponse.responseData?.memberTypeName ?? "";
           qrData.faceTemplate =
-              validateVendorResponse.responseData?.faceTemplate ?? "";
+              validateQrCodeResponse.responseData?.faceTemplate ?? "";
           qrData.isVisitor =
-              validateVendorResponse.responseData?.isVisitor ?? 0;
+              validateQrCodeResponse.responseData?.isVisitor ?? 0;
+          qrData.scheduleId =
+          validateQrCodeResponse.responseData?.scheduleId ?? 0;
           return qrData;
         } else {
           return qrData;
         }
       }
     } catch (e) {
-      log("validateVendorvalidateVendor =" + e.toString());
+      log("validateQrCodeResponse =" + e.toString());
       return qrData;
     }
   }
@@ -226,7 +231,8 @@ class ApiService {
       Map<String, dynamic> deviceSetting = new HashMap();
       deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
       deviceSetting['institutionId'] =
-          '${pref.getString(Sharepref.institutionID)}';
+      '${pref.getString(Sharepref.institutionID)}';
+      deviceSetting['settingType'] = 10;
 
       var url = Uri.parse("${_apiBaseUrl}GetDeviceConfiguration");
       var res = await http.post(url,
@@ -244,7 +250,7 @@ class ApiService {
       print('deviceSetting = ${res.body}');
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
-            SettingsResponse.fromJson(json.decode(res.body));
+        SettingsResponse.fromJson(json.decode(res.body));
         if (settingsResponse.responseCode == 1) {
           pref.setString(
               Sharepref.deviceName, settingsResponse.responseData?.deviceName);
@@ -268,8 +274,64 @@ class ApiService {
               Sharepref.line2ConfirmationView,
               settingsResponse.responseData?.jsonValue?.confirmationViewSettings
                   ?.normalViewLine2);
+          pref.setString(
+              Sharepref.enableConfirmationScreen,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.enableConfirmationScreen);
+          pref.setString(
+              Sharepref.viewDelay,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.viewDelay);
+          pref.setString(
+              Sharepref.mainText,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.mainText);
+          pref.setString(
+              Sharepref.subText,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.subText);
+          pref.setString(
+              Sharepref.enableAnonymousQRCode,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableAnonymousQRCode);
+          pref.setString(
+              Sharepref.enableVendorQR,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVendorQR);
+          pref.setString(
+              Sharepref.enableVisitorQR,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVisitorQR);
+          pref.setString(
+              Sharepref.enableVisitorCheckout,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVisitorCheckout);
+          pref.setString(
+              Sharepref.checkInMode,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.checkInMode);
+          pref.setString(
+              Sharepref.enableVolunteerQR,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.enableVolunteerQR);
           // pref.setString(
-          //     Sharepref.line1HomePageView, Sharepref.line1HomePageView);
+          //     Sharepref.enableBufferTime,
+          //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableBufferTime);
+          // pref.setString(
+          //     Sharepref.allowBufferTime,
+          //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.allowBufferTime);
+          // pref.setString(
+          //     Sharepref.enableMembersVisitors,
+          //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableMembersVisitors);
+          // pref.setString(
+          //     Sharepref.enableVendors,
+          //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableVendors);
+          // pref.setString(
+          //     Sharepref.enableVolunteers,
+          //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableVolunteers);
+
+
+
           return "1";
         }
       }
@@ -301,12 +363,38 @@ class ApiService {
       if (res.statusCode == 200) {
         RegisterDeviceResponse registerDeviceResponse =
         RegisterDeviceResponse.fromJson(json.decode(res.body));
-          return registerDeviceResponse;
+        return registerDeviceResponse;
       }
-      return const RegisterDeviceResponse(responseCode: 0, responseSubCode: 0, responseMessage: "Pleace Try agin");
+      return const RegisterDeviceResponse(responseCode: 0,
+          responseSubCode: 0,
+          responseMessage: "Pleace Try agin");
     } catch (e) {
-      log("registerDeviceForApp =$e");
-      return const RegisterDeviceResponse(responseCode: 0, responseSubCode: 0, responseMessage: "");
+      log("registerDeviceForApp ="+e.toString());
+
+      return const RegisterDeviceResponse(
+          responseCode: 0, responseSubCode: 0, responseMessage: "");
+    }
+  }
+
+  Future<VolunteerResponse?> volunteerApiCall(accessToken, bodys) async {
+    try {
+      var url = Uri.parse("${_apiBaseUrl}VolunteerValidation");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'Bearer $accessToken'
+          },
+          body: jsonEncode(bodys));
+      print('Volunteer =${res.body}');
+      if (res.statusCode == 200) {
+        VolunteerResponse volunteerResponse =
+            VolunteerResponse.fromJson(json.decode(res.body));
+        return volunteerResponse;
+      }
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

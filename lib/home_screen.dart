@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+// import 'dart:html';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:snaphybrid/api/api_service.dart';
+import 'package:snaphybrid/pinView.dart';
 
 import 'common/sharepref.dart';
 import 'common/util.dart';
@@ -26,8 +26,13 @@ class _MyHome extends State<HomeScreen> {
       lineTwoText = "";
   var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
   late Timer dataTime;
+  late Timer timer;
+  String attendanceMode = "0";
+  bool checkInVisiable = true;
+  bool checkOutVisiable = true;
+  bool qrAndpinVisiable = false;
 
-  //SharedPreferences pref = SharedPreferences.getInstance() as SharedPreferences;
+
 
   Map<String, dynamic> diveInfo = HashMap();
 
@@ -35,6 +40,7 @@ class _MyHome extends State<HomeScreen> {
   void initState() {
     super.initState();
     timeDateSet();
+    timer = Timer.periodic(Duration(minutes: 15), (Timer t) => healthCheck());
   }
 
   @override
@@ -63,7 +69,7 @@ class _MyHome extends State<HomeScreen> {
                               children: [
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(25, 20, 25, 15),
+                                  const EdgeInsets.fromLTRB(25, 20, 25, 15),
                                   child: Text(
                                     lineOneText,
                                     style: const TextStyle(
@@ -73,7 +79,7 @@ class _MyHome extends State<HomeScreen> {
                                 ),
                                 Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                  const EdgeInsets.fromLTRB(25, 0, 25, 0),
                                   child: Text(
                                     lineTwoText,
                                     style: const TextStyle(
@@ -96,11 +102,11 @@ class _MyHome extends State<HomeScreen> {
                                 children: <Widget>[
                                   const Image(
                                     image:
-                                        AssetImage('images/assets/quote.png'),
+                                    AssetImage('images/assets/quote.png'),
                                   ),
                                   Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(80, 20, 0, 5),
+                                    const EdgeInsets.fromLTRB(80, 20, 0, 5),
                                     child: TextButton.icon(
                                       // <-- TextButton
                                       onPressed: () {},
@@ -147,6 +153,8 @@ class _MyHome extends State<HomeScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                      child:Visibility(
+                        visible: checkInVisiable,
                       child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
@@ -155,17 +163,34 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.green,
                         ),
                         onPressed: () async {
+                          SharedPreferences pref = await SharedPreferences.getInstance();
                           bool result =
-                              await InternetConnectionChecker().hasConnection;
+                          await InternetConnectionChecker().hasConnection;
                           if (result) {
+                            attendanceMode = "1";
                             SharedPreferences pref =
-                                await SharedPreferences.getInstance();
-                            pref.setBool(Sharepref.isQrCodeScan, true);
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const QRViewExample(
-                                        attendanceMode: "1")));
+                            await SharedPreferences.getInstance();
+                            if(pref.getString(Sharepref.checkInMode) == "0"){
+                              pref.setBool(Sharepref.isQrCodeScan, true);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                       QRViewExample(
+                                          attendanceMode: attendanceMode)));
+
+                          }else if(pref.getString(Sharepref.checkInMode) == "1"){
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PinViewPage(
+                                              attendanceMode: attendanceMode)));
+                          }else if (pref.getString(Sharepref.checkInMode) == "2") {
+                              checkInVisiable = false;
+                              checkOutVisiable = false;
+                              qrAndpinVisiable = true;
+                          }
                           } else {
                             Util.showToastError("No Internet");
                           }
@@ -173,9 +198,13 @@ class _MyHome extends State<HomeScreen> {
                         child: const Text("       Check-In       ",),
                       ),
                     ),
+                    ),
+
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
-                      child: TextButton(
+                      child: Visibility(
+                        visible: checkOutVisiable,
+                        child: TextButton(
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.redAccent,
                           padding: const EdgeInsets.all(16.0),
@@ -183,17 +212,30 @@ class _MyHome extends State<HomeScreen> {
                           backgroundColor: Colors.red.shade200,
                         ),
                         onPressed: () async {
+
+                          SharedPreferences pref = await SharedPreferences.getInstance();
                           bool result =
-                              await InternetConnectionChecker().hasConnection;
+                          await InternetConnectionChecker().hasConnection;
                           if (result) {
-                            SharedPreferences pref =
-                                await SharedPreferences.getInstance();
-                            pref.setBool(Sharepref.isQrCodeScan, true);
-                            Navigator.pushReplacement(
+                            attendanceMode = "2";
+                            if(pref.getString(Sharepref.checkInMode) == "0") {
+                              pref.setBool(Sharepref.isQrCodeScan, true);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          QRViewExample(
+                                              attendanceMode: attendanceMode)));
+                            }else if(pref.getString(Sharepref.checkInMode) == "1") {
+                              Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                    builder: (context) => const QRViewExample(
-                                        attendanceMode: "2")));
+                                MaterialPageRoute(builder: (context) => PinViewPage(attendanceMode: attendanceMode)),
+                              );
+                            }else if (pref.getString(Sharepref.checkInMode) == "2"){
+                              checkInVisiable = false;
+                              checkOutVisiable = false;
+                              qrAndpinVisiable = true;
+                            }
                           } else {
                             Util.showToastError("No Internet");
                           }
@@ -201,7 +243,69 @@ class _MyHome extends State<HomeScreen> {
                         child: const Text("      Check-Out      "),
                       ),
                     ),
-                  ],
+                    ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+              child:Visibility(
+              visible:qrAndpinVisiable,// false qrbox hidden
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.black,
+                  padding: const EdgeInsets.all(16.0),
+                  textStyle: const TextStyle(fontSize: 24),
+                  backgroundColor: Colors.blue,
+
+                ),
+                onPressed: () async {
+                  bool result =
+                  await InternetConnectionChecker().hasConnection;
+                if (result) {
+                  SharedPreferences pref =
+                      await SharedPreferences.getInstance();
+                  pref.setBool(Sharepref.isQrCodeScan, true);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                           QRViewExample(
+                              attendanceMode: attendanceMode)));
+                } else {
+                  Util.showToastError("No Internet");
+                }
+              }, child: const Text("        QrCode        "),
+              ),
+          ),
+          ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+                      child:Visibility(
+                        visible:qrAndpinVisiable,// false pin box hidden
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          padding: const EdgeInsets.all(16.0),
+                          textStyle: const TextStyle(fontSize: 24),
+                          backgroundColor: Colors.blue,
+                        ), onPressed: () async {
+                        bool result =
+                            await InternetConnectionChecker().hasConnection;
+                        if (result) {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                 PinViewPage(
+                                          attendanceMode: attendanceMode)));
+                        } else {
+                          Util.showToastError("No Internet");
+                        }
+                      }, child: const Text("            PIN            "),
+                      ),
+                    ),
+                    ),
+            ],
+
+
                 ),
               )
             ],
@@ -214,7 +318,7 @@ class _MyHome extends State<HomeScreen> {
   Future<void> timeDateSet() async {
     updateUI();
     dataTime = Timer.periodic(const Duration(seconds: 1), (dataTime) {
-      String time = DateFormat('HH:mm a').format(DateTime.now());
+      String time = DateFormat('hh:mm a').format(DateTime.now());
       String date = DateFormat('EEEEE, dd MMM yyyy').format(DateTime.now());
 
       setState(() {
@@ -224,35 +328,22 @@ class _MyHome extends State<HomeScreen> {
     });
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime.now().millisecondsSinceEpoch.toString());
-    WidgetsFlutterBinding.ensureInitialized();
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      diveInfo['osVersion'] = 'Android-12';
-      diveInfo['uniqueDeviceId'] = '${pref.getString(Sharepref.serialNo)}';
-      diveInfo['deviceModel'] = androidInfo.model;
-      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      diveInfo['osVersion'] = '${iosInfo.systemVersion}';
-      diveInfo['uniqueDeviceId'] = '${iosInfo.identifierForVendor}';
-      diveInfo['deviceModel'] = '${iosInfo.model}';
-      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-      //   print('Running on ${iosInfo.utsname.machine}'); // e.g. "iPod7,1"
-    } else if (defaultTargetPlatform == TargetPlatform.windows) {
-      WebBrowserInfo webBrowserDeviceInfo = await deviceInfo.webBrowserInfo;
-      // textHolderModal = 'If you have already added the device on the '
-      //     'portal SL NO:${webBrowserInfo.userAgent}';
-      diveInfo['osVersion'] = '${webBrowserDeviceInfo.browserName}';
-      diveInfo['uniqueDeviceId'] = '${webBrowserDeviceInfo.productSub}';
-      diveInfo['deviceModel'] = '${webBrowserDeviceInfo.appName}';
-      diveInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    }
-    // else if (defaultTargetPlatform == TargetPlatform.macOS) {
-    //   MacOsDeviceInfo macOsDeviceInfo = await deviceInfo.macOsInfo;
-    // }
-    diveInfo['appVersion'] = "v1.0";
+        DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString());
+    healthCheck();
+    deviceSetting();
+  }
+
+  Future<void> healthCheck() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    diveInfo['osVersion'] = pref.getString(Sharepref.osVersion);
+    diveInfo['uniqueDeviceId'] = pref.getString(Sharepref.serialNo);
+    diveInfo['deviceModel'] = pref.getString(Sharepref.deviceModel);
+    diveInfo['deviceSN'] = pref.getString(Sharepref.serialNo);
+    diveInfo['appVersion'] = pref.getString(Sharepref.appVersion);
     diveInfo['mobileNumber'] = "+1";
     diveInfo['IMEINumber'] = "";
     diveInfo['batteryStatus'] = "100";
@@ -263,15 +354,15 @@ class _MyHome extends State<HomeScreen> {
         .format(DateTime.now().toUtc())
         .toString();
     healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
-    healthCheckRequest['deviceInfo'] = '$diveInfo'; //
+    healthCheckRequest['deviceInfo'] = diveInfo;
+    healthCheckRequest['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
     healthCheckRequest['institutionId'] =
-        '${pref.getString(Sharepref.institutionID)}';
+    '${pref.getString(Sharepref.institutionID)}';
     //healthCheckRequest['appState'] = 'Foreground';
     //healthCheckRequest['appUpTime'] = '00:22:00';
     // healthCheckRequest['deviceUpTime'] = '01:20:10';
     ApiService().deviceHealthCheck(pref.getString(Sharepref.accessToken),
         healthCheckRequest, pref.getString(Sharepref.serialNo));
-    deviceSetting();
   }
 
   Future<void> deviceSetting() async {
@@ -281,13 +372,29 @@ class _MyHome extends State<HomeScreen> {
     deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     deviceSetting['institutionId'] =
         '${pref.getString(Sharepref.institutionID)}';
+    deviceSetting['settingType'] = 10;
     String req = await ApiService().deviceSetting(pref) as String;
     if (req == "1") updateUI();
+
   }
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
+      if(qrAndpinVisiable){
+        checkOutVisiable = false;
+      }else
+      if ( pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
+        setState(() {
+          checkOutVisiable = false;
+        }
+        );
+      }else {
+        setState(() {
+          checkOutVisiable = true;
+        }
+        );
+      }
       lineOneText = pref.getString(Sharepref.line1HomePageView)?? "";
       lineTwoText = pref.getString(Sharepref.line2HomePageView)?? "";
       String? base64 = pref.getString(Sharepref.logoHomePageView)?? "";
@@ -297,12 +404,15 @@ class _MyHome extends State<HomeScreen> {
         _imageToShow =
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
+
     });
+
   }
 
   @override
   void dispose() {
     super.dispose();
     dataTime.cancel();
+     // timer.cancel();
   }
 }
