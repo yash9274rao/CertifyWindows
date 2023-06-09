@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,9 +14,6 @@ import 'package:snaphybrid/home_screen.dart';
 
 import 'api/api_service.dart';
 import 'login.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 
 
@@ -151,8 +148,8 @@ class _MyHome extends State<MyLanch> {
     await Firebase.initializeApp();
     SharedPreferences pref = await SharedPreferences.getInstance();
     if(pref.getString(Sharepref.firebaseToken) == null || pref.getString(Sharepref.firebaseToken) == ""){
-      String? deviceToken = await FirebaseMessaging.instance.getToken();
-      pref.setString(Sharepref.firebaseToken, deviceToken ?? "");
+     // String? deviceToken = await FirebaseMessaging.instance.getToken();
+      pref.setString(Sharepref.firebaseToken, "");
     }
     
   }
