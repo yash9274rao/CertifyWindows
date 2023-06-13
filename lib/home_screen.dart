@@ -4,6 +4,7 @@ import 'dart:convert';
 // import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,6 +14,7 @@ import 'package:snaphybrid/pinView.dart';
 
 import 'common/sharepref.dart';
 import 'common/util.dart';
+import'package:intl_phone_field/intl_phone_field.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -20,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHome extends State<HomeScreen> {
+  final _formGlobalKey = GlobalKey<FormState>();
   var timeTextHolderModalController = "",
       dateTextHolderModalController = "",
       lineOneText = "",
@@ -31,6 +34,7 @@ class _MyHome extends State<HomeScreen> {
   bool checkInVisiable = true;
   bool checkOutVisiable = true;
   bool qrAndpinVisiable = false;
+  bool pinPageVisiable = false;
 
 
 
@@ -47,8 +51,15 @@ class _MyHome extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Container(
+        // resizeToAvoidBottomInset: false,
+        body: SingleChildScrollView(
+          // physics: NeverScrollableScrollPhysics(),
+          // reverse: false,
+          child:Container(
           color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+
           child: Row(
             children: [
               Expanded(
@@ -91,14 +102,18 @@ class _MyHome extends State<HomeScreen> {
                         ),
                         Expanded(
                           flex: 1,
+                          child:SingleChildScrollView(
+                            physics: NeverScrollableScrollPhysics(),//scrolling off
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
                             child: Container(
                               color: Colors.blueGrey.shade900,
-                              width: double.infinity,
+                              // width: MediaQuery.of(context).size.width * 0.4,
+
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
+
                                 children: <Widget>[
                                   const Image(
                                     image:
@@ -124,9 +139,10 @@ class _MyHome extends State<HomeScreen> {
                                       ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(
-                                        80, 0, 180, 50),
+                                  Center(
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.fromLTRB(0,0,0,50),
                                     child: Text(
                                       dateTextHolderModalController,
                                       style: const TextStyle(
@@ -135,10 +151,11 @@ class _MyHome extends State<HomeScreen> {
                                           color: Colors.white),
                                     ),
                                   ),
-                                ],
+                                  )],
                               ),
                             ),
                           ),
+                        ),
                         ),
                       ],
                     ),
@@ -180,12 +197,16 @@ class _MyHome extends State<HomeScreen> {
                                           attendanceMode: attendanceMode)));
 
                           }else if(pref.getString(Sharepref.checkInMode) == "1"){
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PinViewPage(
-                                              attendanceMode: attendanceMode)));
+                              // Navigator.pushReplacement(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             PinViewPage(
+                              //                 attendanceMode: attendanceMode)));
+                              pinPageVisiable = true;
+                              checkInVisiable = false;
+                              checkOutVisiable = false;
+                              qrAndpinVisiable = false;
                           }else if (pref.getString(Sharepref.checkInMode) == "2") {
                               checkInVisiable = false;
                               checkOutVisiable = false;
@@ -227,10 +248,14 @@ class _MyHome extends State<HomeScreen> {
                                           QRViewExample(
                                               attendanceMode: attendanceMode)));
                             }else if(pref.getString(Sharepref.checkInMode) == "1") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => PinViewPage(attendanceMode: attendanceMode)),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => PinViewPage(attendanceMode: attendanceMode)),
+                              // );
+                              pinPageVisiable = true;
+                              checkInVisiable = false;
+                              checkOutVisiable = false;
+                              qrAndpinVisiable = false;
                             }else if (pref.getString(Sharepref.checkInMode) == "2"){
                               checkInVisiable = false;
                               checkOutVisiable = false;
@@ -290,12 +315,16 @@ class _MyHome extends State<HomeScreen> {
                         bool result =
                             await InternetConnectionChecker().hasConnection;
                         if (result) {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                 PinViewPage(
-                                          attendanceMode: attendanceMode)));
+                          // Navigator.pushReplacement(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) =>
+                          //        PinViewPage(
+                          //                 attendanceMode: attendanceMode)));
+                          pinPageVisiable = true;
+                          checkInVisiable = false;
+                          checkOutVisiable = false;
+                          qrAndpinVisiable = false;
                         } else {
                           Util.showToastError("No Internet");
                         }
@@ -303,7 +332,77 @@ class _MyHome extends State<HomeScreen> {
                       ),
                     ),
                     ),
-            ],
+                   Padding(
+                      padding: const EdgeInsets.all(30),
+                      child:Visibility(
+                          visible:pinPageVisiable,
+                      child:TextFormField(
+                        decoration: InputDecoration(labelText: 'Enter Pin'),
+                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          maxLength: 6,
+                          obscureText: true,
+                        obscuringCharacter: '*',
+                          validator: (Pin) {
+                          if ((Pin!.length != 6)){
+                            return "Enter a valid Pin";
+                          }
+                          else{
+                            return null;
+                          }
+                        },
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+
+                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(30),
+                      child:Visibility(
+                        visible:pinPageVisiable,
+                    child:IntlPhoneField(
+                      decoration: const InputDecoration(
+                        counter: Offstage(),
+                        hintText: 'Enter Mobile Number',
+                        // border: OutlineInputBorder(
+                        //   borderSide: BorderSide(),
+                        // ),
+                      ),
+                      initialCountryCode: 'IN',
+                      showDropdownIcon: true,
+                      dropdownIconPosition:IconPosition.trailing,
+                      onChanged: (phone) {
+                        print(phone.completeNumber);
+                      },
+                    ),
+                    ),
+                    ),
+
+          SizedBox(
+              width: MediaQuery.of(context).size.width * 0.4,
+            child:Visibility(
+              visible:pinPageVisiable,
+            child: Align(
+              alignment: Alignment.centerRight,
+
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // if (formGlobalKey.currentState.validate()) {
+                        //   // take action what you want
+                        // }
+                      },
+                      child: Text("Proceed"),
+                      style: ElevatedButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 20)
+                      ),
+                    ),
+
+          ),
+          )
+          )  ],
 
 
                 ),
@@ -312,7 +411,7 @@ class _MyHome extends State<HomeScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Future<void> timeDateSet() async {
@@ -406,6 +505,7 @@ class _MyHome extends State<HomeScreen> {
       }
 
     });
+
 
   }
 
