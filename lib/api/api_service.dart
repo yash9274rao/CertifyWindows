@@ -20,7 +20,7 @@ import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
 
 class ApiService {
-  static const String _apiBaseUrl = "https://apiqa.certify.me/";
+  static const String _apiBaseUrl = "https://apidev.certify.me/";
   String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
