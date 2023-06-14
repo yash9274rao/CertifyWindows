@@ -7,7 +7,7 @@ class DeviceSettingsData {
   final String navigationBar;
   final String? multipleScanMode;
   final String? deviceMasterCode;
-  final int primaryLanguageId;
+  final String primaryLanguageId;
   final String? allowMultilingual;
   final String? debugMode;
 

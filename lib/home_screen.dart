@@ -181,12 +181,7 @@ class _MyHome extends State<HomeScreen> {
                         ),
                         onPressed: () async {
                           SharedPreferences pref = await SharedPreferences.getInstance();
-                          bool result =
-                          await InternetConnectionChecker().hasConnection;
-                          if (result) {
                             attendanceMode = "1";
-                            SharedPreferences pref =
-                            await SharedPreferences.getInstance();
                             if(pref.getString(Sharepref.checkInMode) == "0"){
                               pref.setBool(Sharepref.isQrCodeScan, true);
                               Navigator.pushReplacement(
@@ -212,9 +207,6 @@ class _MyHome extends State<HomeScreen> {
                               checkOutVisiable = false;
                               qrAndpinVisiable = true;
                           }
-                          } else {
-                            Util.showToastError("No Internet");
-                          }
                         },
                         child: const Text("       Check-In       ",),
                       ),
@@ -235,9 +227,7 @@ class _MyHome extends State<HomeScreen> {
                         onPressed: () async {
 
                           SharedPreferences pref = await SharedPreferences.getInstance();
-                          bool result =
-                          await InternetConnectionChecker().hasConnection;
-                          if (result) {
+
                             attendanceMode = "2";
                             if(pref.getString(Sharepref.checkInMode) == "0") {
                               pref.setBool(Sharepref.isQrCodeScan, true);
@@ -261,9 +251,7 @@ class _MyHome extends State<HomeScreen> {
                               checkOutVisiable = false;
                               qrAndpinVisiable = true;
                             }
-                          } else {
-                            Util.showToastError("No Internet");
-                          }
+
                         },
                         child: const Text("      Check-Out      "),
                       ),
@@ -282,9 +270,7 @@ class _MyHome extends State<HomeScreen> {
 
                 ),
                 onPressed: () async {
-                  bool result =
-                  await InternetConnectionChecker().hasConnection;
-                if (result) {
+
                   SharedPreferences pref =
                       await SharedPreferences.getInstance();
                   pref.setBool(Sharepref.isQrCodeScan, true);
@@ -294,9 +280,7 @@ class _MyHome extends State<HomeScreen> {
                           builder: (context) =>
                            QRViewExample(
                               attendanceMode: attendanceMode)));
-                } else {
-                  Util.showToastError("No Internet");
-                }
+
               }, child: const Text("        QrCode        "),
               ),
           ),
@@ -312,9 +296,7 @@ class _MyHome extends State<HomeScreen> {
                           textStyle: const TextStyle(fontSize: 24),
                           backgroundColor: Colors.blue,
                         ), onPressed: () async {
-                        bool result =
-                            await InternetConnectionChecker().hasConnection;
-                        if (result) {
+
                           // Navigator.pushReplacement(
                           //     context,
                           //     MaterialPageRoute(
@@ -325,9 +307,7 @@ class _MyHome extends State<HomeScreen> {
                           checkInVisiable = false;
                           checkOutVisiable = false;
                           qrAndpinVisiable = false;
-                        } else {
-                          Util.showToastError("No Internet");
-                        }
+
                       }, child: const Text("            PIN            "),
                       ),
                     ),
