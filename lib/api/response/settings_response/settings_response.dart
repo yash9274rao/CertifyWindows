@@ -17,7 +17,7 @@ class SettingsResponse {
     return SettingsResponse(
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
-        responseMessage: json['responseMessage'] ?? "Invalid QRCode",
-        responseData: JsonValue.fromJson(json['responseData'] ?? {}));
+        responseMessage: json['responseMessage'] ?? "No data found",
+        responseData: JsonValue.fromJson(json['responseData']?? {}));
   }
 }

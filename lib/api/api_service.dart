@@ -245,9 +245,7 @@ class ApiService {
           body: jsonEncode(deviceSetting));
       print('deviceSetting request = ${res.request}');
 
-      print('deviceSetting ${res.statusCode}');
-
-      print('deviceSetting = ${res.body}');
+      print('deviceSetting body = ${res.body}');
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
         SettingsResponse.fromJson(json.decode(res.body));
@@ -355,11 +353,11 @@ class ApiService {
             'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
           body: jsonEncode(bodys));
+      print('registerDeviceForApp res body = ${res.body}');
+
       print('registerDeviceForApp request = ${res.request}');
 
-      print('registerDeviceForApp ${res.statusCode}');
 
-      print('registerDeviceForApp = ${res.body}');
       if (res.statusCode == 200) {
         RegisterDeviceResponse registerDeviceResponse =
         RegisterDeviceResponse.fromJson(json.decode(res.body));
