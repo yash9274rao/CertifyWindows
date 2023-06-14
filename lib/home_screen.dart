@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:snaphybrid/api/api_service.dart';
+import 'package:snaphybrid/checkincheckoutVoluntear.dart';
 import 'package:snaphybrid/pinView.dart';
 
 import 'common/sharepref.dart';
@@ -51,10 +52,7 @@ class _MyHome extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        // resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
-          // physics: NeverScrollableScrollPhysics(),
-          // reverse: false,
           child:Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height,
@@ -67,7 +65,7 @@ class _MyHome extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(25, 55, 25, 25),
                   child: Container(
-                    color: Colors.grey.shade200,
+                    // color: Colors.grey.shade200,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -164,6 +162,10 @@ class _MyHome extends State<HomeScreen> {
               ),
               Expanded(
                 flex: 1,
+             child: Padding(
+              padding: const EdgeInsets.fromLTRB(25, 55, 25, 25),
+              child: Container(
+                color: Colors.grey.shade200,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -390,9 +392,12 @@ class _MyHome extends State<HomeScreen> {
 
                     child: ElevatedButton(
                       onPressed: () {
-                        // if (formGlobalKey.currentState.validate()) {
-                        //   // take action what you want
-                        // }
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VolunteerCheckinCheckOut(
+                                        )));
                       },
                       child: Text("Proceed"),
                       style: ElevatedButton.styleFrom(
@@ -406,7 +411,9 @@ class _MyHome extends State<HomeScreen> {
 
 
                 ),
-              )
+              ),
+             ),
+              ),
             ],
           ),
         ),
