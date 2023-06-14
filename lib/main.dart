@@ -174,7 +174,7 @@ class _MyHome extends State<MyLanch> {
       pref.setString(Sharepref.platformId, "4");
     }else  if( _clientInfo.osName =='Windows') {
       pref.setString(Sharepref.platform, "web");
-      pref.setString(Sharepref.platformId, "1");
+      pref.setString(Sharepref.platformId, "4");
     }else {
       pref.setString(Sharepref.platform, "IOS Tablet");
       pref.setString(Sharepref.platformId, "3");
