@@ -108,10 +108,11 @@ class _QRViewExampleState extends State<QRViewExample> {
         const SnackBar(content: Text('no Permission')),
       );
     }
-    Future.delayed(Duration(seconds: 15), () {
-       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
-    });
+      Future.delayed(Duration(seconds: 15), () {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+      });
   }
 
   @override

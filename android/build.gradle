@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.21'
+    ext.kotlin_version = '1.6.0'
     repositories {
         google()
         mavenCentral()
@@ -17,10 +17,6 @@ buildscript {
 allprojects {
     repositories {
         google()
-        maven {
-            // [required] background_fetch
-            url "${project(':background_fetch').projectDir}/libs"
-        }
     }
 }
 
