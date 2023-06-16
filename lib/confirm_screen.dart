@@ -1,15 +1,12 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/api_service.dart';
-import 'package:snaphybrid/api/response/VoluntearResponse.dart';
 import 'package:snaphybrid/common/qr_data.dart';
 import 'package:snaphybrid/home_screen.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:intl/intl.dart';
 import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';

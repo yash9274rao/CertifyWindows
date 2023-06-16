@@ -1,10 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
-// import 'dart:js' ;
-
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:snaphybrid/api/response/VoluntearResponse.dart';
 import 'package:snaphybrid/api/response/accesslogs_Response.dart';
@@ -15,7 +11,6 @@ import 'package:snaphybrid/api/response/response_data_token.dart';
 import 'package:snaphybrid/api/response/validate_qrcode_response.dart';
 import 'package:snaphybrid/common/qr_data.dart';
 import '../common/sharepref.dart';
-import '../confirm_screen.dart';
 import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
 
