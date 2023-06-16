@@ -1,20 +1,15 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-// import 'dart:html';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/QRViewExmple.dart';
 import 'package:snaphybrid/api/api_service.dart';
-import 'package:snaphybrid/pinView.dart';
 
 import 'common/sharepref.dart';
-import 'common/util.dart';
-import'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -25,6 +20,7 @@ class _MyHome extends State<HomeScreen> {
   final _formGlobalKey = GlobalKey<FormState>();
   var timeTextHolderModalController = "",
       dateTextHolderModalController = "",
+      versionId = "",
       lineOneText = "",
       lineTwoText = "";
   var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
@@ -35,8 +31,6 @@ class _MyHome extends State<HomeScreen> {
   bool checkOutVisiable = true;
   bool qrAndpinVisiable = false;
   bool pinPageVisiable = false;
-
-
 
   Map<String, dynamic> diveInfo = HashMap();
 
@@ -50,24 +44,22 @@ class _MyHome extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        // resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
-          // physics: NeverScrollableScrollPhysics(),
-          // reverse: false,
-          child:Container(
+        home: Scaffold(
+      // resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        // physics: NeverScrollableScrollPhysics(),
+        // reverse: false,
+        child: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-
           child: Row(
             children: [
               Expanded(
                 flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(25, 55, 25, 25),
+                  padding: const EdgeInsets.fromLTRB(25, 55, 15, 25),
                   child: Container(
-                    color: Colors.grey.shade200,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -80,7 +72,7 @@ class _MyHome extends State<HomeScreen> {
                               children: [
                                 Padding(
                                   padding:
-                                  const EdgeInsets.fromLTRB(25, 20, 25, 15),
+                                      const EdgeInsets.fromLTRB(25, 20, 25, 15),
                                   child: Text(
                                     lineOneText,
                                     style: const TextStyle(
@@ -90,7 +82,7 @@ class _MyHome extends State<HomeScreen> {
                                 ),
                                 Padding(
                                   padding:
-                                  const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                      const EdgeInsets.fromLTRB(25, 0, 25, 0),
                                   child: Text(
                                     lineTwoText,
                                     style: const TextStyle(
@@ -102,60 +94,73 @@ class _MyHome extends State<HomeScreen> {
                         ),
                         Expanded(
                           flex: 1,
-                          child:SingleChildScrollView(
-                            physics: NeverScrollableScrollPhysics(),//scrolling off
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
-                            child: Container(
-                              color: Colors.blueGrey.shade900,
-                              // width: MediaQuery.of(context).size.width * 0.4,
+                          child: SingleChildScrollView(
+                            physics: NeverScrollableScrollPhysics(),
+                            //scrolling off
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(25, 0, 25, 25),
+                              child: Container(
+                                color: Colors.blueGrey.shade900,
+                                // width: MediaQuery.of(context).size.width * 0.4,
 
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-
-                                children: <Widget>[
-                                  const Image(
-                                    image:
-                                    AssetImage('images/assets/quote.png'),
-                                  ),
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.fromLTRB(80, 20, 0, 5),
-                                    child: TextButton.icon(
-                                      // <-- TextButton
-                                      onPressed: () {},
-                                      icon: const Icon(
-                                        color: Colors.white,
-                                        Icons.access_time,
-                                        size: 24.0,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    const Image(
+                                      image:
+                                          AssetImage('images/assets/quote.png'),
+                                    ),
+                                    Center(
+                                        child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 20, 0, 5),
+                                      child: TextButton.icon(
+                                        // <-- TextButton
+                                        onPressed: () {},
+                                        icon: const Icon(
+                                          color: Colors.white,
+                                          Icons.access_time,
+                                          size: 24.0,
+                                        ),
+                                        label: Text(
+                                          timeTextHolderModalController,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 24,
+                                              color: Colors.white),
+                                        ),
                                       ),
-                                      label: Text(
-                                        timeTextHolderModalController,
+                                    )),
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 0, 0, 20),
+                                        child: Text(
+                                          dateTextHolderModalController,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 18,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          15, 0, 0, 5),
+                                      child: Text(
+                                        versionId,
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 24,
-                                            color: Colors.white),
+                                            fontWeight: FontWeight.normal,
+                                            fontSize: 10,
+                                            color: Colors.grey),
                                       ),
                                     ),
-                                  ),
-                                  Center(
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.fromLTRB(0,0,0,50),
-                                    child: Text(
-                                      dateTextHolderModalController,
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 18,
-                                          color: Colors.white),
-                                    ),
-                                  ),
-                                  )],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
                         ),
                       ],
                     ),
@@ -164,227 +169,233 @@ class _MyHome extends State<HomeScreen> {
               ),
               Expanded(
                 flex: 1,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
-                      child:Visibility(
-                        visible: checkInVisiable,
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.all(16.0),
-                          textStyle: const TextStyle(fontSize: 24),
-                          backgroundColor: Colors.green,
-                        ),
-                        onPressed: () async {
-                          SharedPreferences pref = await SharedPreferences.getInstance();
-                            attendanceMode = "1";
-                            if(pref.getString(Sharepref.checkInMode) == "0"){
-                              pref.setBool(Sharepref.isQrCodeScan, true);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                       QRViewExample(
-                                          attendanceMode: attendanceMode)));
-
-                          }else if(pref.getString(Sharepref.checkInMode) == "1"){
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             PinViewPage(
-                              //                 attendanceMode: attendanceMode)));
-                              pinPageVisiable = true;
-                              checkInVisiable = false;
-                              checkOutVisiable = false;
-                              qrAndpinVisiable = false;
-                          }else if (pref.getString(Sharepref.checkInMode) == "2") {
-                              checkInVisiable = false;
-                              checkOutVisiable = false;
-                              qrAndpinVisiable = true;
-                          }
-                        },
-                        child: const Text("       Check-In       ",),
-                      ),
-                    ),
-                    ),
-
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
-                      child: Visibility(
-                        visible: checkOutVisiable,
-                        child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.redAccent,
-                          padding: const EdgeInsets.all(16.0),
-                          textStyle: const TextStyle(fontSize: 24),
-                          backgroundColor: Colors.red.shade200,
-                        ),
-                        onPressed: () async {
-
-                          SharedPreferences pref = await SharedPreferences.getInstance();
-
-                            attendanceMode = "2";
-                            if(pref.getString(Sharepref.checkInMode) == "0") {
-                              pref.setBool(Sharepref.isQrCodeScan, true);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          QRViewExample(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(25, 55, 25, 25),
+                  child: Container(
+                    color: Colors.grey.shade200,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
+                          child: Visibility(
+                            visible: checkInVisiable,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.all(16.0),
+                                textStyle: const TextStyle(fontSize: 24),
+                                backgroundColor: Colors.green,
+                              ),
+                              onPressed: () async {
+                                SharedPreferences pref =
+                                    await SharedPreferences.getInstance();
+                                attendanceMode = "1";
+                                if (pref.getString(Sharepref.checkInMode) ==
+                                    "0") {
+                                  pref.setBool(Sharepref.isQrCodeScan, true);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => QRViewExample(
                                               attendanceMode: attendanceMode)));
-                            }else if(pref.getString(Sharepref.checkInMode) == "1") {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(builder: (context) => PinViewPage(attendanceMode: attendanceMode)),
-                              // );
-                              pinPageVisiable = true;
-                              checkInVisiable = false;
-                              checkOutVisiable = false;
-                              qrAndpinVisiable = false;
-                            }else if (pref.getString(Sharepref.checkInMode) == "2"){
-                              checkInVisiable = false;
-                              checkOutVisiable = false;
-                              qrAndpinVisiable = true;
-                            }
-
-                        },
-                        child: const Text("      Check-Out      "),
-                      ),
-                    ),
-                    ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
-              child:Visibility(
-              visible:qrAndpinVisiable,// false qrbox hidden
-              child: TextButton(
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  padding: const EdgeInsets.all(16.0),
-                  textStyle: const TextStyle(fontSize: 24),
-                  backgroundColor: Colors.blue,
-
-                ),
-                onPressed: () async {
-
-                  SharedPreferences pref =
-                      await SharedPreferences.getInstance();
-                  pref.setBool(Sharepref.isQrCodeScan, true);
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                           QRViewExample(
-                              attendanceMode: attendanceMode)));
-
-              }, child: const Text("        QrCode        "),
-              ),
-          ),
-          ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
-                      child:Visibility(
-                        visible:qrAndpinVisiable,// false pin box hidden
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.black,
-                          padding: const EdgeInsets.all(16.0),
-                          textStyle: const TextStyle(fontSize: 24),
-                          backgroundColor: Colors.blue,
-                        ), onPressed: () async {
-
-                          // Navigator.pushReplacement(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) =>
-                          //        PinViewPage(
-                          //                 attendanceMode: attendanceMode)));
-                          pinPageVisiable = true;
-                          checkInVisiable = false;
-                          checkOutVisiable = false;
-                          qrAndpinVisiable = false;
-
-                      }, child: const Text("            PIN            "),
-                      ),
-                    ),
-                    ),
-                   Padding(
-                      padding: const EdgeInsets.all(30),
-                      child:Visibility(
-                          visible:pinPageVisiable,
-                      child:TextFormField(
-                        decoration: InputDecoration(labelText: 'Enter Pin'),
-                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                          maxLength: 6,
-                          obscureText: true,
-                        obscuringCharacter: '*',
-                          validator: (Pin) {
-                          if ((Pin!.length != 6)){
-                            return "Enter a valid Pin";
-                          }
-                          else{
-                            return null;
-                          }
-                        },
-                        style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                                } else if (pref
+                                        .getString(Sharepref.checkInMode) ==
+                                    "1") {
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             PinViewPage(
+                                  //                 attendanceMode: attendanceMode)));
+                                  pinPageVisiable = true;
+                                  checkInVisiable = false;
+                                  checkOutVisiable = false;
+                                  qrAndpinVisiable = false;
+                                } else if (pref
+                                        .getString(Sharepref.checkInMode) ==
+                                    "2") {
+                                  checkInVisiable = false;
+                                  checkOutVisiable = false;
+                                  qrAndpinVisiable = true;
+                                }
+                              },
+                              child: const Text(
+                                "       Check-In       ",
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+                          child: Visibility(
+                            visible: checkOutVisiable,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.redAccent,
+                                padding: const EdgeInsets.all(16.0),
+                                textStyle: const TextStyle(fontSize: 24),
+                                backgroundColor: Colors.red.shade200,
+                              ),
+                              onPressed: () async {
+                                SharedPreferences pref =
+                                    await SharedPreferences.getInstance();
 
+                                attendanceMode = "2";
+                                if (pref.getString(Sharepref.checkInMode) ==
+                                    "0") {
+                                  pref.setBool(Sharepref.isQrCodeScan, true);
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => QRViewExample(
+                                              attendanceMode: attendanceMode)));
+                                } else if (pref
+                                        .getString(Sharepref.checkInMode) ==
+                                    "1") {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) => PinViewPage(attendanceMode: attendanceMode)),
+                                  // );
+                                  pinPageVisiable = true;
+                                  checkInVisiable = false;
+                                  checkOutVisiable = false;
+                                  qrAndpinVisiable = false;
+                                } else if (pref
+                                        .getString(Sharepref.checkInMode) ==
+                                    "2") {
+                                  checkInVisiable = false;
+                                  checkOutVisiable = false;
+                                  qrAndpinVisiable = true;
+                                }
+                              },
+                              child: const Text("      Check-Out      "),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+                          child: Visibility(
+                            visible: qrAndpinVisiable, // false qrbox hidden
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.all(16.0),
+                                textStyle: const TextStyle(fontSize: 24),
+                                backgroundColor: Colors.blue,
+                              ),
+                              onPressed: () async {
+                                SharedPreferences pref =
+                                    await SharedPreferences.getInstance();
+                                pref.setBool(Sharepref.isQrCodeScan, true);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => QRViewExample(
+                                            attendanceMode: attendanceMode)));
+                              },
+                              child: const Text("        QrCode        "),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(20, 15, 0, 20),
+                          child: Visibility(
+                            visible: qrAndpinVisiable,
+                            // false pin box hidden
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                foregroundColor: Colors.black,
+                                padding: const EdgeInsets.all(16.0),
+                                textStyle: const TextStyle(fontSize: 24),
+                                backgroundColor: Colors.blue,
+                              ),
+                              onPressed: () async {
+                                // Navigator.pushReplacement(
+                                //     context,
+                                //     MaterialPageRoute(
+                                //         builder: (context) =>
+                                //        PinViewPage(
+                                //                 attendanceMode: attendanceMode)));
+                                pinPageVisiable = true;
+                                checkInVisiable = false;
+                                checkOutVisiable = false;
+                                qrAndpinVisiable = false;
+                              },
+                              child: const Text("            PIN            "),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: Visibility(
+                            visible: pinPageVisiable,
+                            child: TextFormField(
+                              decoration:
+                                  InputDecoration(labelText: 'Enter Pin'),
+                              keyboardType: TextInputType.numberWithOptions(
+                                  signed: true, decimal: true),
+                              maxLength: 6,
+                              obscureText: true,
+                              obscuringCharacter: '*',
+                              validator: (Pin) {
+                                if ((Pin!.length != 6)) {
+                                  return "Enter a valid Pin";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: Visibility(
+                            visible: pinPageVisiable,
+                            child: IntlPhoneField(
+                              decoration: const InputDecoration(
+                                counter: Offstage(),
+                                hintText: 'Enter Mobile Number',
+                                // border: OutlineInputBorder(
+                                //   borderSide: BorderSide(),
+                                // ),
+                              ),
+                              initialCountryCode: 'IN',
+                              showDropdownIcon: true,
+                              dropdownIconPosition: IconPosition.trailing,
+                              onChanged: (phone) {
+                                print(phone.completeNumber);
+                              },
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.4,
+                            child: Visibility(
+                              visible: pinPageVisiable,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    // if (formGlobalKey.currentState.validate()) {
+                                    //   // take action what you want
+                                    // }
+                                  },
+                                  child: Text("Proceed"),
+                                  style: ElevatedButton.styleFrom(
+                                      textStyle: const TextStyle(fontSize: 20)),
+                                ),
+                              ),
+                            ))
+                      ],
                     ),
-                  Padding(
-                    padding: const EdgeInsets.all(30),
-                      child:Visibility(
-                        visible:pinPageVisiable,
-                    child:IntlPhoneField(
-                      decoration: const InputDecoration(
-                        counter: Offstage(),
-                        hintText: 'Enter Mobile Number',
-                        // border: OutlineInputBorder(
-                        //   borderSide: BorderSide(),
-                        // ),
-                      ),
-                      initialCountryCode: 'IN',
-                      showDropdownIcon: true,
-                      dropdownIconPosition:IconPosition.trailing,
-                      onChanged: (phone) {
-                        print(phone.completeNumber);
-                      },
-                    ),
-                    ),
-                    ),
-
-          SizedBox(
-              width: MediaQuery.of(context).size.width * 0.4,
-            child:Visibility(
-              visible:pinPageVisiable,
-            child: Align(
-              alignment: Alignment.centerRight,
-
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // if (formGlobalKey.currentState.validate()) {
-                        //   // take action what you want
-                        // }
-                      },
-                      child: Text("Proceed"),
-                      style: ElevatedButton.styleFrom(
-                          textStyle: const TextStyle(fontSize: 20)
-                      ),
-                    ),
-
-          ),
-          )
-          )  ],
-
-
+                  ),
                 ),
               )
             ],
@@ -396,6 +407,7 @@ class _MyHome extends State<HomeScreen> {
 
   Future<void> timeDateSet() async {
     updateUI();
+    SharedPreferences pref = await SharedPreferences.getInstance();
     dataTime = Timer.periodic(const Duration(seconds: 1), (dataTime) {
       String time = DateFormat('hh:mm a').format(DateTime.now());
       String date = DateFormat('EEEEE, dd MMM yyyy').format(DateTime.now());
@@ -405,12 +417,8 @@ class _MyHome extends State<HomeScreen> {
         dateTextHolderModalController = date;
       });
     });
-    SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime
-            .now()
-            .millisecondsSinceEpoch
-            .toString());
+        DateTime.now().millisecondsSinceEpoch.toString());
     healthCheck();
     deviceSetting();
   }
@@ -434,9 +442,10 @@ class _MyHome extends State<HomeScreen> {
         .toString();
     healthCheckRequest['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     healthCheckRequest['deviceInfo'] = diveInfo;
-    healthCheckRequest['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
+    healthCheckRequest['pushAuthToken'] =
+        pref.getString(Sharepref.firebaseToken);
     healthCheckRequest['institutionId'] =
-    '${pref.getString(Sharepref.institutionID)}';
+        '${pref.getString(Sharepref.institutionID)}';
     //healthCheckRequest['appState'] = 'Foreground';
     //healthCheckRequest['appUpTime'] = '00:22:00';
     // healthCheckRequest['deviceUpTime'] = '01:20:10';
@@ -454,45 +463,40 @@ class _MyHome extends State<HomeScreen> {
     deviceSetting['settingType'] = 10;
     String req = await ApiService().deviceSetting(pref) as String;
     if (req == "1") updateUI();
-
   }
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
-      if(qrAndpinVisiable){
+      versionId = 'V${pref.getString(Sharepref.appVersion)!.substring(0, 3)}';
+      if (qrAndpinVisiable) {
         checkOutVisiable = false;
-      }else
-      if ( pref.getString(Sharepref.enableVisitorCheckout) == "0" && pref.getString(Sharepref.enableVisitorQR) == "1"){
+      } else if (pref.getString(Sharepref.enableVisitorCheckout) == "0" &&
+          pref.getString(Sharepref.enableVisitorQR) == "1") {
         setState(() {
           checkOutVisiable = false;
-        }
-        );
-      }else {
+        });
+      } else {
         setState(() {
           checkOutVisiable = true;
-        }
-        );
+        });
       }
-      lineOneText = pref.getString(Sharepref.line1HomePageView)?? "";
-      lineTwoText = pref.getString(Sharepref.line2HomePageView)?? "";
-      String? base64 = pref.getString(Sharepref.logoHomePageView)?? "";
+      lineOneText = pref.getString(Sharepref.line1HomePageView) ?? "";
+      lineTwoText = pref.getString(Sharepref.line2HomePageView) ?? "";
+      String? base64 = pref.getString(Sharepref.logoHomePageView) ?? "";
       if (base64.isNotEmpty) {
         _imageToShow = Image.memory(const Base64Decoder().convert(base64));
       } else {
         _imageToShow =
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
-
     });
-
-
   }
 
   @override
   void dispose() {
     super.dispose();
     dataTime.cancel();
-     // timer.cancel();
+    // timer.cancel();
   }
 }
