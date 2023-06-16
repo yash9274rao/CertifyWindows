@@ -7,7 +7,6 @@ class DeviceSettingsData {
   final String navigationBar;
   final String? multipleScanMode;
   final String? deviceMasterCode;
-  final String primaryLanguageId;
   final String? allowMultilingual;
   final String? debugMode;
 
@@ -19,7 +18,6 @@ class DeviceSettingsData {
       required this.navigationBar,
       required this.multipleScanMode,
       required this.deviceMasterCode,
-      required this.primaryLanguageId,
       required this.allowMultilingual,
       required this.debugMode});
 
@@ -32,7 +30,6 @@ class DeviceSettingsData {
         navigationBar: json['navigationBar'],
         multipleScanMode: json['multipleScanMode'],
         deviceMasterCode: json['deviceMasterCode'] ?? "Invalid QRCode",
-        primaryLanguageId: json['primaryLanguageId'],
         allowMultilingual: json['allowMultilingual'],
         debugMode: json['debugMode']);
   }

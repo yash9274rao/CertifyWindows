@@ -128,9 +128,6 @@ class ApiService {
           },
           body: jsonEncode(bodys));
       print('deviceHealthCheck request = ${res.request}');
-
-      print('deviceHealthCheck ${res.statusCode}');
-
       print('deviceHealthCheck = ${res.body}');
       return "";
     } catch (e) {
@@ -143,7 +140,6 @@ class ApiService {
   Future<AccesslogsResponse> accessLogs(accessToken, bodys) async {
     try {
       print('AccessLogs ${bodys}');
-
       var url = Uri.parse("${_apiBaseUrl}AccessLogs");
       var res = await http.post(url,
           headers: {
@@ -154,8 +150,6 @@ class ApiService {
           },
           body: jsonEncode(bodys));
       print('AccessLogs request = ${res.request}');
-
-      print('AccessLogs ${res.statusCode}');
       print('AccessLogs = ${res.body}');
       if (res.statusCode == 200) {
         AccesslogsResponse accesslogsResponse =
@@ -176,7 +170,6 @@ class ApiService {
     QrData qrData = new QrData();
     qrData.isValid = false;
     qrData.setFirstName = "InValid QR Code";
-
     try {
       var url = Uri.parse("${_apiBaseUrl}ValidateQRCode");
       var res = await http.post(url,
