@@ -1,11 +1,11 @@
 {
-    "name": "snaphybrid",
-    "short_name": "snaphybrid",
+    "name": "Certify.Me",
+    "short_name": "Certify.Me",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",
     "theme_color": "#hexcode",
-    "description": "A new Hybrid project.",
+    "description": "Certify.Me.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
