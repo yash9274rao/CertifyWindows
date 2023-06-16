@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:snaphybrid/checkInMultipleSlots.dart';
 
 class VolunteerCheckinCheckOut extends StatefulWidget {
   @override
@@ -20,13 +21,17 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     child:Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                    Padding(padding:  const EdgeInsets.fromLTRB(150, 50, 10, 0),
+                          child: Container(
+                            child: _imageToShow,
+                          ),),
                         Expanded(
                         flex: 1,
                     child: Padding(
-                        padding: const EdgeInsets.fromLTRB(150, 200, 150, 50),
+                        padding: const EdgeInsets.fromLTRB(150, 10, 150, 50),
                         child: Container(
-                            // color: Colors.grey.shade200,
                             decoration: BoxDecoration(
                                 color: Colors.grey.shade200,
                                 borderRadius:
@@ -77,7 +82,7 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               5, 20, 50, 0),
-                                          child: Expanded(
+
                                             child: TextButton(
                                               style: TextButton.styleFrom(
                                                 foregroundColor: Colors.white,
@@ -93,17 +98,22 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                                                 minimumSize:
                                                     const Size.fromHeight(90),
                                               ),
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            CheckinSlotsPage(
+                                                            )));
+                                              },
                                               child: const Text(
                                                 "       Check-In       ",
                                               ),
                                             ),
-                                          ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
                                               5, 20, 50, 0),
-                                          child: Expanded(
                                               child: TextButton(
                                             style: TextButton.styleFrom(
                                               foregroundColor: Colors.redAccent,
@@ -124,50 +134,16 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                                             child: const Text(
                                               "       Check-Out       ",
                                             ),
-                                          )),
+                                          ),
                                         ),
                                         Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 0, 30, 0, 0),
                                             child: Row(
-                                              // mainAxisAlignment:
-                                              //     MainAxisAlignment
-                                              //         .spaceEvenly,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:MainAxisAlignment.center,
 
                                               children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          0, 5, 33, 0),
-                                                  child: Expanded(
-                                                    child: TextButton(
-                                                      style:
-                                                          TextButton.styleFrom(
-                                                        foregroundColor:
-                                                            Colors.black,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16.0),
-                                                        textStyle:
-                                                            const TextStyle(
-                                                          fontSize: 24,
-                                                        ),
-                                                        backgroundColor:
-                                                            Colors.white,
-                                                      ),
-                                                      onPressed: () {},
-                                                      child: const Text(
-                                                        "       View Schedule      ",
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                    padding: const EdgeInsets
-                                                        .fromLTRB(0, 5, 30, 0),
-                                                    child: Expanded(
+                                            Center(
                                                       child: TextButton(
                                                         style: TextButton
                                                             .styleFrom(
@@ -175,7 +151,7 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                                                               Colors.black,
                                                           padding:
                                                               const EdgeInsets
-                                                                  .all(16.0),
+                                                                  .all(20.0),
                                                           textStyle:
                                                               const TextStyle(
                                                             fontSize: 24,
@@ -185,10 +161,10 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                                                         ),
                                                         onPressed: () {},
                                                         child: const Text(
-                                                          "      Service History      ",
+                                                          "      Service History          ",
                                                         ),
                                                       ),
-                                                    ))
+                                                    )
                                               ],
                                             ))
                                       ],

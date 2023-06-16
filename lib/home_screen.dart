@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-// import 'dart:html';
-
+import 'dart:js_interop';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -36,6 +35,8 @@ class _MyHome extends State<HomeScreen> {
   bool checkOutVisiable = true;
   bool qrAndpinVisiable = false;
   bool pinPageVisiable = false;
+  int Pin = 0;
+  int phone = 0;
 
 
 
@@ -340,12 +341,12 @@ class _MyHome extends State<HomeScreen> {
                           visible:pinPageVisiable,
                       child:TextFormField(
                         decoration: InputDecoration(labelText: 'Enter Pin'),
-                        keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
-                          maxLength: 6,
+                        keyboardType: TextInputType.number,
+                          maxLength: 5,
                           obscureText: true,
                         obscuringCharacter: '*',
                           validator: (Pin) {
-                          if ((Pin!.length != 6)){
+                          if ((Pin!.length != 5)){
                             return "Enter a valid Pin";
                           }
                           else{
@@ -369,9 +370,6 @@ class _MyHome extends State<HomeScreen> {
                       decoration: const InputDecoration(
                         counter: Offstage(),
                         hintText: 'Enter Mobile Number',
-                        // border: OutlineInputBorder(
-                        //   borderSide: BorderSide(),
-                        // ),
                       ),
                       initialCountryCode: 'IN',
                       showDropdownIcon: true,
@@ -392,13 +390,18 @@ class _MyHome extends State<HomeScreen> {
 
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    VolunteerCheckinCheckOut(
-                                        )));
-                      },
+                        if(Pin == null || Pin.isNull){
+                          Util.showToastError("Please enter email");
+                        }else{
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      VolunteerCheckinCheckOut(
+                                      )));
+                        }
+                        },
+
                       child: Text("Proceed"),
                       style: ElevatedButton.styleFrom(
                           textStyle: const TextStyle(fontSize: 20)
