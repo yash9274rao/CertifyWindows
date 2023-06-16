@@ -39,16 +39,39 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
                             child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(50, 50, 5, 5),
-                                    child: Text(
-                                      "Hi Heena",
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 25),
-                                    ),
+                            Padding(
+                            padding:
+                            const EdgeInsets.fromLTRB(
+                                40, 20, 0, 5),
+                                   child: TextButton.icon(
+                                   onPressed: () {
+                                     Navigator.of(context, rootNavigator: true).pop(context);
+                                   },
+                                  icon: const Icon(
+                                    color: Colors.black,
+                                    Icons.arrow_back_outlined,
+                                    size: 30.0,
                                   ),
+                                  label: Text(
+                                      "Hi Heena",
+                                    style: const TextStyle(
+                                        fontWeight:
+                                        FontWeight.bold,
+                                        fontSize: 24,
+                                        color: Colors.black),
+                                  ),
+                                   ),
+                            ),
+                                  // Padding(
+                                  //   padding:
+                                  //       const EdgeInsets.fromLTRB(50, 50, 5, 5),
+                                  //   child: Text(
+                                  //     "Hi Heena",
+                                  //     style: const TextStyle(
+                                  //         fontWeight: FontWeight.bold,
+                                  //         fontSize: 25),
+                                  //   ),
+                                  // ),
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(50, 5, 0, 0),

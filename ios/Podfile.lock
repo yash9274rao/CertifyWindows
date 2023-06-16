@@ -1,6 +1,4 @@
 PODS:
-  - background_fetch (1.1.6):
-    - Flutter
   - client_information (1.0.0):
     - Flutter
     - SAMKeychain
@@ -73,7 +71,6 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - client_information (from `.symlinks/plugins/client_information/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
@@ -103,8 +100,6 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
-  background_fetch:
-    :path: ".symlinks/plugins/background_fetch/ios"
   client_information:
     :path: ".symlinks/plugins/client_information/ios"
   connectivity_plus:
@@ -129,7 +124,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: bc9b44b0bf8b434e282a2ac9be8662800a0296ed
   client_information: cd2088b683015ea782082d6562d17e0320ae7097
   connectivity_plus: 07c49e96d7fc92bc9920617b83238c4d178b446a
   device_info_plus: 7545d84d8d1b896cb16a4ff98c19f07ec4b298ea
