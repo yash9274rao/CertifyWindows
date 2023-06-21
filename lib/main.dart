@@ -1,5 +1,6 @@
 import 'dart:collection';
-
+import 'dart:io';
+import 'dart:js';
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,18 +23,21 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-
+  HttpOverrides.global = myHttpOverrides();
   runApp(MyApp());
-}
+  }
+
+
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyLanch(),
-    );
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MyLanch(),
+      );
   }
 }
 
@@ -224,7 +228,7 @@ class _MyHome extends State<MyLanch> {
           pref.setString(Sharepref.institutionID,
               getDeviceTokenResponse.responseData.institutionID);
           Navigator.pushReplacement(
-              context, MaterialPageRoute(builder: (context) => HomeScreen()));
+              context as BuildContext, MaterialPageRoute(builder: (context) => HomeScreen()));
         } else {
           setState(() {
             _isVisibility = true;
@@ -239,4 +243,19 @@ class _MyHome extends State<MyLanch> {
       Util.showToastError("No Internet");
     }
   }
+
 }
+class myHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient create(SecurityContext context) {
+    final HttpClient client = super.createHttpClient(context);
+    client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    return client;
+  }
+  }
+@override
+String findProxyFromEnvironment(_, __) {
+  return 'PROXY 10.3.10.178;'; // IP address of your proxy
+}
+
+

@@ -46,9 +46,9 @@ class CheckInSlots extends State<CheckinSlotsPage> {
                                       color: Colors.grey.shade200,
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(7.0))),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                  child: ListView(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.center,
                                       children: [
                                         Row(
                                           children: [
