@@ -8,6 +8,7 @@ import 'package:snaphybrid/api/api_service.dart';
 import 'package:snaphybrid/common/qr_data.dart';
 import 'package:snaphybrid/home_screen.dart';
 import 'package:intl/intl.dart';
+import 'package:snaphybrid/toast.dart';
 import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
 import 'common/util.dart';
@@ -179,9 +180,9 @@ class _Confirm extends State<ConfirmLanch> {
       } else {
         textHolderModalController = "";
         if (widget.type == "pin")
-          Util.showToastErrorAccessLogs("Invalid Pin");
+          context.showToast("Invalid Pin");
         else
-          Util.showToastErrorAccessLogs("Invalid QRCode");
+          context.showToast("Invalid QRCode");
       }
     });
     Future.delayed(Duration(milliseconds: 5000), () {
@@ -262,28 +263,29 @@ class _Confirm extends State<ConfirmLanch> {
         int.parse(widget.attendanceMode) == 1 &&
         qrData.isValid == true) {
       updateUI(qrData);
-      Util.showToastErrorAccessLogs("Check In");
+      context.showToast("Check In");
     } else if (accesslogsResponse.responseSubCode == 0 &&
         int.parse(widget.attendanceMode) == 2 &&
         qrData.isValid == true) {
       updateUI(qrData);
-      Util.showToastErrorAccessLogs("Check Out");
+      context.showToast("Check Out");
     } else if (accesslogsResponse.responseSubCode == 103 &&
         int.parse(widget.attendanceMode) == 1 &&
         qrData.isValid == true) {
       navigationHome();
-      Util.showToastErrorAccessLogs("Already Check In");
+      context.showToast("Already Check In");
     } else if (accesslogsResponse.responseSubCode == 103 &&
         int.parse(widget.attendanceMode) == 2 &&
         qrData.isValid == true) {
       navigationHome();
-      Util.showToastErrorAccessLogs("Already Check Out");
+      context.showToast("Already Check Out");
     } else if (qrData.isValid == false) {
       navigationHome();
       if (widget.type == "pin")
-        Util.showToastErrorAccessLogs("Invalid Pin");
+        context.showToast("Invalid Pin");
       else
-        Util.showToastErrorAccessLogs("Invalid QRCode");
+        // Util.showToastErrorAccessLogs("Invalid QRCode");
+        context.showToast('Invalid QRCode');
     } else {
       updateUI(qrData);
     }

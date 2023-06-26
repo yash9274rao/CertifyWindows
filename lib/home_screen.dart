@@ -33,8 +33,8 @@ class _MyHome extends State<HomeScreen> {
   bool checkOutVisiable = true;
   bool qrAndpinVisiable = false;
   bool pinPageVisiable = false;
-  int Pin = 0;
-  int phone = 0;
+  bool pinVisiable = false;
+
 
   Map<String, dynamic> diveInfo = HashMap();
 
@@ -238,6 +238,7 @@ class _MyHome extends State<HomeScreen> {
                                                     checkInVisiable = false;
                                                     checkOutVisiable = false;
                                                     qrAndpinVisiable = false;
+                                                    pinVisiable = false;
                                                   } else if (pref.getString(
                                                           Sharepref
                                                               .checkInMode) ==
@@ -245,6 +246,8 @@ class _MyHome extends State<HomeScreen> {
                                                     checkInVisiable = false;
                                                     checkOutVisiable = false;
                                                     qrAndpinVisiable = true;
+                                                    pinPageVisiable = false;
+                                                    pinVisiable = true;
                                                   }
                                                 },
                                                 child: const Text(
@@ -297,12 +300,15 @@ class _MyHome extends State<HomeScreen> {
                                               checkInVisiable = false;
                                               checkOutVisiable = false;
                                               qrAndpinVisiable = false;
+                                              pinVisiable = false;
                                             } else if (pref.getString(
                                                     Sharepref.checkInMode) ==
                                                 "2") {
                                               checkInVisiable = false;
                                               checkOutVisiable = false;
                                               qrAndpinVisiable = true;
+                                              pinVisiable = true;
+                                              pinPageVisiable = false;
                                             }
                                           },
                                           child: const Text(
@@ -312,7 +318,7 @@ class _MyHome extends State<HomeScreen> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          20, 15, 0, 20),
+                                          0, 40, 0, 120),
                                       child: Visibility(
                                         visible: qrAndpinVisiable,
                                         // false qrbox hidden
@@ -346,9 +352,9 @@ class _MyHome extends State<HomeScreen> {
 
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          20, 15, 0, 20),
+                                          0, 150, 0, 40),
                                       child: Visibility(
-                                        visible: qrAndpinVisiable,
+                                        visible: pinVisiable,
                                         // false pin box hidden
                                         child: TextButton(
                                           style: TextButton.styleFrom(
@@ -369,6 +375,7 @@ class _MyHome extends State<HomeScreen> {
                                             checkInVisiable = false;
                                             checkOutVisiable = false;
                                             qrAndpinVisiable = false;
+                                            pinVisiable = false;
                                           },
                                           child: const Text(
                                               "            PIN            "),
@@ -524,7 +531,7 @@ class _MyHome extends State<HomeScreen> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       versionId = 'V${pref.getString(Sharepref.appVersion)!.substring(0, 3)}';
-      if (qrAndpinVisiable) {
+      if ((qrAndpinVisiable) || (pinPageVisiable) || (pinVisiable) ){
         checkOutVisiable = false;
       } else if (pref.getString(Sharepref.enableVisitorCheckout) == "0" &&
           pref.getString(Sharepref.enableVisitorQR) == "1") {
