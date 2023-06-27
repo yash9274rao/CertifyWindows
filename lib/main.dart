@@ -16,10 +16,7 @@ import 'package:snaphybrid/home_screen.dart';
 import 'api/api_service.dart';
 import 'login.dart';
 
-
-
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
@@ -148,17 +145,16 @@ class _MyHome extends State<MyLanch> {
       ),
     );
   }
+
   Future<void> getDeviceToken() async {
     await Firebase.initializeApp();
     SharedPreferences pref = await SharedPreferences.getInstance();
-    if(pref.getString(Sharepref.firebaseToken) == null || pref.getString(Sharepref.firebaseToken) == ""){
-     // String? deviceToken = await FirebaseMessaging.instance.getToken();
+    if (pref.getString(Sharepref.firebaseToken) == null ||
+        pref.getString(Sharepref.firebaseToken) == "") {
+      // String? deviceToken = await FirebaseMessaging.instance.getToken();
       pref.setString(Sharepref.firebaseToken, "");
     }
-    
   }
-
-
 
   Future<void> initPlatformState() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -168,25 +164,26 @@ class _MyHome extends State<MyLanch> {
     DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     ClientInformation _clientInfo = await ClientInformation.fetch();
     setState(() {
-      textHolderModalController =
-      'If you have already added the device on the '
+      textHolderModalController = 'If you have already added the device on the '
           'portal SL NO: ${_clientInfo.deviceId.toUpperCase()}';
     });
     pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());
-    if( _clientInfo.osName =='Android') {
+    if (_clientInfo.osName == 'Android') {
       pref.setString(Sharepref.platform, "Android Tablet");
       pref.setString(Sharepref.platformId, "4");
-    }else  if( _clientInfo.osName =='Windows') {
+    } else if (_clientInfo.osName == 'Windows') {
       pref.setString(Sharepref.platform, "web");
       pref.setString(Sharepref.platformId, "4");
-    }else {
+    } else {
       pref.setString(Sharepref.platform, "IOS Tablet");
       pref.setString(Sharepref.platformId, "3");
     }
     pref.setString(Sharepref.deviceModel, _clientInfo.deviceName);
     pref.setString(Sharepref.appVersion, _clientInfo.applicationVersion);
-    pref.setString(Sharepref.osVersion, '${_clientInfo.osName} - ${_clientInfo.osVersion}');
-
+    pref.setString(Sharepref.osVersion,
+        '${_clientInfo.osName} - ${_clientInfo.osVersion}');
+    print(
+        "_clientInfo.applicationVersion object${_clientInfo.applicationVersion}");
     activiAPI();
   }
 
@@ -206,7 +203,7 @@ class _MyHome extends State<MyLanch> {
     Map<String, dynamic> createDoc = new HashMap();
     createDoc['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
     createDoc['deviceData'] = diveInfo;
-   // bool result = await InternetConnectionChecker().hasConnection;
+    // bool result = await InternetConnectionChecker().hasConnection;
     if (true) {
       ActivateApplicationResponse activateApplicationResponse =
           await ApiService().activateApplication(diveInfo, sn)
