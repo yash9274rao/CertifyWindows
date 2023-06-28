@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snaphybrid/api/response/register_device_response.dart';
 import 'package:snaphybrid/main.dart';
+import 'package:snaphybrid/toast.dart';
 
 import 'api/api_service.dart';
 import 'common/sharepref.dart';
-import 'common/util.dart';
 
 class AddDevice extends StatelessWidget {
   const AddDevice({super.key});
@@ -192,7 +192,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             onPressed: () {
                               _formAddDeviceKey.currentState!.save();
                               if (_deviceName.isEmpty) {
-                                Util.showToastError("Please enter Device Name");
+                                context.showToast("Please enter Device Name");
                               } else {
                                 addDevice();
                               }
@@ -260,7 +260,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(builder: (context) => MyApp()),
       );
     } else {
-      Util.showToastError(registerDeviceResponse.responseMessage!);
+      context.showToast(registerDeviceResponse.responseMessage!);
     }
   }
 }

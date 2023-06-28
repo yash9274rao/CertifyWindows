@@ -35,7 +35,6 @@ class _MyHome extends State<HomeScreen> {
   bool pinPageVisiable = false;
   bool pinVisiable = false;
 
-
   Map<String, dynamic> diveInfo = HashMap();
 
   @override
@@ -47,6 +46,8 @@ class _MyHome extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return MaterialApp(
         home: Scaffold(
             body: SingleChildScrollView(
@@ -183,6 +184,8 @@ class _MyHome extends State<HomeScreen> {
                               padding:
                                   const EdgeInsets.fromLTRB(25, 55, 30, 55),
                               child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height,
                                 alignment: Alignment.center,
                                 color: Colors.grey.shade200,
                                 child: Column(
@@ -190,11 +193,14 @@ class _MyHome extends State<HomeScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Stack(
-                                        alignment: Alignment.center,
+                                      alignment: Alignment.center,
                                         children: <Widget>[
-                                          Padding(
+                                          SizedBox(
+                                            width:width * 0.3,
+                                            height:height * 0.4,
+                                          child: Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                0, 40, 0, 120),
+                                                0, 40, 0, 180),
                                             child: Visibility(
                                               visible: checkInVisiable,
                                               child: TextButton(
@@ -250,17 +256,25 @@ class _MyHome extends State<HomeScreen> {
                                                     pinVisiable = true;
                                                   }
                                                 },
-                                                child: const Text(
-                                                  "       Check-In       ",
+                                                child: FittedBox(
+                                                  fit: BoxFit.scaleDown,
+                                                  child: const Text(
+                                                  "Check-In",
                                                 ),
+                                                )
                                               ),
                                             ),
                                           ),
-
-
-                                    Padding(
+                              ),
+                                          SizedBox(
+                                            width:
+                                            MediaQuery.of(context).size.width *
+                                                0.3,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
+                                    child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
-                                          0, 150, 0, 40),
+                                          0, 160, 0, 40),
                                       child: Visibility(
                                         visible: checkOutVisiable,
                                         child: TextButton(
@@ -312,10 +326,11 @@ class _MyHome extends State<HomeScreen> {
                                             }
                                           },
                                           child: const Text(
-                                              "      Check-Out      "),
+                                              "Check-Out"),
                                         ),
                                       ),
                                     ),
+                                          ),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 40, 0, 120),

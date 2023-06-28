@@ -3,12 +3,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:snaphybrid/toast.dart';
 
 import 'add_device.dart';
 import 'api/api_service.dart';
 import 'api/response/getdevice_token_response.dart';
 import 'common/sharepref.dart';
-import 'common/util.dart';
 
 void main() {
   runApp(const login());
@@ -224,14 +224,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () {
                           _formGlobalKey.currentState!.save();
                           if (_email == null || _email.isEmpty) {
-                            Util.showToastError("Please enter email");
+                            context.showToast("Please enter email");
                           } else if (!RegExp(
                                   r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
                               .hasMatch(_email)) {
-                            Util.showToastError("Please enter valid email");
+                            context.showToast("Please enter valid email");
                           } else if (_password.isEmpty ||
                               _password.length < 8) {
-                            Util.showToastError("Please enter Password");
+                            context.showToast("Please enter Password");
                           } else {
                             loginUser();
                           }
@@ -277,7 +277,7 @@ class _MyHomePageState extends State<MyHomePage> {
         MaterialPageRoute(builder: (context) => const AddDevice()),
       );
     }else{
-      Util.showToastError(getDeviceTokenResponse.responseMessage);
+      context.showToast(getDeviceTokenResponse.responseMessage);
 
     }
   }
