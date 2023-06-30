@@ -370,13 +370,13 @@
 				DEVELOPMENT_TEAM = 6KD3FWB58U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Certify.me Kiosk;
+				INFOPLIST_KEY_CFBundleDisplayName = Certify.me;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.demoQrSnapx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.certify.me.kiosk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -501,7 +501,7 @@
 				DEVELOPMENT_TEAM = 6KD3FWB58U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Certify.me Kiosk;
+				INFOPLIST_KEY_CFBundleDisplayName = Certify.me;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -527,13 +527,13 @@
 				DEVELOPMENT_TEAM = 6KD3FWB58U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Certify.me Kiosk;
+				INFOPLIST_KEY_CFBundleDisplayName = Certify.me;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.example.demoQrSnapx;
+				PRODUCT_BUNDLE_IDENTIFIER = com.certify.me.kiosk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
