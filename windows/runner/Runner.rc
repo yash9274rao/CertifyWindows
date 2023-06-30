@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "com.certify.snaphybrid" "\0"
-            VALUE "FileDescription", "Certify.Me Kiosk" "\0"
+            VALUE "CompanyName", "com.certify.me.kiosk" "\0"
+            VALUE "FileDescription", "Certify.me Kiosk" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Certify.Me Kiosk" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2023 com.certify.snaphybrid. All rights reserved." "\0"
-            VALUE "OriginalFilename", "Certify.exe" "\0"
-            VALUE "ProductName", "Certify.Me Kiosk" "\0"
+            VALUE "InternalName", "Certify.me Kiosk" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2023 com.certify.me.kiosk All rights reserved." "\0"
+            VALUE "OriginalFilename", "Certify_me_Kiosk.exe" "\0"
+            VALUE "ProductName", "Certify.me Kiosk" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

@@ -7,11 +7,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snaphybrid/api/response/activate_application_response.dart';
-import 'package:snaphybrid/api/response/getdevice_token_response.dart';
-import 'package:snaphybrid/common/sharepref.dart';
-import 'package:snaphybrid/common/util.dart';
-import 'package:snaphybrid/home_screen.dart';
+import 'package:certify_me_kiosk/api/response/activate_application_response.dart';
+import 'package:certify_me_kiosk/api/response/getdevice_token_response.dart';
+import 'package:certify_me_kiosk/common/sharepref.dart';
+import 'package:certify_me_kiosk/common/util.dart';
+import 'package:certify_me_kiosk/home_screen.dart';
 
 import 'api/api_service.dart';
 import 'login.dart';

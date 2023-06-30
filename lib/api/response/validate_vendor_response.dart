@@ -1,4 +1,4 @@
-import 'package:snaphybrid/api/response/response_data_validate_vendor.dart';
+import 'package:certify_me_kiosk/api/response/response_data_validate_vendor.dart';
 
 class ValidateVendorResponse {
   final int responseCode;

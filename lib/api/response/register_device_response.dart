@@ -1,4 +1,3 @@
-import 'package:snaphybrid/api/response/response_data_validate_vendor.dart';
 
 class RegisterDeviceResponse {
   final int responseCode;

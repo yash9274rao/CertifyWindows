@@ -2,8 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snaphybrid/api/response/register_device_response.dart';
-import 'package:snaphybrid/main.dart';
+import 'package:certify_me_kiosk/api/response/register_device_response.dart';
+import 'package:certify_me_kiosk/main.dart';
 
 import 'api/api_service.dart';
 import 'common/sharepref.dart';

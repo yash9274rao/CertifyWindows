@@ -68,7 +68,7 @@ class DefaultFirebaseOptions {
     projectId: 'snapxt-hybrid',
     storageBucket: 'snapxt-hybrid.appspot.com',
     iosClientId: '319119188350-6lctqps7642v95e4n75ln0bargsec0f0.apps.googleusercontent.com',
-    iosBundleId: 'com.certify.snaphybrid.snaphybrid',
+    iosBundleId: 'com.certify.me.kiosk',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -78,6 +78,6 @@ class DefaultFirebaseOptions {
     projectId: 'snapxt-hybrid',
     storageBucket: 'snapxt-hybrid.appspot.com',
     iosClientId: '319119188350-6lctqps7642v95e4n75ln0bargsec0f0.apps.googleusercontent.com',
-    iosBundleId: 'com.certify.snaphybrid.snaphybrid',
+    iosBundleId: 'com.certify.me.kiosk',
   );
 }
