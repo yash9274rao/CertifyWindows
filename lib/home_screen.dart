@@ -203,7 +203,7 @@ class _MyHome extends State<HomeScreen> {
                                                   padding: const EdgeInsets.all(
                                                       16.0),
                                                   textStyle: const TextStyle(
-                                                      fontSize: 24),
+                                                      fontSize: 40),
                                                   backgroundColor: Colors.green,
                                                 ),
                                                 onPressed: () async {
@@ -268,7 +268,7 @@ class _MyHome extends State<HomeScreen> {
                                             foregroundColor: Colors.redAccent,
                                             padding: const EdgeInsets.all(16.0),
                                             textStyle:
-                                                const TextStyle(fontSize: 24),
+                                                const TextStyle(fontSize: 40),
                                             backgroundColor:
                                                 Colors.red.shade200,
                                           ),
