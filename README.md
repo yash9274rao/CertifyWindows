@@ -1,4 +1,4 @@
-# snaphybrid
+# CertifyMe
 
 A new Hybrid project.
 
