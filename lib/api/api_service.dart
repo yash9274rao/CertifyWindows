@@ -15,7 +15,7 @@ import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
 
 class ApiService {
-  static const String _apiBaseUrl = "https://apiqa.certify.me/";
+  static const String _apiBaseUrl = "https://apidev.certify.me/";
   String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
@@ -73,7 +73,7 @@ class ApiService {
   Future<QrData?> validateVendor(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;
-    qrData.setFirstName = "InValid QR Code";
+    qrData.setFirstName = "Anonymous";
 
     try {
       var url = Uri.parse("${_apiBaseUrl}validateVendor");
@@ -96,7 +96,7 @@ class ApiService {
           qrData.setIsValid = true;
           return qrData;
         } else {
-          qrData.setFirstName = "InValid QR Code";
+          qrData.setFirstName = "Anonymous";
           qrData.setIsValid = false;
           return qrData;
         }

@@ -115,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             'Login to register the device',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 30,
+                              fontSize: 40,
                               // height: 2, //line height 200%, 1= 100%, were 0.9 = 90% of actual line height
                               color: Colors.black87,
                               //font color
