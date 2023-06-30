@@ -370,7 +370,7 @@
 				DEVELOPMENT_TEAM = 6KD3FWB58U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CERTIFY.me;
+				INFOPLIST_KEY_CFBundleDisplayName = CERTIFY.me Kiosk;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -501,7 +501,7 @@
 				DEVELOPMENT_TEAM = 6KD3FWB58U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CERTIFY.me;
+				INFOPLIST_KEY_CFBundleDisplayName = CERTIFY.me Kiosk;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -527,7 +527,7 @@
 				DEVELOPMENT_TEAM = 6KD3FWB58U;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = CERTIFY.me;
+				INFOPLIST_KEY_CFBundleDisplayName = CERTIFY.me Kiosk;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
