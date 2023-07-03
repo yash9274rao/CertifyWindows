@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.certify.snaphybrid.snaphybrid">
+    package="com.certify.me.kiosk">
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
    <application
-        android:label="CERTIFY.me"
+        android:label="Certify.me Kiosk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

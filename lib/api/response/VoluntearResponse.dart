@@ -1,4 +1,4 @@
-import 'package:snaphybrid/api/response/response_data_voluntear.dart';
+import 'package:certify_me_kiosk/api/response/response_data_voluntear.dart';
 
 class VolunteerResponse {
   final int responseCode;

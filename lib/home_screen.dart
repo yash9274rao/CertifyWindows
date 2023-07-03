@@ -5,10 +5,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snaphybrid/QRViewExmple.dart';
-import 'package:snaphybrid/api/api_service.dart';
-import 'package:snaphybrid/checkincheckoutVoluntear.dart';
-import 'package:snaphybrid/pinView.dart';
+import 'package:certify_me_kiosk/QRViewExmple.dart';
+import 'package:certify_me_kiosk/api/api_service.dart';
+import 'package:certify_me_kiosk/checkincheckoutVoluntear.dart';
+import 'package:certify_me_kiosk/pinView.dart';
 
 import 'common/sharepref.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';

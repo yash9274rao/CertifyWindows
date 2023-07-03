@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:snaphybrid/checkInMultipleSlots.dart';
+import 'package:certify_me_kiosk/checkInMultipleSlots.dart';
 
 class VolunteerCheckinCheckOut extends StatefulWidget {
   @override

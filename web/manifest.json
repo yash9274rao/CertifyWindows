@@ -1,11 +1,11 @@
 {
-    "name": "Certify.Me",
-    "short_name": "Certify.Me",
+    "name": "Certify.me Kiosk",
+    "short_name": "Certify.me Kiosk",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",
     "theme_color": "#hexcode",
-    "description": "Certify.Me.",
+    "description": "Certify.me Kiosk",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
