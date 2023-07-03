@@ -28,6 +28,7 @@ class ConfirmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Certify.me Kiosk',
       debugShowCheckedModeBanner: false,
       home: ConfirmLanch(dataStr, attendanceMode, type),
     );

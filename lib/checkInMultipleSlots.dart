@@ -22,6 +22,7 @@ class CheckInSlots extends State<CheckinSlotsPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        title: 'Certify.me Kiosk',
         home: Scaffold(
             body: SingleChildScrollView(
                 child: Container(

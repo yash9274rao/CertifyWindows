@@ -13,6 +13,7 @@ class ConfirmationVolunteer extends State<CheckinCheckOutConfirmation> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        title: 'Certify.me Kiosk',
         home: Scaffold(
             body: Center(
                 child: Container(

@@ -14,6 +14,7 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        title: 'Certify.me Kiosk',
         home: Scaffold(
             resizeToAvoidBottomInset: true,
             body: SingleChildScrollView(

@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
       return MaterialApp(
+        title: 'Certify.me Kiosk',
         debugShowCheckedModeBanner: false,
         home: MyLanch(),
       );
@@ -58,6 +59,7 @@ class _MyHome extends State<MyLanch> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Certify.me Kiosk',
       home: Scaffold(
         body: Container(
           color: Colors.white,
