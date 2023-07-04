@@ -50,6 +50,7 @@ dependencies:
   firebase_core_platform_interface: ^4.8.0
   cloud_firestore_web: ^3.6.0
   intl_phone_field: ^3.0.1
+  auto_size_text: ^3.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 // import 'dart:js';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -81,10 +82,11 @@ class _MyHome extends State<MyLanch> {
                     children: <Widget>[
                       const Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                        child: Text(
+                        child: AutoSizeText(
                           'Register Device',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 22),
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 52),
+                          minFontSize: 28,
+                          maxLines: 1, overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const Padding(
@@ -92,9 +94,12 @@ class _MyHome extends State<MyLanch> {
                           child: Divider(color: Colors.grey)),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                        child: Text(
+                        child: AutoSizeText(
                             'This device is not configured to work online. If'
-                            ' you already have a cloud account'),
+                            ' you already have a cloud account',
+                          style: TextStyle(fontSize: 18),
+                          minFontSize: 12,
+                          maxLines: 2, overflow: TextOverflow.ellipsis),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
@@ -106,20 +111,25 @@ class _MyHome extends State<MyLanch> {
                             backgroundColor: Colors.blue,
                           ),
                           onPressed: () {
-                            print("AAAAAAAAAAAAAAAA");
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => login()));
                           },
-                          child: Text("Login to Register the Device"),
+                          child: const AutoSizeText("Login to Register the Device",
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                            minFontSize: 18,
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
+
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
-                        child: Text(
+                        child: AutoSizeText(
                           '${textHolderModalController}',
-                        ),
+                            style: const TextStyle(fontSize: 18),
+                          minFontSize: 12,
+                          maxLines: 2, overflow: TextOverflow.ellipsis),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
@@ -134,7 +144,10 @@ class _MyHome extends State<MyLanch> {
                             print("BBBBBBBBBBBBBBBBBBBB");
                             activiAPI();
                           },
-                          child: Text("Try Activation Again"),
+                          child: const AutoSizeText("Try Activation Again",
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+                            minFontSize: 18,
+                            maxLines: 1, overflow: TextOverflow.ellipsis),
                         ),
                       ),
                     ],
