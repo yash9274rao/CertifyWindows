@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:certify_me_kiosk/api/response/register_device_response.dart';
+import 'package:certify_me_kiosk/api/response/register_device/register_device_response.dart';
 import 'package:certify_me_kiosk/main.dart';
 import 'package:certify_me_kiosk/toast.dart';
 
@@ -236,10 +236,13 @@ class _MyHomePageState extends State<MyHomePage> {
     var pref = await SharedPreferences.getInstance();
     setState(() {
       textHolderModalController = pref.getString(Sharepref.platform);
-      textHolderInfo =
-      'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref
-          .getString(Sharepref.osVersion)}, Serial Number: ${pref.getString(
-          Sharepref.serialNo)}';
+      if (pref.getString(Sharepref.platform) == "web") {
+        textHolderInfo =
+            'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}';
+      } else {
+        textHolderInfo =
+            'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}, Serial Number: ${pref.getString(Sharepref.serialNo)}';
+      }
     });
   }
 

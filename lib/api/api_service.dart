@@ -6,7 +6,7 @@ import 'package:certify_me_kiosk/api/response/VoluntearResponse.dart';
 import 'package:certify_me_kiosk/api/response/accesslogs_Response.dart';
 import 'package:certify_me_kiosk/api/response/activate_application_response.dart';
 import 'package:certify_me_kiosk/api/response/getdevice_token_response.dart';
-import 'package:certify_me_kiosk/api/response/register_device_response.dart';
+import 'package:certify_me_kiosk/api/response/register_device/register_device_response.dart';
 import 'package:certify_me_kiosk/api/response/response_data_token.dart';
 import 'package:certify_me_kiosk/api/response/validate_qrcode_response.dart';
 import 'package:certify_me_kiosk/common/qr_data.dart';
