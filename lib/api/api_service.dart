@@ -2,14 +2,14 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
-import 'package:snaphybrid/api/response/VoluntearResponse.dart';
-import 'package:snaphybrid/api/response/accesslogs_Response.dart';
-import 'package:snaphybrid/api/response/activate_application_response.dart';
-import 'package:snaphybrid/api/response/getdevice_token_response.dart';
-import 'package:snaphybrid/api/response/register_device_response.dart';
-import 'package:snaphybrid/api/response/response_data_token.dart';
-import 'package:snaphybrid/api/response/validate_qrcode_response.dart';
-import 'package:snaphybrid/common/qr_data.dart';
+import 'package:certify_me_kiosk/api/response/VoluntearResponse.dart';
+import 'package:certify_me_kiosk/api/response/accesslogs_Response.dart';
+import 'package:certify_me_kiosk/api/response/activate_application_response.dart';
+import 'package:certify_me_kiosk/api/response/getdevice_token_response.dart';
+import 'package:certify_me_kiosk/api/response/register_device_response.dart';
+import 'package:certify_me_kiosk/api/response/response_data_token.dart';
+import 'package:certify_me_kiosk/api/response/validate_qrcode_response.dart';
+import 'package:certify_me_kiosk/common/qr_data.dart';
 import '../common/sharepref.dart';
 import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
@@ -96,7 +96,7 @@ class ApiService {
           qrData.setIsValid = true;
           return qrData;
         } else {
-          qrData.setFirstName = "InValid QR Code";
+          qrData.setFirstName = "Anonymous";
           qrData.setIsValid = false;
           return qrData;
         }

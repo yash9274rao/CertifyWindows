@@ -1,4 +1,4 @@
-import 'package:snaphybrid/api/response/response_data_qrcode.dart';
+import 'package:certify_me_kiosk/api/response/response_data_qrcode.dart';
 
 class ValidateQrCodeResponse {
   final int responseCode;
@@ -18,7 +18,7 @@ class ValidateQrCodeResponse {
         responseSubCode: json['responseSubCode'],
         responseMessage: json['responseMessage'] ?? "Invalid QRCode",
         responseData:
-        ResponseDataQrCode.fromJson(json['responseData'] ??  ResponseDataQrCode(id: "", firstName: "", lastName: "", middleName: "", memberId: "", accessId: ""
+        ResponseDataQrCode.fromJson(json['responseData'] ??  const ResponseDataQrCode(id: "", firstName: "", lastName: "", middleName: "", memberId: "", accessId: ""
             "", trqStatus: 0, memberTypeId: 0, faceTemplate: "", memberTypeName: "", isVisitor: 0, scheduleId: 0)));
   }
 }

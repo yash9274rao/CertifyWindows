@@ -1,4 +1,6 @@
-import 'package:snaphybrid/api/response/response_data_token.dart';
+
+
+import 'package:certify_me_kiosk/api/response/response_data_token.dart';
 
 class GetDeviceTokenResponse {
   final int responseCode;

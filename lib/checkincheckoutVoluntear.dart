@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:snaphybrid/checkInMultipleSlots.dart';
+import 'package:certify_me_kiosk/checkInMultipleSlots.dart';
 
 class VolunteerCheckinCheckOut extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class Volunteer extends State<VolunteerCheckinCheckOut> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        title: 'Certify.me Kiosk',
         home: Scaffold(
             resizeToAvoidBottomInset: true,
             body: SingleChildScrollView(

@@ -1,14 +1,13 @@
 import 'dart:collection';
 
 import 'package:dart_ipify/dart_ipify.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snaphybrid/api/api_service.dart';
-import 'package:snaphybrid/common/qr_data.dart';
-import 'package:snaphybrid/home_screen.dart';
+import 'package:certify_me_kiosk/api/api_service.dart';
+import 'package:certify_me_kiosk/common/qr_data.dart';
+import 'package:certify_me_kiosk/home_screen.dart';
 import 'package:intl/intl.dart';
-import 'package:snaphybrid/toast.dart';
+import 'package:certify_me_kiosk/toast.dart';
 import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
 import 'common/util.dart';
@@ -29,6 +28,7 @@ class ConfirmScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Certify.me Kiosk',
       debugShowCheckedModeBanner: false,
       home: ConfirmLanch(dataStr, attendanceMode, type),
     );

@@ -2,9 +2,9 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snaphybrid/api/response/register_device_response.dart';
-import 'package:snaphybrid/main.dart';
-import 'package:snaphybrid/toast.dart';
+import 'package:certify_me_kiosk/api/response/register_device_response.dart';
+import 'package:certify_me_kiosk/main.dart';
+import 'package:certify_me_kiosk/toast.dart';
 
 import 'api/api_service.dart';
 import 'common/sharepref.dart';
@@ -16,7 +16,7 @@ class AddDevice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Certify.me Kiosk',
       theme: ThemeData(
         // This is the theme of your application.
         //

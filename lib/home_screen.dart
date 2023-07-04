@@ -5,10 +5,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:snaphybrid/QRViewExmple.dart';
-import 'package:snaphybrid/api/api_service.dart';
-import 'package:snaphybrid/checkincheckoutVoluntear.dart';
-import 'package:snaphybrid/pinView.dart';
+import 'package:certify_me_kiosk/QRViewExmple.dart';
+import 'package:certify_me_kiosk/api/api_service.dart';
+import 'package:certify_me_kiosk/checkincheckoutVoluntear.dart';
+import 'package:certify_me_kiosk/pinView.dart';
 
 import 'common/sharepref.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -49,6 +49,7 @@ class _MyHome extends State<HomeScreen> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
     return MaterialApp(
+        title: 'Certify.me Kiosk',
         home: Scaffold(
             body: SingleChildScrollView(
                 child: Container(
@@ -209,7 +210,7 @@ class _MyHome extends State<HomeScreen> {
                                                   padding: const EdgeInsets.all(
                                                       16.0),
                                                   textStyle: const TextStyle(
-                                                      fontSize: 24),
+                                                      fontSize: 40),
                                                   backgroundColor: Colors.green,
                                                 ),
                                                 onPressed: () async {
@@ -282,7 +283,7 @@ class _MyHome extends State<HomeScreen> {
                                             foregroundColor: Colors.redAccent,
                                             padding: const EdgeInsets.all(16.0),
                                             textStyle:
-                                                const TextStyle(fontSize: 24),
+                                                const TextStyle(fontSize: 40),
                                             backgroundColor:
                                                 Colors.red.shade200,
                                           ),

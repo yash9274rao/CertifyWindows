@@ -1,4 +1,4 @@
-package com.certify.snaphybrid.snaphybrid
+package com.certify.me.kiosk
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,6 @@
-# CertifyMe
+# certify_me_kiosk
 
-A new Hybrid project.
+A new Certify.me Kiosk project.
 
 ## Getting Started
 
