@@ -102,14 +102,8 @@ class _MyHomePageState extends State<MyHomePage> {
               // color: Colors.red,
             ),
             onPressed: () {
-              print("efewfewfwefe");
               Navigator.of(context, rootNavigator: true).pop(context);
             }),
-        // Expanded(flex:1,child:  ImageIcon(
-        //   AssetImage("images/assets/aerrow.png"),
-        // ),
-        // ),
-
         const Expanded(
           flex: 7,
           child: AutoSizeText(
@@ -145,8 +139,9 @@ class _MyHomePageState extends State<MyHomePage> {
     labelText: "Email",
     // hintText: 'your-email@domain.com',
     labelStyle: TextStyle(color: Colors.black26, fontSize: 18),
+
     ),
-    ),
+        style: TextStyle(fontSize: 24)),
     ),
 
     // Padding(
@@ -195,7 +190,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const Icon(Icons.visibility_off, color: Colors.grey,),
     ),
     ),
-    ),
+        style: TextStyle(fontSize: 24)),
     ),
     ElevatedButton(
     style: ElevatedButton.styleFrom(

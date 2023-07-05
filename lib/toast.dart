@@ -62,7 +62,7 @@ class _ToastWidgetState extends State<ToastWidget>
           child: Text(
             widget.text,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 22,
               color: Colors.black,
               decoration: TextDecoration.none,
               fontWeight: FontWeight.normal,
@@ -87,6 +87,7 @@ extension ToastExtension on BuildContext {
         text: text,
         transitionDuration: transitionDuration,
         duration: duration,
+
       ),
     );
     // then insert it to the overlay
