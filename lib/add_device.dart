@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:js_util';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
@@ -8,38 +9,38 @@ import 'package:certify_me_kiosk/main.dart';
 import 'package:certify_me_kiosk/toast.dart';
 
 import 'api/api_service.dart';
+import 'api/response/register_device/response_data.dart';
 import 'common/sharepref.dart';
 
-const List<String> list = <String>['Select Device', '+ Add New'];
+const List<String> listDeviceData = <String>['Select Device', '+ Add New'];
 const List<String> listSettings = <String>['Default'];
 
 class AddDevice extends StatelessWidget {
-  const AddDevice({super.key});
+  const AddDevice(
+      {Key? key,
+      required this.offlineDeviceData,
+      required this.tabletSettingData})
+      : super(key: key);
+  final List<OfflineDeviceData> offlineDeviceData;
+
+  final List<TabletSettingData> tabletSettingData;
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Certify.me Kiosk',
-      theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          // primarySwatch: Colors.blue,
-          ),
-      home: const MyHomePage(),
+      home: MyHomePage(offlineDeviceData, tabletSettingData),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage();
+  const MyHomePage(this.offlineDeviceData, this.tabletSettingData);
+
+  final List<OfflineDeviceData> offlineDeviceData;
+
+  final List<TabletSettingData> tabletSettingData;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -60,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formAddDeviceKey = GlobalKey<FormState>();
   String _deviceName = "";
   String _selectDName = "";
-  String dropdownDeviceName = list.first;
+  String dropdownDeviceName = listDeviceData.first;
   String deviceSettings = listSettings.first;
   var _isVisibility = false;
   var _isAddDevice = false;
@@ -166,8 +167,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               _isVisibility = false;
                           });
                         },
-                        items:
-                            list.map<DropdownMenuItem<String>>((String value) {
+                        items: listDeviceData
+                            .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
@@ -319,6 +320,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initPlatformState() async {
     var pref = await SharedPreferences.getInstance();
     setState(() {
+      // listDeviceData.clear();
+      // for(var item in widget.offlineDeviceData){
+      //   listDeviceData.add(item.deviceName);
+      // }
+      //
+      // listSettings.clear();
+      // for(var itemS in widget.tabletSettingData){
+      //   listSettings.add(itemS.settingName);
+      // }
       textHolderModalController = pref.getString(Sharepref.platform);
       if (pref.getString(Sharepref.platform) == "web") {
         _isAddDevice = true;
@@ -346,7 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
     registerBody['serialNumber'] = pref.getString(Sharepref.serialNo);
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;
-    registerBody['settingsId'] = 1;
+    registerBody['settingsId'] = 2020;
 
     RegisterDeviceResponse registerDeviceResponse = await ApiService()
         .registerDeviceForApp(pref, registerBody) as RegisterDeviceResponse;

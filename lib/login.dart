@@ -9,6 +9,7 @@ import 'package:certify_me_kiosk/toast.dart';
 import 'add_device.dart';
 import 'api/api_service.dart';
 import 'api/response/getdevice_token_response.dart';
+import 'api/response/register_device/response_data.dart';
 import 'common/sharepref.dart';
 
 void main() {
@@ -63,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _email = "";
   String _password = "";
   bool _isVisible = false;
+  bool _isProgressLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -242,6 +244,11 @@ class _MyHomePageState extends State<MyHomePage> {
         overflow: TextOverflow.ellipsis
     ),
     ),
+                    Center(
+                      child: !_isProgressLoading
+                          ? const Text("")
+                          : const CircularProgressIndicator(),
+                    ),
     ])),
     ),
     ),
@@ -249,7 +256,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> loginUser() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
+    setState(() {
+      _isProgressLoading = true;
+    });
     Map<String, dynamic> tokenBody = HashMap();
     tokenBody['email'] = _email;
     tokenBody['password'] = base64Url.encode(utf8.encode(_password));
@@ -257,15 +266,20 @@ class _MyHomePageState extends State<MyHomePage> {
     GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
         .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
     if (getDeviceTokenResponse.responseCode == 1) {
+      setState(() {
+        _isProgressLoading = false;
+      });
+      var pref = await SharedPreferences.getInstance();
       pref.setString(Sharepref.accessToken,
-          getDeviceTokenResponse.responseData.access_token);
-      // pref.setString(Sharepref.institutionID,
-      //     getDeviceTokenResponse.responseData.institutionID);
+          getDeviceTokenResponse.responseData.responseData.access_token);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const AddDevice()),
-      );
+        MaterialPageRoute(builder: (context) => AddDevice(offlineDeviceData: getDeviceTokenResponse.responseData.offlineDeviceData!! , tabletSettingData: getDeviceTokenResponse.responseData.tabletSettingData!!)
+    ));
     } else {
+      setState(() {
+        _isProgressLoading = false;
+      });
       context.showToast(getDeviceTokenResponse.responseMessage);
     }
   }

@@ -191,13 +191,16 @@ class _MyHome extends State<MyLanch> {
       textHolderModalController = 'If you have already added the device on the '
           'portal SL NO: ${_clientInfo.deviceId.toUpperCase()}';
     });
-    pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());
+    if (pref.getString(Sharepref.serialNo) == null ||
+        pref.getString(Sharepref.serialNo)!.isEmpty) {
+      pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());
+    }
     if (_clientInfo.osName == 'Android') {
       pref.setString(Sharepref.platform, "Android Tablet");
       pref.setString(Sharepref.platformId, "4");
     } else if (_clientInfo.osName == 'Windows') {
       pref.setString(Sharepref.platform, "web");
-      pref.setString(Sharepref.platformId, "4");
+      pref.setString(Sharepref.platformId, "5");
     } else {
       pref.setString(Sharepref.platform, "IOS Tablet");
       pref.setString(Sharepref.platformId, "3");
@@ -244,9 +247,9 @@ class _MyHome extends State<MyLanch> {
             .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
         if (getDeviceTokenResponse.responseCode == 1) {
           pref.setString(Sharepref.accessToken,
-              getDeviceTokenResponse.responseData.access_token);
+              getDeviceTokenResponse.responseData.responseData.access_token);
           pref.setString(Sharepref.institutionID,
-              getDeviceTokenResponse.responseData.institutionID);
+              getDeviceTokenResponse.responseData.responseData.institutionID);
           Navigator.pushReplacement(context as BuildContext,
               MaterialPageRoute(builder: (context) => HomeScreen()));
         } else {

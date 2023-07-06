@@ -190,8 +190,8 @@ class _Confirm extends State<ConfirmLanch> {
       try {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      }catch(e){
-        print("Error "+e.toString());
+      } catch (e) {
+        print("Error " + e.toString());
       }
     });
   }
@@ -220,8 +220,8 @@ class _Confirm extends State<ConfirmLanch> {
     diveInfo['appState'] = "Foreground";
     try {
       ipv4 = await Ipify.ipv4();
-    }catch(e){
-      ipv4 ="";
+    } catch (e) {
+      ipv4 = "";
     }
     Map<String, dynamic> accessLogs = HashMap();
     accessLogs['id'] = qrData.getId;
