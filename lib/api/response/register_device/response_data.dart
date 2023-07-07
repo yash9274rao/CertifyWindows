@@ -27,7 +27,7 @@ class OfflineDeviceData {
   const OfflineDeviceData(
       {required this.deviceName, required this.serialNumber});
 
-  factory OfflineDeviceData.fromJson(json) {
+  factory OfflineDeviceData.fromJson(Map<String, dynamic> json) {
     return OfflineDeviceData(
       deviceName: json['deviceName'],
       serialNumber: json['serialNumber'],
