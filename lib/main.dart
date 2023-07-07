@@ -191,6 +191,7 @@ class _MyHome extends State<MyLanch> {
       textHolderModalController = 'If you have already added the device on the '
           'portal SL NO: ${_clientInfo.deviceId.toUpperCase()}';
     });
+
     if (pref.getString(Sharepref.serialNo) == null ||
         pref.getString(Sharepref.serialNo)!.isEmpty) {
       pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());

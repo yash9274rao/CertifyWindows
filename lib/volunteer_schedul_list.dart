@@ -1,23 +1,44 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'api/response/response_data_voluntear.dart';
 import 'checkInCheckoutConfirmation.dart';
 
-class CheckinSlotsPage extends StatefulWidget {
+var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
+
+class VolunteerSchedulingList extends StatelessWidget {
+  const VolunteerSchedulingList(
+      {Key? key,
+        required this.itemId,
+        required this.name,
+        required this.volunteerList})
+      : super(key: key);
+  final int itemId;
+  final String name;
+  final List<VolunteerSchedulingDetailList> volunteerList;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Certify.me Kiosk',
+      debugShowCheckedModeBanner: false,
+      home: ConfirmLanch(itemId, name, volunteerList),
+    );
+  }
+}
+class ConfirmLanch extends StatefulWidget {
+  ConfirmLanch(this.itemId,  this.name, this.volunteerList);
+
+  final String name;
+  final int itemId;
+  final List<VolunteerSchedulingDetailList> volunteerList;
   @override
   CheckInSlots createState() => CheckInSlots();
 }
 
-class CheckInSlots extends State<CheckinSlotsPage> {
+class CheckInSlots extends State<ConfirmLanch> {
   var _imageToShow =
       const Image(image: AssetImage('images/assets/final_logo.png'));
-  List<String> items = [
-    "Special Events",
-    "Direct Patient",
-    "Administration",
-    "Programs Education",
-    "Training"
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +133,7 @@ class CheckInSlots extends State<CheckinSlotsPage> {
                                                 },
                                         child: ListView.builder(
                                             shrinkWrap: true,
-                                            itemCount: items.length,
+                                            itemCount: widget.volunteerList.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               return Container(
@@ -121,7 +142,7 @@ class CheckInSlots extends State<CheckinSlotsPage> {
                                                 padding: EdgeInsets.all(15),
                                                 alignment: Alignment.center,
                                                 child: Text(
-                                                  items[index],
+                                                  widget.volunteerList[index].scheduleTitle,
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 22,
