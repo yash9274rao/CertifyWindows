@@ -65,18 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
   String deviceSettings = listSettings.first;
   var _isVisibility = false;
   var _isAddDevice = false;
-  List<String>  dropdownData = [];
-  late String selectDevicename;
+  List<String>  dropdownDataDeviceName = [];
+  late String selectDevicename =listSettings.first;
 
   @override
   void initState() {
     super.initState();
-    dropdownData.add("Select Device");
+    dropdownDataDeviceName.add("Select Device");
     for (var data in widget.offlineDeviceData){
-      dropdownData.add(data.deviceName);
+      dropdownDataDeviceName.add(data.deviceName);
     }
-    dropdownData.add("+ Add New");
-    selectDevicename = dropdownData.first;
+    dropdownDataDeviceName.add("+ Add New");
+    dropdownDeviceName = dropdownDataDeviceName.first;
     initPlatformState();
   }
 
@@ -175,7 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               _isVisibility = false;
                           });
                         },
-                        items: listDeviceData
+                        items: dropdownDataDeviceName
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -234,7 +234,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             selectDevicename = newValue!;
                           });
                         },
-                        items: dropdownData.map<DropdownMenuItem<String>>((String value)
+                        items: listSettings.map<DropdownMenuItem<String>>((String value)
                         {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -355,9 +355,20 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_isAddDevice) {
       if (_deviceName.isEmpty) {
         _deviceName = dropdownDeviceName;
+        pref.setString(Sharepref.serialNo, _deviceName);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => MyApp()),
+        );
+      }else{
+        addDeviceAPI();
       }
-      pref.setString(Sharepref.serialNo, _deviceName);
+    } else {
+      addDeviceAPI();
     }
+  }
+  Future<void> addDeviceAPI() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
     registerBody['deviceName'] = _deviceName;
@@ -365,7 +376,6 @@ class _MyHomePageState extends State<MyHomePage> {
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;
     registerBody['settingsId'] = 2020;
-
     RegisterDeviceResponse registerDeviceResponse = await ApiService()
         .registerDeviceForApp(pref, registerBody) as RegisterDeviceResponse;
     if (registerDeviceResponse.responseCode == 1) {
@@ -377,4 +387,5 @@ class _MyHomePageState extends State<MyHomePage> {
       context.showToast(registerDeviceResponse.responseMessage!);
     }
   }
+
 }
