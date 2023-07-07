@@ -60,15 +60,23 @@ class _MyHomePageState extends State<MyHomePage> {
   var textHolderInfo;
   final _formAddDeviceKey = GlobalKey<FormState>();
   String _deviceName = "";
-  String _selectDName = "";
+  // String selectDevicename = "";
   String dropdownDeviceName = listDeviceData.first;
   String deviceSettings = listSettings.first;
   var _isVisibility = false;
   var _isAddDevice = false;
+  List<String>  dropdownData = [];
+  late String selectDevicename;
 
   @override
   void initState() {
     super.initState();
+    dropdownData.add("Select Device");
+    for (var data in widget.offlineDeviceData){
+      dropdownData.add(data.deviceName);
+    }
+    dropdownData.add("+ Add New");
+    selectDevicename = dropdownData.first;
     initPlatformState();
   }
 
@@ -211,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: DropdownButton<String>(
                         isExpanded: true,
                         alignment: AlignmentDirectional.centerStart,
-                        value: deviceSettings,
+                        value: selectDevicename,
                         icon: const Icon(Icons.arrow_downward),
                         elevation: 16,
                         style:
@@ -220,19 +228,19 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 2,
                           color: Colors.grey,
                         ),
-                        onChanged: (String? value) {
+                        onChanged: (newValue) {
                           // This is called when the user selects an item.
                           setState(() {
-                            deviceSettings = value!;
+                            selectDevicename = newValue!;
                           });
                         },
-                        items: listSettings
-                            .map<DropdownMenuItem<String>>((String value) {
+                        items: dropdownData.map<DropdownMenuItem<String>>((String value)
+                        {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(value),
-                          );
-                        }).toList(),
+                        );
+                          }).toList(),
                       )),
                   Padding(
                     padding: const EdgeInsets.only(
