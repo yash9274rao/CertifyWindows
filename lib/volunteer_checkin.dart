@@ -50,11 +50,13 @@ class _Confirm extends State<ConfirmLanch> {
   var confirmationSubText = "";
   var screenDelayValue = "120";
   var result;
+  String attendanceMode = "0";
   QrData qrData = QrData();
 
   @override
   void initState() {
     super.initState();
+    updateUI();
     screenDelay();
   }
 
@@ -136,22 +138,22 @@ class _Confirm extends State<ConfirmLanch> {
                                         //         fontSize: 25),
                                         //   ),
                                         // ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
                                               50, 5, 0, 0),
                                           child: Text(
                                             "What Would you like to do?",
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 fontWeight: FontWeight.w500,
                                                 fontSize: 18),
                                           ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(
+                                        const Padding(
+                                          padding: EdgeInsets.fromLTRB(
                                               50, 5, 0, 0),
                                           child: Text(
                                             "Click on Check-In to sign in and Check-Out to \nsign out.",
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 color: Colors.grey,
                                                 fontSize: 20),
@@ -192,12 +194,13 @@ class _Confirm extends State<ConfirmLanch> {
                                                             90),
                                                   ),
                                                   onPressed: () {
+                                                    attendanceMode = "1";
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
                                                             builder:
                                                                 (context) =>
-                                                                    VolunteerSchedulingList(itemId : widget.itemId, name : widget.name, volunteerList : widget.volunteerList)
+                                                                    VolunteerSchedulingList(itemId : widget.itemId, name : widget.name, attendanceMode: attendanceMode, volunteerList : widget.volunteerList)
                                                         ));
                                                   },
                                                   child: const Text(
@@ -230,7 +233,10 @@ class _Confirm extends State<ConfirmLanch> {
                                                         const Size.fromHeight(
                                                             85),
                                                   ),
-                                                  onPressed: () {},
+                                                  onPressed: () {
+                                                    attendanceMode = "2";
+
+                                                  },
                                                   child: const Text(
                                                     "       Check-Out       ",
                                                   ),
