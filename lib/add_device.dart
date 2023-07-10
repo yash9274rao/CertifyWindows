@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String dropdownDeviceName = listDeviceData.first;
   String deviceSettings = listSettings.first;
   var _isVisibility = false;
+  var dropdownVisiability = false;
   var _isAddDevice = false;
   List<String>  dropdownDataDeviceName = [];
   late String selectDevicename =listSettings.first;
@@ -170,9 +171,13 @@ class _MyHomePageState extends State<MyHomePage> {
                           setState(() {
                             dropdownDeviceName = value!;
                             if (dropdownDeviceName == "+ Add New") {
-                              _isVisibility = true;
-                            } else
+                                _isVisibility = true;
+                                dropdownVisiability = true;
+                            } else{
                               _isVisibility = false;
+                              dropdownVisiability = false;
+                            }
+
                           });
                         },
                         items: dropdownDataDeviceName
@@ -216,6 +221,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   Padding(
                       padding: const EdgeInsets.only(
                           left: 20, right: 20, bottom: 5, top: 20),
+                      child: Visibility(
+                          visible: dropdownVisiability,
                       child: DropdownButton<String>(
                         isExpanded: true,
                         alignment: AlignmentDirectional.centerStart,
@@ -241,7 +248,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Text(value),
                         );
                           }).toList(),
-                      )),
+                      ) )),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 20, top: 20),
@@ -318,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis),
                   ),
-                ]),
+                   ]),
           ),
         ),
       ),
