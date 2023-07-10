@@ -44,7 +44,7 @@ class _ToastWidgetState extends State<ToastWidget>
     return FadeTransition(
       opacity: opacity,
       child: Align(
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         child: Container(
           decoration: BoxDecoration(
             color: Colors.blue,

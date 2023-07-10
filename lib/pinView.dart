@@ -305,12 +305,12 @@ class PinViewPageState extends State<PinViewPage> {
     // at any time, we can get the text from _controller.value.text
     final text = _myController.value.text;
     if (text.length == maxLength) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) =>
-          ConfirmScreen(dataStr: '${text}',
-              attendanceMode: widget.attendanceMode,
-              type: "pin"))
-      );
+      // Navigator.pushReplacement(
+      //     context, MaterialPageRoute(builder: (context) =>
+      //     ConfirmScreen(dataStr: '${text}',
+      //         attendanceMode: widget.attendanceMode,
+      //         type: "pin"))
+  //    );
       return '';
     }
   }

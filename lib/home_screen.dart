@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_checkin.dart';
 import 'package:flutter/material.dart';
@@ -29,9 +30,9 @@ class _MyHome extends State<HomeScreen> {
   var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
   late Timer dataTime;
   late Timer timer;
-  String attendanceMode = "0", _pinStr = "", _mobileNumber = "";
-  bool checkInVisiable = true;
-  bool checkOutVisiable = true;
+  String attendanceMode = "0", _pinStr = "", _mobileNumber = "", _countryCode = "1";
+  bool checkInVisiable = false;
+  bool checkOutVisiable = false;
   bool qrAndpinVisiable = false;
   bool pinPageVisiable = false;
   bool pinVisiable = false;
@@ -226,43 +227,18 @@ class _MyHome extends State<HomeScreen> {
                                                       SharedPreferences pref =
                                                           await SharedPreferences
                                                               .getInstance();
+                                                      pref.setBool(
+                                                          Sharepref
+                                                              .isQrCodeScan,
+                                                          true);
                                                       attendanceMode = "1";
-                                                      if (pref.getString(Sharepref
-                                                              .checkInMode) ==
-                                                          "0") {
-                                                        pref.setBool(
-                                                            Sharepref
-                                                                .isQrCodeScan,
-                                                            true);
-                                                        Navigator.pushReplacement(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    QRViewExample(
-                                                                        attendanceMode:
-                                                                            attendanceMode)));
-                                                      } else if (pref.getString(
-                                                              Sharepref
-                                                                  .checkInMode) ==
-                                                          "1") {
-                                                             // pinPageVisiable = true;
-                                                        // checkInVisiable = false;
-                                                        // checkOutVisiable =
-                                                        //     false;
-                                                        // qrAndpinVisiable =
-                                                        //     false;
-                                                        // pinVisiable = false;
-                                                      } else if (pref.getString(
-                                                              Sharepref
-                                                                  .checkInMode) ==
-                                                          "2") {
-                                                        checkInVisiable = false;
-                                                        checkOutVisiable =
-                                                            false;
-                                                        qrAndpinVisiable = true;
-                                                        pinPageVisiable = false;
-                                                        pinVisiable = true;
-                                                      }
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  QRViewExample(
+                                                                      attendanceMode:
+                                                                      attendanceMode)));
                                                     },
                                                     child: FittedBox(
                                                       fit: BoxFit.scaleDown,
@@ -275,17 +251,13 @@ class _MyHome extends State<HomeScreen> {
                                           ),
                                           SizedBox(
                                             width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.3,
+                                                    .size.width * 0.3,
                                             height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.4,
+                                                    .size.height * 0.4,
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      0, 160, 0, 40),
+                                                      0, 180, 0, 40),
                                               child: Visibility(
                                                 visible: checkOutVisiable,
                                                 child: TextButton(
@@ -301,8 +273,11 @@ class _MyHome extends State<HomeScreen> {
                                                         Colors.red.shade200,
                                                   ),
                                                   onPressed: () async {
+                                                    SharedPreferences pref = await SharedPreferences.getInstance();
+                                                    pref.setBool(Sharepref.isQrCodeScan, true);
                                                     attendanceMode = "2";
-                                                    //todo2
+                                                    Navigator.pushReplacement(context, MaterialPageRoute(
+                                                        builder: (context) => QRViewExample(attendanceMode: attendanceMode)));
                                                   },
                                                   child:
                                                       const Text("Check-Out"),
@@ -403,10 +378,10 @@ class _MyHome extends State<HomeScreen> {
                                                     return null;
                                                   }
                                                 },
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   fontSize: 30,
                                                   color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontWeight: FontWeight.normal,
                                                 ),
                                               ),
                                             ),
@@ -423,35 +398,45 @@ class _MyHome extends State<HomeScreen> {
                                                   hintText:
                                                       'Enter Mobile Number',
                                                 ),
-                                                initialCountryCode: 'IN',
+                                                initialCountryCode: 'US',
                                                 showDropdownIcon: true,
+                                                dropdownTextStyle: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 30,
+                                                    fontWeight: FontWeight.normal),
                                                 dropdownIconPosition:
                                                     IconPosition.trailing,
                                                 onChanged: (phone) {
                                                   _mobileNumber = phone.number;
-                                                  //  print(phone.completeNumber);
+                                                  _countryCode = phone.countryCode;
+                                                    print(_countryCode);
                                                 },
+                                                style: const TextStyle(
+                                                  fontSize: 30,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.normal,
+                                                ),
                                               ),
                                             ),
                                           ),
                                           SizedBox(
-                                              width: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.4,
-                                              child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          20, 300, 0, 20),
+                                              width: MediaQuery.of(context).size.width * 0.4,
+                                              child: Padding(padding: const EdgeInsets.fromLTRB(20, 320, 0, 20),
                                                   child: Visibility(
                                                       visible: pinPageVisiable,
                                                       child: Align(
-                                                        alignment: Alignment
-                                                            .bottomRight,
-                                                        child: ElevatedButton(
+                                                        alignment: Alignment.bottomRight,
+                                                        child: TextButton(
+                                                          style: TextButton.styleFrom(
+                                                            foregroundColor: Colors.black,
+                                                            padding: const EdgeInsets.all(
+                                                                16.0),
+
+                                                            backgroundColor: Colors.blue,
+                                                          ),
                                                           onPressed: () {
                                                             print(
-                                                                "bbbbbbbbb_pinStr = $_pinStr,  $_mobileNumber");
+                                                                "bbbbbbbbb_pinStr = $_pinStr,  $_mobileNumber , $_countryCode");
                                                             if (_pinStr
                                                                 .isEmpty) {
                                                               context.showToast(
@@ -462,13 +447,9 @@ class _MyHome extends State<HomeScreen> {
                                                               VolunteerValidation();
                                                             }
                                                           },
-                                                          child:
-                                                              Text("Proceed"),
-                                                          style: ElevatedButton.styleFrom(
-                                                              textStyle:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          20)),
+                                                          child: const AutoSizeText("  Proceed  ",  style: TextStyle(fontSize: 40),
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow.ellipsis,),
                                                         ),
                                                       ))))
                                         ],
@@ -548,22 +529,33 @@ class _MyHome extends State<HomeScreen> {
         .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
     if (volunteerResponse?.responseCode == 1) {
       if(volunteerResponse?.responseData!.volunteerList != null) {
-        List<VolunteerSchedulingDetailList>? temp = volunteerResponse?.responseData!.volunteerList!;
+        List<VolunteerSchedulingDetailList>? temp = volunteerResponse
+            ?.responseData!.volunteerList!;
         String nameFull = volunteerResponse!.responseData!.firstName;
-        if(volunteerResponse!.responseData!.middleName.isNotEmpty && volunteerResponse!.responseData!.lastName.isNotEmpty ) {
+        if (volunteerResponse!.responseData!.middleName.isNotEmpty &&
+            volunteerResponse!.responseData!.lastName.isNotEmpty) {
           nameFull =
           '${volunteerResponse!.responseData!.firstName} ${volunteerResponse!
               .responseData!.middleName} ${volunteerResponse!.responseData!
               .lastName}';
-        }else if(volunteerResponse!.responseData!.lastName.isNotEmpty ) {
+        } else if (volunteerResponse!.responseData!.lastName.isNotEmpty) {
           nameFull =
           '${volunteerResponse!.responseData!.firstName} ${volunteerResponse!
               .responseData!
               .lastName}';
         }
-        Navigator.push(context,
-            MaterialPageRoute(
-                builder: (context) => VolunteerCheckIn(itemId: volunteerResponse!.responseData!.id, name : nameFull, volunteerList : volunteerResponse!.responseData!.volunteerList!)));
+        if (volunteerResponse!.responseData!.volunteerList!.length == 0) {
+          context.showToast("You don't have Appointments");
+        } else {
+          Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      VolunteerCheckIn(
+                          itemId: volunteerResponse!.responseData!.id,
+                          name: nameFull,
+                          volunteerList: volunteerResponse!.responseData!
+                              .volunteerList!)));
+        }
       }
     } else {
       if (volunteerResponse?.responseMessage != null) {
