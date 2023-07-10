@@ -9,6 +9,7 @@ import 'api/response/response_data_voluntear.dart';
 import 'checkInCheckoutConfirmation.dart';
 import 'common/sharepref.dart';
 import 'confirm_screen.dart';
+import 'home_screen.dart';
 
 
 class VolunteerSchedulingList extends StatelessWidget {
@@ -115,11 +116,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                         // color: Colors.red,
                                                       ),
                                                       onPressed: () {
-                                                        print("efewfewfwefe");
-                                                        Navigator.of(context,
-                                                                rootNavigator:
-                                                                    false)
-                                                            .pop(context);
+                                                        Navigator.of(context, rootNavigator: true).pop(context);
                                                       }),
                                                 )),
                                             const Padding(
@@ -199,6 +196,16 @@ class CheckInSlots extends State<ConfirmLanch> {
       } else {
         _imageToShow =
         const Image(image: AssetImage('images/assets/final_logo.png'));
+      }
+    });
+    Future.delayed(Duration(seconds: 15), () {
+      try {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => HomeScreen()));
+      }catch(e){
+        print("Error :"+e.toString());
       }
     });
   }

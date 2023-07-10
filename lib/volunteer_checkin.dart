@@ -7,9 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/response/response_data_voluntear.dart';
 import 'common/sharepref.dart';
+import 'confirm_screen.dart';
+import 'home_screen.dart';
 
 typedef StringValue = String Function(String);
-var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
+
+var _imageToShow =
+    const Image(image: AssetImage('images/assets/final_logo.png'));
 
 class VolunteerCheckIn extends StatelessWidget {
   const VolunteerCheckIn(
@@ -33,7 +37,7 @@ class VolunteerCheckIn extends StatelessWidget {
 }
 
 class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.itemId,  this.name, this.volunteerList);
+  ConfirmLanch(this.itemId, this.name, this.volunteerList);
 
   final String name;
   final int itemId;
@@ -84,8 +88,7 @@ class _Confirm extends State<ConfirmLanch> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.fromLTRB(150, 50, 10, 0),
-                            child: Container(
-                            child: _imageToShow),
+                            child: Container(child: _imageToShow),
                           ),
                           Expanded(
                               child: Padding(
@@ -139,8 +142,8 @@ class _Confirm extends State<ConfirmLanch> {
                                         //   ),
                                         // ),
                                         const Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              50, 5, 0, 0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(50, 5, 0, 0),
                                           child: Text(
                                             "What Would you like to do?",
                                             style: TextStyle(
@@ -149,10 +152,10 @@ class _Confirm extends State<ConfirmLanch> {
                                           ),
                                         ),
                                         const Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              50, 5, 0, 0),
+                                          padding:
+                                              EdgeInsets.fromLTRB(50, 5, 0, 0),
                                           child: Text(
-                                            "Click on Check-In to sign in and Check-Out to \nsign out.",
+                                            "Click on Check-In to sign in and Check-Out to sign out.",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.normal,
                                                 color: Colors.grey,
@@ -195,13 +198,42 @@ class _Confirm extends State<ConfirmLanch> {
                                                   ),
                                                   onPressed: () {
                                                     attendanceMode = "1";
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder:
-                                                                (context) =>
-                                                                    VolunteerSchedulingList(itemId : widget.itemId, name : widget.name, attendanceMode: attendanceMode, volunteerList : widget.volunteerList)
-                                                        ));
+
+                                                    if (widget.volunteerList!
+                                                            .length ==
+                                                        1) {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => ConfirmScreen(
+                                                                  dataStr: '',
+                                                                  attendanceMode:
+                                                                      attendanceMode,
+                                                                  type: "pin",
+                                                                  name: widget
+                                                                      .name,
+                                                                  id: widget
+                                                                      .itemId,
+                                                                  scheduleId: widget
+                                                                      .volunteerList[
+                                                                          0]
+                                                                      .scheduleId!)));
+                                                    } else {
+
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => VolunteerSchedulingList(
+                                                                  itemId: widget
+                                                                      .itemId,
+                                                                  name: widget
+                                                                      .name,
+                                                                  attendanceMode:
+                                                                      attendanceMode,
+                                                                  volunteerList:
+                                                                      widget
+                                                                          .volunteerList)));
+                                                    }
                                                   },
                                                   child: const Text(
                                                     "       Check-In       ",
@@ -235,20 +267,53 @@ class _Confirm extends State<ConfirmLanch> {
                                                   ),
                                                   onPressed: () {
                                                     attendanceMode = "2";
-
+                                                    if (widget.volunteerList!
+                                                            .length ==
+                                                        1) {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => ConfirmScreen(
+                                                                  dataStr: '',
+                                                                  attendanceMode:
+                                                                      attendanceMode,
+                                                                  type: "pin",
+                                                                  name: widget
+                                                                      .name,
+                                                                  id: widget
+                                                                      .itemId,
+                                                                  scheduleId: widget
+                                                                      .volunteerList[
+                                                                          0]
+                                                                      .scheduleId!)));
+                                                    } else {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) => VolunteerSchedulingList(
+                                                                  itemId: widget
+                                                                      .itemId,
+                                                                  name: widget
+                                                                      .name,
+                                                                  attendanceMode:
+                                                                  attendanceMode,
+                                                                  volunteerList:
+                                                                  widget
+                                                                      .volunteerList)));
+                                                    }
                                                   },
                                                   child: const Text(
                                                     "       Check-Out       ",
                                                   ),
                                                 ),
                                               ),
-
                                             ],
                                           ),
                                         )
                                       ]))))
                         ])))));
   }
+
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
@@ -257,8 +322,19 @@ class _Confirm extends State<ConfirmLanch> {
         _imageToShow = Image.memory(const Base64Decoder().convert(base64));
       } else {
         _imageToShow =
-        const Image(image: AssetImage('images/assets/final_logo.png'));
+            const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
-    }
+    Future.delayed(Duration(seconds: 15), () {
+      try {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => HomeScreen()));
+      }catch(e){
+        print("Error :"+e.toString());
+      }
+    });
+  }
+
 }
