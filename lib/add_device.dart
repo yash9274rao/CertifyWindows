@@ -63,10 +63,12 @@ class _MyHomePageState extends State<MyHomePage> {
   // String selectDevicename = "";
   String dropdownDeviceName = listDeviceData.first;
   String deviceSettings = listSettings.first;
+  int deviceID = 0;
   var _isVisibility = false;
   var dropdownVisiability = false;
   var _isAddDevice = false;
   List<String>  dropdownDataDeviceName = [];
+  List<String> dropdownDataDeviceSetting = [];
   late String selectDevicename =listSettings.first;
 
   @override
@@ -76,6 +78,10 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var data in widget.offlineDeviceData){
       dropdownDataDeviceName.add(data.deviceName);
     }
+    for (var data in widget.tabletSettingData){
+      dropdownDataDeviceSetting.add(data.settingName);
+    }
+
     dropdownDataDeviceName.add("+ Add New");
     dropdownDeviceName = dropdownDataDeviceName.first;
     initPlatformState();
@@ -226,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: DropdownButton<String>(
                         isExpanded: true,
                         alignment: AlignmentDirectional.centerStart,
-                        value: selectDevicename,
+                        value: deviceSettings,
                         icon: const Icon(Icons.arrow_downward),
                         elevation: 16,
                         style:
@@ -238,10 +244,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         onChanged: (newValue) {
                           // This is called when the user selects an item.
                           setState(() {
-                            selectDevicename = newValue!;
+                            deviceSettings = newValue!;
                           });
                         },
-                        items: listSettings.map<DropdownMenuItem<String>>((String value)
+                        items: dropdownDataDeviceSetting.map<DropdownMenuItem<String>>((String value)
                         {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -363,11 +369,10 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_deviceName.isEmpty) {
         _deviceName = dropdownDeviceName;
         pref.setString(Sharepref.serialNo, _deviceName);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => MyApp()),
-        );
+      // offline device just active
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()),);
       }else{
+        pref.setString(Sharepref.serialNo, _deviceName);
         addDeviceAPI();
       }
     } else {
@@ -375,6 +380,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
   Future<void> addDeviceAPI() async {
+    for (var data in widget.tabletSettingData){
+      if(deviceSettings == data.settingName){
+        deviceID = data.id;
+      }
+    }
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
@@ -382,7 +392,7 @@ class _MyHomePageState extends State<MyHomePage> {
     registerBody['serialNumber'] = pref.getString(Sharepref.serialNo);
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;
-    registerBody['settingsId'] = 2020;
+    registerBody['settingsId'] = deviceID;
     RegisterDeviceResponse registerDeviceResponse = await ApiService()
         .registerDeviceForApp(pref, registerBody) as RegisterDeviceResponse;
     if (registerDeviceResponse.responseCode == 1) {
@@ -394,5 +404,7 @@ class _MyHomePageState extends State<MyHomePage> {
       context.showToast(registerDeviceResponse.responseMessage!);
     }
   }
+
+
 
 }
