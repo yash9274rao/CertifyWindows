@@ -26,7 +26,7 @@ class _MyHome extends State<HomeScreen> {
       versionId = "",
       lineOneText = "",
       lineTwoText = "";
-  var _imageToShow = const Image(image: AssetImage('images/assets/quote.png'));
+  var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
   late Timer dataTime;
   late Timer timer;
   String attendanceMode = "0", _pinStr = "", _mobileNumber = "";
