@@ -199,7 +199,7 @@ class _MyHome extends State<MyLanch> {
     if (_clientInfo.osName == 'Android') {
       pref.setString(Sharepref.platform, "Android Tablet");
       pref.setString(Sharepref.platformId, "4");
-    } else if (_clientInfo.osName == 'Windows') {
+    } else if ((_clientInfo.osName == 'Windows') || (_clientInfo.osName == 'Mac OS')){
       pref.setString(Sharepref.platform, "web");
       pref.setString(Sharepref.platformId, "5");
     } else {
