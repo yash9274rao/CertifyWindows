@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:certify_me_kiosk/common/qr_data.dart';
+import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -56,6 +58,7 @@ class _Confirm extends State<ConfirmLanch> {
   var result;
   String attendanceMode = "0";
   QrData qrData = QrData();
+  late Timer timerDelay;
 
   @override
   void initState() {
@@ -107,7 +110,7 @@ class _Confirm extends State<ConfirmLanch> {
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      35, 5, 0, 0),
+                                                      35, 25, 0, 0),
                                               child: TextButton.icon(
                                                 onPressed: () {
                                                   Navigator.of(context,
@@ -124,7 +127,7 @@ class _Confirm extends State<ConfirmLanch> {
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 24,
+                                                      fontSize: 28,
                                                       color: Colors.black),
                                                 ),
                                               ),
@@ -143,17 +146,17 @@ class _Confirm extends State<ConfirmLanch> {
                                         // ),
                                         const Padding(
                                           padding:
-                                              EdgeInsets.fromLTRB(50, 5, 0, 0),
+                                              EdgeInsets.fromLTRB(50, 10, 0, 0),
                                           child: Text(
                                             "What Would you like to do?",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w500,
-                                                fontSize: 18),
+                                                fontSize: 20),
                                           ),
                                         ),
                                         const Padding(
                                           padding:
-                                              EdgeInsets.fromLTRB(50, 5, 0, 0),
+                                              EdgeInsets.fromLTRB(50, 10, 0, 0),
                                           child: Text(
                                             "Click on Check-In to sign in and Check-Out to sign out.",
                                             style: TextStyle(
@@ -164,7 +167,7 @@ class _Confirm extends State<ConfirmLanch> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
-                                              50, 10, 0, 0),
+                                              50, 30, 50, 0),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -198,42 +201,7 @@ class _Confirm extends State<ConfirmLanch> {
                                                   ),
                                                   onPressed: () {
                                                     attendanceMode = "1";
-
-                                                    if (widget.volunteerList!
-                                                            .length ==
-                                                        1) {
-                                                      Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => ConfirmScreen(
-                                                                  dataStr: '',
-                                                                  attendanceMode:
-                                                                      attendanceMode,
-                                                                  type: "pin",
-                                                                  name: widget
-                                                                      .name,
-                                                                  id: widget
-                                                                      .itemId,
-                                                                  scheduleId: widget
-                                                                      .volunteerList[
-                                                                          0]
-                                                                      .scheduleId!)));
-                                                    } else {
-
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => VolunteerSchedulingList(
-                                                                  itemId: widget
-                                                                      .itemId,
-                                                                  name: widget
-                                                                      .name,
-                                                                  attendanceMode:
-                                                                      attendanceMode,
-                                                                  volunteerList:
-                                                                      widget
-                                                                          .volunteerList)));
-                                                    }
+                                                    CheckInOutValidations();
                                                   },
                                                   child: const Text(
                                                     "       Check-In       ",
@@ -267,40 +235,7 @@ class _Confirm extends State<ConfirmLanch> {
                                                   ),
                                                   onPressed: () {
                                                     attendanceMode = "2";
-                                                    if (widget.volunteerList!
-                                                            .length ==
-                                                        1) {
-                                                      Navigator.pushReplacement(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => ConfirmScreen(
-                                                                  dataStr: '',
-                                                                  attendanceMode:
-                                                                      attendanceMode,
-                                                                  type: "pin",
-                                                                  name: widget
-                                                                      .name,
-                                                                  id: widget
-                                                                      .itemId,
-                                                                  scheduleId: widget
-                                                                      .volunteerList[
-                                                                          0]
-                                                                      .scheduleId!)));
-                                                    } else {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => VolunteerSchedulingList(
-                                                                  itemId: widget
-                                                                      .itemId,
-                                                                  name: widget
-                                                                      .name,
-                                                                  attendanceMode:
-                                                                  attendanceMode,
-                                                                  volunteerList:
-                                                                  widget
-                                                                      .volunteerList)));
-                                                    }
+                                                    CheckInOutValidations();
                                                   },
                                                   child: const Text(
                                                     "       Check-Out       ",
@@ -325,16 +260,93 @@ class _Confirm extends State<ConfirmLanch> {
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
-    Future.delayed(Duration(seconds: 15), () {
+    timerDelay = Timer(Duration(seconds: 15), () {
       try {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => HomeScreen()));
-      }catch(e){
-        print("Error :"+e.toString());
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+      } catch (e) {
+        print("Error :" + e.toString());
       }
     });
   }
 
-}
+  Future<void> CheckInOutValidations() async {
+    try {
+      final List<VolunteerSchedulingDetailList> volunteerListCheckIn = [];
+      final List<VolunteerSchedulingDetailList> volunteerListCheckOut = [];
+
+      for (var item in widget.volunteerList) {
+        if (item.checkIndate.isEmpty ||
+            (item.checkIndate.isNotEmpty && item.checkOutDate.isNotEmpty)) {
+          volunteerListCheckIn.add(item);
+        } else {
+          volunteerListCheckOut.add(item);
+        }
+      }
+      if (attendanceMode == "1") {
+        if (volunteerListCheckOut.isEmpty) {
+          if (volunteerListCheckIn.length == 1) {
+            cancelTimer();
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ConfirmScreen(
+                        dataStr: '',
+                        attendanceMode: attendanceMode,
+                        type: "pin",
+                        name: widget.name,
+                        id: widget.itemId,
+                        scheduleId: volunteerListCheckIn[0].scheduleId!)));
+          } else {
+            cancelTimer();
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => VolunteerSchedulingList(
+                        itemId: widget.itemId,
+                        name: widget.name,
+                        attendanceMode: attendanceMode,
+                        volunteerList: volunteerListCheckIn)));
+          }
+        } else {
+          context.showToast("Already Check In");
+        }
+      } else {
+        if (volunteerListCheckOut.isEmpty) {
+          context.showToast("Not Check In");
+        } else if (volunteerListCheckOut.length == 1) {
+          cancelTimer();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmScreen(
+                      dataStr: '',
+                      attendanceMode: attendanceMode,
+                      type: "pin",
+                      name: widget.name,
+                      id: widget.itemId,
+                      scheduleId: volunteerListCheckOut[0].scheduleId!)));
+        } else {
+          cancelTimer();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VolunteerSchedulingList(
+                      itemId: widget.itemId,
+                      name: widget.name,
+                      attendanceMode: attendanceMode,
+                      volunteerList: volunteerListCheckOut)));
+        }
+      }
+    } catch (e) {
+      print("CheckInOutValidations :" + e.toString());
+    }
+  }
+  Future<void> cancelTimer() async {
+    try{
+        timerDelay.cancel();
+    }catch(e){
+      print("cancelTimer ${e.toString()}");
+    }
+  }
+  }

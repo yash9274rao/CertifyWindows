@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHome extends State<HomeScreen> {
-  final _formGlobalKey = GlobalKey<FormState>();
   var timeTextHolderModalController = "",
       dateTextHolderModalController = "",
       versionId = "",
@@ -29,7 +28,7 @@ class _MyHome extends State<HomeScreen> {
       lineTwoText = "";
   var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
   late Timer dataTime;
-  late Timer timer;
+  late Timer timer,delayQRPinUI;
   String attendanceMode = "0", _pinStr = "", _mobileNumber = "", _countryCode = "1";
   bool checkInVisiable = false;
   bool checkOutVisiable = false;
@@ -139,7 +138,7 @@ class _MyHome extends State<HomeScreen> {
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 24,
+                                                      fontSize: 32,
                                                       color: Colors.white),
                                                 ),
                                               ),
@@ -154,7 +153,7 @@ class _MyHome extends State<HomeScreen> {
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.normal,
-                                                      fontSize: 18,
+                                                      fontSize: 24,
                                                       color: Colors.white),
                                                 ),
                                               ),
@@ -168,7 +167,7 @@ class _MyHome extends State<HomeScreen> {
                                                 style: const TextStyle(
                                                     fontWeight:
                                                         FontWeight.normal,
-                                                    fontSize: 10,
+                                                    fontSize: 14,
                                                     color: Colors.grey),
                                               ),
                                             ),
@@ -242,7 +241,7 @@ class _MyHome extends State<HomeScreen> {
                                                     },
                                                     child: FittedBox(
                                                       fit: BoxFit.scaleDown,
-                                                      child: const Text(
+                                                      child: const AutoSizeText(
                                                         "Check-In",
                                                       ),
                                                     )),
@@ -280,14 +279,19 @@ class _MyHome extends State<HomeScreen> {
                                                         builder: (context) => QRViewExample(attendanceMode: attendanceMode)));
                                                   },
                                                   child:
-                                                      const Text("Check-Out"),
+                                                      const AutoSizeText("Check-Out"),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                          Padding(
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size.width * 0.3,
+                                            height: MediaQuery.of(context)
+                                                .size.height * 0.4,
+                                            child:  Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                0, 40, 0, 120),
+                                                0, 40, 0, 180),
                                             child: Visibility(
                                               visible: qrAndpinVisiable,
                                               // false qrbox hidden
@@ -297,7 +301,7 @@ class _MyHome extends State<HomeScreen> {
                                                   padding: const EdgeInsets.all(
                                                       16.0),
                                                   textStyle: const TextStyle(
-                                                      fontSize: 24),
+                                                      fontSize: 40),
                                                   backgroundColor: Colors.blue,
                                                 ),
                                                 onPressed: () async {
@@ -315,14 +319,19 @@ class _MyHome extends State<HomeScreen> {
                                                                   attendanceMode:
                                                                       attendanceMode)));
                                                 },
-                                                child: const Text(
-                                                    "        QrCode        "),
+                                                child: const AutoSizeText("  QR Code  "),
                                               ),
                                             ),
                                           ),
-                                          Padding(
+                                          ),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size.width * 0.3,
+                                            height: MediaQuery.of(context)
+                                                .size.height * 0.4,
+                                            child:   Padding(
                                             padding: const EdgeInsets.fromLTRB(
-                                                0, 150, 0, 40),
+                                                0, 180, 0, 40),
                                             child: Visibility(
                                               visible: pinVisiable,
                                               // false pin box hidden
@@ -332,7 +341,7 @@ class _MyHome extends State<HomeScreen> {
                                                   padding: const EdgeInsets.all(
                                                       16.0),
                                                   textStyle: const TextStyle(
-                                                      fontSize: 24),
+                                                      fontSize: 40),
                                                   backgroundColor: Colors.blue,
                                                 ),
                                                 onPressed: () async {
@@ -347,11 +356,16 @@ class _MyHome extends State<HomeScreen> {
                                                   checkOutVisiable = false;
                                                   qrAndpinVisiable = false;
                                                   pinVisiable = false;
+                                                  delayQRPinUI = Timer(Duration(seconds: 35), () {
+                                                    pinPageVisiable = false;
+                                                    qrAndpinVisiable = true;
+                                                    pinVisiable = true;
+                                                  });
                                                 },
-                                                child: const Text(
-                                                    "            PIN            "),
+                                                child: const AutoSizeText("  PIN "),
                                               ),
                                             ),
+                                          ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
@@ -386,6 +400,7 @@ class _MyHome extends State<HomeScreen> {
                                               ),
                                             ),
                                           ),
+
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(
                                                 20, 160, 20, 20),
@@ -429,22 +444,23 @@ class _MyHome extends State<HomeScreen> {
                                                         child: TextButton(
                                                           style: TextButton.styleFrom(
                                                             foregroundColor: Colors.black,
-                                                            padding: const EdgeInsets.all(
-                                                                16.0),
-
+                                                            padding: const EdgeInsets.all(16.0),
                                                             backgroundColor: Colors.blue,
                                                           ),
                                                           onPressed: () {
-                                                            print(
-                                                                "bbbbbbbbb_pinStr = $_pinStr,  $_mobileNumber , $_countryCode");
-                                                            if (_pinStr
-                                                                .isEmpty) {
+                                                              if (_pinStr.isEmpty) {
                                                               context.showToast(
                                                                   "Please Enter pin");
-                                                            } else if (_mobileNumber
-                                                                .isEmpty) {
+                                                            } else if (_mobileNumber.isEmpty) {
                                                             } else {
                                                               VolunteerValidation();
+                                                              try {
+                                                                if (pinVisiable) {
+                                                                  delayQRPinUI.cancel();
+                                                                }
+                                                              }catch(e){
+                                                                print("error : ${e.toString()}");
+                                                              }
                                                             }
                                                           },
                                                           child: const AutoSizeText("  Proceed  ",  style: TextStyle(fontSize: 40),
@@ -479,7 +495,6 @@ class _MyHome extends State<HomeScreen> {
 
   Future<void> healthCheck() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    print("objectffff=${pref.getString(Sharepref.checkInMode)}");
     diveInfo['osVersion'] = pref.getString(Sharepref.osVersion);
     diveInfo['uniqueDeviceId'] = pref.getString(Sharepref.serialNo);
     diveInfo['deviceModel'] = pref.getString(Sharepref.deviceModel);
@@ -523,29 +538,27 @@ class _MyHome extends State<HomeScreen> {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     Map<String, dynamic> volunteerInfo = HashMap();
-    volunteerInfo['Pin'] = base64Url.encode(utf8.encode(_pinStr));
-    volunteerInfo['PhoneNumber'] = '${_mobileNumber}';
+    volunteerInfo['pin'] = base64Url.encode(utf8.encode(_pinStr));
+    volunteerInfo['countrycode'] = _countryCode;
+    volunteerInfo['phoneNumber'] = _mobileNumber;
+
     VolunteerResponse? volunteerResponse = await ApiService()
         .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
     if (volunteerResponse?.responseCode == 1) {
       if(volunteerResponse?.responseData!.volunteerList != null) {
-        List<VolunteerSchedulingDetailList>? temp = volunteerResponse
-            ?.responseData!.volunteerList!;
         String nameFull = volunteerResponse!.responseData!.firstName;
         if (volunteerResponse!.responseData!.middleName.isNotEmpty &&
             volunteerResponse!.responseData!.lastName.isNotEmpty) {
           nameFull =
           '${volunteerResponse!.responseData!.firstName} ${volunteerResponse!
-              .responseData!.middleName} ${volunteerResponse!.responseData!
-              .lastName}';
+              .responseData!.middleName} ${volunteerResponse!.responseData!.lastName}';
         } else if (volunteerResponse!.responseData!.lastName.isNotEmpty) {
           nameFull =
           '${volunteerResponse!.responseData!.firstName} ${volunteerResponse!
-              .responseData!
-              .lastName}';
+              .responseData!.lastName}';
         }
         if (volunteerResponse!.responseData!.volunteerList!.length == 0) {
-          context.showToast("You don't have Appointments");
+          context.showToast("No active slots");
         } else {
           Navigator.push(context,
               MaterialPageRoute(
@@ -553,8 +566,7 @@ class _MyHome extends State<HomeScreen> {
                       VolunteerCheckIn(
                           itemId: volunteerResponse!.responseData!.id,
                           name: nameFull,
-                          volunteerList: volunteerResponse!.responseData!
-                              .volunteerList!)));
+                          volunteerList: volunteerResponse!.responseData!.volunteerList!)));
         }
       }
     } else {
@@ -600,6 +612,8 @@ class _MyHome extends State<HomeScreen> {
       } else {
         setState(() {
           checkOutVisiable = true;
+          checkInVisiable = true;
+
         });
       }
       lineOneText = pref.getString(Sharepref.line1HomePageView) ?? "";

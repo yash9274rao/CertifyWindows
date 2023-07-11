@@ -1,7 +1,5 @@
 import 'dart:collection';
 import 'dart:io';
-
-// import 'dart:js';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -55,6 +53,7 @@ class _MyHome extends State<MyLanch> {
     initPlatformState();
     getDeviceToken();
   }
+
 
   @override
   Widget build(BuildContext context) {
