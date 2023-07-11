@@ -1,12 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
-
-import 'package:certify_me_kiosk/toast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'api/response/response_data_voluntear.dart';
-import 'checkInCheckoutConfirmation.dart';
 import 'common/sharepref.dart';
 import 'confirm_screen.dart';
 import 'home_screen.dart';
@@ -35,7 +33,7 @@ class VolunteerSchedulingList extends StatelessWidget {
   }
 }
 class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.itemId,  this.name, this.attendanceMode, this.volunteerList);
+  ConfirmLanch(this.itemId, this.name, this.attendanceMode, this.volunteerList);
 
   final int itemId;
   final String name;
@@ -47,6 +45,7 @@ class ConfirmLanch extends StatefulWidget {
 
 class CheckInSlots extends State<ConfirmLanch> {
   var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
+  late Timer timerDelay;
 
   @override
   void initState() {
@@ -117,6 +116,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                       ),
                                                       onPressed: () {
                                                         Navigator.of(context, rootNavigator: true).pop(context);
+    cancelTimer();
                                                       }),
                                                 )),
                                             const Padding(
@@ -141,19 +141,9 @@ class CheckInSlots extends State<ConfirmLanch> {
                                         ),
                                         Padding(padding:  const EdgeInsets.fromLTRB(
                                             70, 5, 70, 0),
-                                            child: InkWell(
-                                              onTap:(){
-                                                Navigator.pushReplacement(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            CheckinCheckOutConfirmation(
-                                                            )));
-                                                },
                                         child: ListView.builder(
                                             shrinkWrap: true,
                                             itemCount: widget.volunteerList.length,
-
                                             itemBuilder: (BuildContext context,
                                                 int index) {
                                               return InkWell(
@@ -165,7 +155,15 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ConfirmScreen(dataStr:'', attendanceMode : widget.attendanceMode,type:"pin",name : widget.name,id:widget.itemId,scheduleId: widget.volunteerList[index].scheduleId!)));
+                                                              ConfirmScreen(
+                                                                  dataStr: '',
+                                                                  attendanceMode: widget
+                                                                      .attendanceMode,
+                                                                  type: "pin",
+                                                                  name: widget.name,
+                                                                  id: widget.itemId,
+                                                                  scheduleId: widget.volunteerList[index].scheduleId!)));
+                                                  cancelTimer();
                                                 },
                                                 child:Container(
                                                 color: Colors.white,
@@ -183,7 +181,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                 )
                                               );
                                             }),
-                                        ) )]))))
+                                        )]))))
                     ])))));
   }
 
@@ -198,7 +196,7 @@ class CheckInSlots extends State<ConfirmLanch> {
         const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
-    Future.delayed(Duration(seconds: 15), () {
+    timerDelay = Timer(Duration(seconds: 15), () {
       try {
         Navigator.pushReplacement(
             context,
@@ -208,5 +206,13 @@ class CheckInSlots extends State<ConfirmLanch> {
         print("Error :"+e.toString());
       }
     });
+  }
+  Future<void> cancelTimer() async {
+    try{
+      print("cancelTimer ccccccccccccc");
+      timerDelay.cancel();
+    }catch(e){
+      print("cancelTimer ${e.toString()}");
+    }
   }
 }
