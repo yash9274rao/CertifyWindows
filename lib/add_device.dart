@@ -63,14 +63,16 @@ class _MyHomePageState extends State<MyHomePage> {
   // String selectDevicename = "";
   String dropdownDeviceName = listDeviceData.first;
   String deviceSettings = listSettings.first;
-  int deviceID = 0;
+  int deviceId = 0;
+  int settingId = 0;
+
   var _isVisibility = false;
   var dropdownVisiability = false;
   var _isAddDevice = false;
   List<String>  dropdownDataDeviceName = [];
   List<String> dropdownDataDeviceSetting = [];
   late String selectDevicename =listSettings.first;
-
+  late OfflineDeviceData offlineDeviceDataSelected;
   @override
   void initState() {
     super.initState();
@@ -369,8 +371,23 @@ class _MyHomePageState extends State<MyHomePage> {
       if (_deviceName.isEmpty) {
         _deviceName = dropdownDeviceName;
         pref.setString(Sharepref.serialNo, _deviceName);
-      // offline device just active
+        for (var data in widget.offlineDeviceData){
+          if (dropdownDeviceName == data.deviceName){
+            offlineDeviceDataSelected = data;
+            break;
+          }
+        }
+    if(offlineDeviceDataSelected != null){
+      if(offlineDeviceDataSelected.deviceStatus == 0){
+        deviceId = offlineDeviceDataSelected.deviceId;
+        settingId = offlineDeviceDataSelected.settingId;
+        addDeviceAPI();
+      }else{
+        // offline device just active
         Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()),);
+
+      }
+    }
       }else{
         pref.setString(Sharepref.serialNo, _deviceName);
         addDeviceAPI();
@@ -382,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> addDeviceAPI() async {
     for (var data in widget.tabletSettingData){
       if(deviceSettings == data.settingName){
-        deviceID = data.id;
+        settingId = data.id;
       }
     }
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -392,7 +409,9 @@ class _MyHomePageState extends State<MyHomePage> {
     registerBody['serialNumber'] = pref.getString(Sharepref.serialNo);
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;
-    registerBody['settingsId'] = deviceID;
+    registerBody['settingsId'] = settingId;
+    registerBody['deviceId'] = deviceId;
+
     RegisterDeviceResponse registerDeviceResponse = await ApiService()
         .registerDeviceForApp(pref, registerBody) as RegisterDeviceResponse;
     if (registerDeviceResponse.responseCode == 1) {
