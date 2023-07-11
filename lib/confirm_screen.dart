@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
-import 'common/util.dart';
 
 typedef StringValue = String Function(String);
 
@@ -186,9 +185,9 @@ class _Confirm extends State<ConfirmLanch> {
       } else {
         textHolderModalController = "";
         if (widget.type == "pin")
-          context.showToast("Invalid Pin");
+          context.showToast("Invalid PIN");
         else
-          context.showToast("Invalid QRCode");
+          context.showToast("Invalid QR Code");
       }
     });
     Future.delayed(Duration(milliseconds: 5000), () {
@@ -269,29 +268,29 @@ class _Confirm extends State<ConfirmLanch> {
         int.parse(widget.attendanceMode) == 1 &&
         qrData.isValid == true) {
       updateUI(qrData);
-      context.showToast("You have been Checked-in.");
+      context.showToast("You have been Checked-in");
     } else if (accesslogsResponse.responseSubCode == 0 &&
         int.parse(widget.attendanceMode) == 2 &&
         qrData.isValid == true) {
       updateUI(qrData);
-      context.showToast("Check Out");
+      context.showToast("Checked-out");
     } else if (accesslogsResponse.responseSubCode == 103 &&
         int.parse(widget.attendanceMode) == 1 &&
         qrData.isValid == true) {
       navigationHome();
-      context.showToast("Already Check In");
+      context.showToast("Already Checked-in");
     } else if (accesslogsResponse.responseSubCode == 103 &&
         int.parse(widget.attendanceMode) == 2 &&
         qrData.isValid == true) {
       navigationHome();
-      context.showToast("Already Check Out");
+      context.showToast("Already Checked-out");
     } else if (qrData.isValid == false) {
       navigationHome();
       if (widget.type == "pin")
-        context.showToast("Invalid Pin");
+        context.showToast("Invalid PIN");
       else
-        // Util.showToastErrorAccessLogs("Invalid QRCode");
-        context.showToast('Invalid QRCode');
+        // Util.showToastErrorAccessLogs("Invalid QR Code");
+        context.showToast('Invalid QR Code');
     } else {
       updateUI(qrData);
     }

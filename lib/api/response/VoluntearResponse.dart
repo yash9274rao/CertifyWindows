@@ -16,7 +16,7 @@ class VolunteerResponse {
     return VolunteerResponse(
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
-        responseMessage: json['responseMessage'] ?? "Invalid Pin",
+        responseMessage: json['responseMessage'] ?? "Invalid PIN",
         responseData:
         ResponseDataVolunteer.fromJson(json['responseData'] ?? {}));
   }

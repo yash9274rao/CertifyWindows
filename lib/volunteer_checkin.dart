@@ -311,11 +311,11 @@ class _Confirm extends State<ConfirmLanch> {
                         volunteerList: volunteerListCheckIn)));
           }
         } else {
-          context.showToast("Already Check In");
+          context.showToast("Already Checked-in");
         }
       } else {
         if (volunteerListCheckOut.isEmpty) {
-          context.showToast("Not Check In");
+          context.showToast("Not Checked-in");
         } else if (volunteerListCheckOut.length == 1) {
           cancelTimer();
           Navigator.pushReplacement(

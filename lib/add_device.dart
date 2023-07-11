@@ -85,6 +85,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
     dropdownDataDeviceName.add("+ Add New");
     dropdownDeviceName = dropdownDataDeviceName.first;
+    dropdownDataDeviceName = dropdownDataDeviceName.toSet().toList();
+    dropdownDataDeviceSetting = dropdownDataDeviceSetting.toSet().toList();
     initPlatformState();
   }
 

@@ -16,7 +16,7 @@ class ValidateVendorResponse {
     return ValidateVendorResponse(
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
-        responseMessage: json['responseMessage'] ?? "Invalid QRCode",
+        responseMessage: json['responseMessage'] ?? "Invalid QR Code",
         responseData:
             ResponseDataValidateVendor.fromJson(json['responseData'] ?? {}));
   }

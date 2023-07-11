@@ -134,7 +134,7 @@ class ApiService {
       return "";
     } catch (e) {
       log("validateVendorvalidateVendor =" + e.toString());
-      return "Invalid QRCode";
+      return "Invalid QR Code";
     }
   }
 
