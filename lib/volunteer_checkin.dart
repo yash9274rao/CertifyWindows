@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:certify_me_kiosk/common/qr_data.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
@@ -167,7 +168,7 @@ class _Confirm extends State<ConfirmLanch> {
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(
-                                              50, 30, 50, 0),
+                                              250, 30, 250, 0),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -191,21 +192,21 @@ class _Confirm extends State<ConfirmLanch> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             16.0),
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 24),
                                                     backgroundColor:
                                                         Colors.green,
                                                     minimumSize:
-                                                        const Size.fromHeight(
-                                                            90),
+                                                    const Size.fromHeight(
+                                                        80),
                                                   ),
                                                   onPressed: () {
                                                     attendanceMode = "1";
                                                     CheckInOutValidations();
                                                   },
-                                                  child: const Text(
-                                                    "       Check-In       ",
-                                                  ),
+                                                  child: const AutoSizeText("Check-In",
+                                                      style: TextStyle(fontSize: 40),
+                                                      minFontSize: 18,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis),
                                                 ),
                                               ),
                                               Padding(
@@ -225,21 +226,22 @@ class _Confirm extends State<ConfirmLanch> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             16.0),
-                                                    textStyle: const TextStyle(
-                                                        fontSize: 24),
+
                                                     backgroundColor:
                                                         Colors.red.shade200,
                                                     minimumSize:
                                                         const Size.fromHeight(
-                                                            85),
+                                                            80),
                                                   ),
                                                   onPressed: () {
                                                     attendanceMode = "2";
                                                     CheckInOutValidations();
                                                   },
-                                                  child: const Text(
-                                                    "       Check-Out       ",
-                                                  ),
+                                                  child: const AutoSizeText("Check-Out",
+                                                      style: TextStyle(fontSize: 40),
+                                                      minFontSize: 18,
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis),
                                                 ),
                                               ),
                                             ],
@@ -342,11 +344,12 @@ class _Confirm extends State<ConfirmLanch> {
       print("CheckInOutValidations :" + e.toString());
     }
   }
+
   Future<void> cancelTimer() async {
-    try{
-        timerDelay.cancel();
-    }catch(e){
+    try {
+      timerDelay.cancel();
+    } catch (e) {
       print("cancelTimer ${e.toString()}");
     }
   }
-  }
+}
