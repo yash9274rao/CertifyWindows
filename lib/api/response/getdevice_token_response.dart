@@ -1,12 +1,12 @@
 
 
-import 'package:certify_me_kiosk/api/response/response_data_token.dart';
+import 'package:certify_me_kiosk/api/response/register_device/response_data.dart';
 
 class GetDeviceTokenResponse {
   final int responseCode;
   final int responseSubCode;
   final String responseMessage;
-  final ResponseDataToken responseData;
+  final ResponseDataDevice responseData;
 
   const GetDeviceTokenResponse(
       {required this.responseCode,
@@ -19,6 +19,6 @@ class GetDeviceTokenResponse {
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
         responseMessage: json['responseMessage'] ?? "Invalid Login Credentials",
-        responseData: ResponseDataToken.fromJson(json['responseData'] ?? {}));
+        responseData: ResponseDataDevice.fromJson(json['responseData'] ?? {}));
   }
 }

@@ -89,7 +89,7 @@ class _QRViewExampleState extends State<QRViewExample> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ConfirmScreen(dataStr: '${result!.code}',attendanceMode : widget.attendanceMode,type:"qr")));
+                      ConfirmScreen(dataStr: '${result!.code}',attendanceMode : widget.attendanceMode,type:"qr",name: "",id: 0,scheduleId: 0,)));
           if (defaultTargetPlatform == TargetPlatform.android) {
             controller!.pauseCamera();
           }

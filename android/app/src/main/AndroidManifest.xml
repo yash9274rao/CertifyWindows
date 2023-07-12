@@ -3,7 +3,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-   <application
+    <supports-screens android:smallScreens="false"
+        android:normalScreens="false"
+        android:largeScreens="true"
+        android:xlargeScreens="true"/>
+    <application
         android:label="Certify.me Kiosk"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">

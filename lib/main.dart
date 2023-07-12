@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
-// import 'dart:js';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:client_information/client_information.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,19 +22,17 @@ Future<void> main() async {
       [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   HttpOverrides.global = myHttpOverrides();
   runApp(MyApp());
-  }
-
-
-
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of the application.
   @override
   Widget build(BuildContext context) {
-      return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: MyLanch(),
-      );
+    return MaterialApp(
+      title: 'Certify.me Kiosk',
+      debugShowCheckedModeBanner: false,
+      home: MyLanch(),
+    );
   }
 }
 
@@ -47,7 +45,8 @@ class _MyHome extends State<MyLanch> {
   var textHolderModalController = "";
   Map<String, dynamic> diveInfo = HashMap();
   var _isVisibility = false;
- 
+  var _is_web = true;
+
   @override
   void initState() {
     super.initState();
@@ -55,9 +54,11 @@ class _MyHome extends State<MyLanch> {
     getDeviceToken();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Certify.me Kiosk',
       home: Scaffold(
         body: Container(
           color: Colors.white,
@@ -79,10 +80,12 @@ class _MyHome extends State<MyLanch> {
                     children: <Widget>[
                       const Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                        child: Text(
+                        child: AutoSizeText(
                           'Register Device',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 22),
+                              fontWeight: FontWeight.bold, fontSize: 40),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const Padding(
@@ -90,9 +93,13 @@ class _MyHome extends State<MyLanch> {
                           child: Divider(color: Colors.grey)),
                       const Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                        child: Text(
+                        child: AutoSizeText(
                             'This device is not configured to work online. If'
-                            ' you already have a cloud account'),
+                            ' you already have a cloud account',
+                            style: TextStyle(fontSize: 18),
+                            minFontSize: 12,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
@@ -104,35 +111,51 @@ class _MyHome extends State<MyLanch> {
                             backgroundColor: Colors.blue,
                           ),
                           onPressed: () {
-                            print("AAAAAAAAAAAAAAAA");
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => login()));
                           },
-                          child: Text("Login to Register the Device"),
+                          child: const AutoSizeText(
+                              "Login to Register the Device",
+                              style: TextStyle(fontSize: 26),
+                              minFontSize: 18,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
-                        child: Text(
-                          '${textHolderModalController}',
+                        child: Visibility(
+                          visible: _is_web,
+                          child: AutoSizeText('${textHolderModalController}',
+                              style: const TextStyle(fontSize: 18),
+                              minFontSize: 12,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.blue,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
-                            side: BorderSide(color: Colors.blue, width: 1),
+                        child: Visibility(
+                          visible: _is_web,
+                          child: TextButton(
+                            style: TextButton.styleFrom(
+                              foregroundColor: Colors.blue,
+                              padding: const EdgeInsets.all(16.0),
+                              textStyle: const TextStyle(fontSize: 20),
+                              side: BorderSide(color: Colors.blue, width: 1),
+                            ),
+                            onPressed: () {
+                              print("BBBBBBBBBBBBBBBBBBBB");
+                              activiAPI();
+                            },
+                            child: const AutoSizeText("Try Activation Again",
+                                style: TextStyle(fontSize: 26),
+                                minFontSize: 18,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis),
                           ),
-                          onPressed: () {
-                            print("BBBBBBBBBBBBBBBBBBBB");
-                            activiAPI();
-                          },
-                          child: Text("Try Activation Again"),
                         ),
                       ),
                     ],
@@ -167,13 +190,17 @@ class _MyHome extends State<MyLanch> {
       textHolderModalController = 'If you have already added the device on the '
           'portal SL NO: ${_clientInfo.deviceId.toUpperCase()}';
     });
-    pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());
+
+    if (pref.getString(Sharepref.serialNo) == null ||
+        pref.getString(Sharepref.serialNo)!.isEmpty) {
+      pref.setString(Sharepref.serialNo, _clientInfo.deviceId.toUpperCase());
+    }
     if (_clientInfo.osName == 'Android') {
       pref.setString(Sharepref.platform, "Android Tablet");
       pref.setString(Sharepref.platformId, "4");
-    } else if (_clientInfo.osName == 'Windows') {
+    } else if ((_clientInfo.osName == 'Windows') || (_clientInfo.osName == 'Mac OS')){
       pref.setString(Sharepref.platform, "web");
-      pref.setString(Sharepref.platformId, "4");
+      pref.setString(Sharepref.platformId, "5");
     } else {
       pref.setString(Sharepref.platform, "IOS Tablet");
       pref.setString(Sharepref.platformId, "3");
@@ -212,7 +239,6 @@ class _MyHome extends State<MyLanch> {
 
       if (activateApplicationResponse.responseCode == 1) {
         print("activateApplicationResponse.responseCode ==1");
-
         Map<String, dynamic> tokenBody = HashMap();
         tokenBody['email'] = "";
         tokenBody['password'] = "";
@@ -221,18 +247,20 @@ class _MyHome extends State<MyLanch> {
             .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
         if (getDeviceTokenResponse.responseCode == 1) {
           pref.setString(Sharepref.accessToken,
-              getDeviceTokenResponse.responseData.access_token);
+              getDeviceTokenResponse.responseData.responseData.access_token);
           pref.setString(Sharepref.institutionID,
-              getDeviceTokenResponse.responseData.institutionID);
-          Navigator.pushReplacement(
-              context as BuildContext, MaterialPageRoute(builder: (context) => HomeScreen()));
+              getDeviceTokenResponse.responseData.responseData.institutionID);
+          Navigator.pushReplacement(context as BuildContext,
+              MaterialPageRoute(builder: (context) => HomeScreen()));
         } else {
           setState(() {
+            if (pref.getString(Sharepref.platform) == "web") _is_web = false;
             _isVisibility = true;
           });
         }
       } else {
         setState(() {
+          if (pref.getString(Sharepref.platform) == "web") _is_web = false;
           _isVisibility = true;
         });
       }
@@ -240,19 +268,19 @@ class _MyHome extends State<MyLanch> {
       Util.showToastError("No Internet");
     }
   }
-
 }
+
 class myHttpOverrides extends HttpOverrides {
   @override
   HttpClient create(SecurityContext context) {
     final HttpClient client = super.createHttpClient(context);
-    client.badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+    client.badCertificateCallback =
+        (X509Certificate cert, String host, int port) => true;
     return client;
   }
-  }
+}
+
 @override
 String findProxyFromEnvironment(_, __) {
   return 'PROXY 10.3.10.178;'; // IP address of your proxy
 }
-
-

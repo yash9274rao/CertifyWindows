@@ -1,12 +1,13 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:certify_me_kiosk/api/response/register_device/response_data.dart';
 import 'package:http/http.dart' as http;
 import 'package:certify_me_kiosk/api/response/VoluntearResponse.dart';
 import 'package:certify_me_kiosk/api/response/accesslogs_Response.dart';
 import 'package:certify_me_kiosk/api/response/activate_application_response.dart';
 import 'package:certify_me_kiosk/api/response/getdevice_token_response.dart';
-import 'package:certify_me_kiosk/api/response/register_device_response.dart';
+import 'package:certify_me_kiosk/api/response/register_device/register_device_response.dart';
 import 'package:certify_me_kiosk/api/response/response_data_token.dart';
 import 'package:certify_me_kiosk/api/response/validate_qrcode_response.dart';
 import 'package:certify_me_kiosk/common/qr_data.dart';
@@ -15,7 +16,8 @@ import 'response/settings_response/settings_response.dart';
 import 'response/validate_vendor_response.dart';
 
 class ApiService {
-  static const String _apiBaseUrl = "https://apidev.certify.me/";
+  static const String _apiBaseUrl =
+      "https://apidev.certify.me/"; //"https://apidev.certify.me/";
   String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
@@ -29,10 +31,13 @@ class ApiService {
             'device_sn': sn
           },
           body: jsonEncode(bodys));
+      print(res.request);
+      print("sn $sn");
       print(res.body);
+
       if (res.statusCode == 200) {
         ActivateApplicationResponse activateApplicationResponse =
-        ActivateApplicationResponse.fromJson(jsonDecode(res.body));
+            ActivateApplicationResponse.fromJson(jsonDecode(res.body));
         return activateApplicationResponse;
         // if (aaR.responseCode == 1) getGenerateToken(headers, bodys, sn);
       }
@@ -51,7 +56,7 @@ class ApiService {
       print('GenerateToken =${res.body}');
       if (res.statusCode == 200) {
         GetDeviceTokenResponse getDeviceTokenResponse =
-        GetDeviceTokenResponse.fromJson(json.decode(res.body));
+            GetDeviceTokenResponse.fromJson(json.decode(res.body));
         return getDeviceTokenResponse;
       }
     } catch (e) {
@@ -60,13 +65,16 @@ class ApiService {
           responseCode: 0,
           responseSubCode: 0,
           responseMessage: "Invalid Login Credentials",
-          responseData: ResponseDataToken(
-              access_token: "",
-              token_type: "",
-              expires_in: 454,
-              institutionID: "",
-              command: "",
-              expiryTime: ""));
+          responseData: ResponseDataDevice(
+              tabletSettingData: null, offlineDeviceData: null,
+              responseData: ResponseDataToken(
+                  access_token: "",
+                  token_type: "",
+                  expires_in: 454,
+                  institutionID: "",
+                  command: "",
+                  expiryTime: ""))
+              );
     }
   }
 
@@ -89,10 +97,10 @@ class ApiService {
       QrData qrData = QrData();
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
-        ValidateVendorResponse.fromJson(json.decode(res.body));
+            ValidateVendorResponse.fromJson(json.decode(res.body));
         if (validateVendorResponse.responseCode == 1) {
           qrData.setFirstName =
-          (validateVendorResponse.responseData?.vendorName ?? "");
+              (validateVendorResponse.responseData?.vendorName ?? "");
           qrData.setIsValid = true;
           return qrData;
         } else {
@@ -111,7 +119,6 @@ class ApiService {
     try {
       print('deviceHealthCheck ${jsonEncode(bodys)}');
 
-
       var url = Uri.parse("${_apiBaseUrl}DeviceHealthCheck");
       var res = await http.post(url,
           headers: {
@@ -127,10 +134,9 @@ class ApiService {
       return "";
     } catch (e) {
       log("validateVendorvalidateVendor =" + e.toString());
-      return "Invalid QRCode";
+      return "Invalid QR Code";
     }
   }
-
 
   Future<AccesslogsResponse> accessLogs(accessToken, bodys) async {
     try {
@@ -148,10 +154,11 @@ class ApiService {
       print('AccessLogs = ${res.body}');
       if (res.statusCode == 200) {
         AccesslogsResponse accesslogsResponse =
-        AccesslogsResponse.fromJson(json.decode(res.body));
+            AccesslogsResponse.fromJson(json.decode(res.body));
         return accesslogsResponse;
       }
-      return const AccesslogsResponse(responseCode: 0,
+      return const AccesslogsResponse(
+          responseCode: 0,
           responseSubCode: 0,
           responseMessage: "Pleace Try agin");
     } catch (e) {
@@ -179,7 +186,7 @@ class ApiService {
       QrData qrData = new QrData();
       if (res.statusCode == 200) {
         ValidateQrCodeResponse validateQrCodeResponse =
-        ValidateQrCodeResponse.fromJson(json.decode(res.body));
+            ValidateQrCodeResponse.fromJson(json.decode(res.body));
         if (validateQrCodeResponse.responseCode == 1) {
           qrData.firstName =
               validateQrCodeResponse.responseData?.firstName ?? "";
@@ -201,7 +208,7 @@ class ApiService {
           qrData.isVisitor =
               validateQrCodeResponse.responseData?.isVisitor ?? 0;
           qrData.scheduleId =
-          validateQrCodeResponse.responseData?.scheduleId ?? 0;
+              validateQrCodeResponse.responseData?.scheduleId ?? 0;
           return qrData;
         } else {
           return qrData;
@@ -219,7 +226,7 @@ class ApiService {
       Map<String, dynamic> deviceSetting = new HashMap();
       deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
       deviceSetting['institutionId'] =
-      '${pref.getString(Sharepref.institutionID)}';
+          '${pref.getString(Sharepref.institutionID)}';
       deviceSetting['settingType'] = 10;
 
       var url = Uri.parse("${_apiBaseUrl}GetDeviceConfiguration");
@@ -236,7 +243,7 @@ class ApiService {
       print('deviceSetting body = ${res.body}');
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
-        SettingsResponse.fromJson(json.decode(res.body));
+            SettingsResponse.fromJson(json.decode(res.body));
         if (settingsResponse.responseCode == 1) {
           pref.setString(
               Sharepref.deviceName, settingsResponse.responseData?.deviceName);
@@ -270,12 +277,12 @@ class ApiService {
                   ?.viewDelay);
           pref.setString(
               Sharepref.mainText,
-              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
-                  ?.mainText);
+              settingsResponse
+                  .responseData?.jsonValue?.confirmationViewSettings?.mainText);
           pref.setString(
               Sharepref.subText,
-              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
-                  ?.subText);
+              settingsResponse
+                  .responseData?.jsonValue?.confirmationViewSettings?.subText);
           pref.setString(
               Sharepref.enableAnonymousQRCode,
               settingsResponse.responseData?.jsonValue?.identificationSettings
@@ -316,8 +323,6 @@ class ApiService {
           //     Sharepref.enableVolunteers,
           //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableVolunteers);
 
-
-
           return "1";
         }
       }
@@ -345,17 +350,17 @@ class ApiService {
 
       print('registerDeviceForApp request = ${res.request}');
 
-
       if (res.statusCode == 200) {
         RegisterDeviceResponse registerDeviceResponse =
-        RegisterDeviceResponse.fromJson(json.decode(res.body));
+            RegisterDeviceResponse.fromJson(json.decode(res.body));
         return registerDeviceResponse;
       }
-      return const RegisterDeviceResponse(responseCode: 0,
+      return const RegisterDeviceResponse(
+          responseCode: 0,
           responseSubCode: 0,
           responseMessage: "Pleace Try agin");
     } catch (e) {
-      log("registerDeviceForApp ="+e.toString());
+      log("registerDeviceForApp =" + e.toString());
 
       return const RegisterDeviceResponse(
           responseCode: 0, responseSubCode: 0, responseMessage: "");
@@ -373,7 +378,10 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
+      print('Volunteer request url  =${res.request}');
+      print('Volunteer request =${jsonEncode(bodys)}');
       print('Volunteer =${res.body}');
+
       if (res.statusCode == 200) {
         VolunteerResponse volunteerResponse =
             VolunteerResponse.fromJson(json.decode(res.body));

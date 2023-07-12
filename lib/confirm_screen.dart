@@ -10,7 +10,6 @@ import 'package:intl/intl.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
-import 'common/util.dart';
 
 typedef StringValue = String Function(String);
 
@@ -19,25 +18,30 @@ class ConfirmScreen extends StatelessWidget {
       {Key? key,
       required this.dataStr,
       required this.attendanceMode,
-      required this.type})
+      required this.type, required this.name, required this.id,required this.scheduleId})
       : super(key: key);
   final String dataStr;
   final String attendanceMode;
   final String type;
+  final String name;
+  final int id;
+  final int scheduleId;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Certify.me Kiosk',
       debugShowCheckedModeBanner: false,
-      home: ConfirmLanch(dataStr, attendanceMode, type),
+      home: ConfirmLanch(dataStr, attendanceMode, type, name, id, scheduleId),
     );
   }
 }
 
 class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.dataStr, this.attendanceMode, this.type);
+  ConfirmLanch(this.dataStr, this.attendanceMode, this.type, this.name, this.id, this.scheduleId);
 
-  final String dataStr, attendanceMode, type;
+  final String dataStr, attendanceMode, type, name;
+  final int scheduleId, id;
 
   @override
   _Confirm createState() => _Confirm();
@@ -152,9 +156,11 @@ class _Confirm extends State<ConfirmLanch> {
 
     } else if (widget.type == "pin") {
       qrData = QrData();
-      qrData.setIsValid = false;
-      qrData.setFirstName = "Anonymous";
-      qrData.setQrCodeID = widget.dataStr;
+      qrData.setIsValid = true;
+      qrData.setFirstName = widget.name;
+      qrData.setQrCodeID = "";
+      qrData.scheduleId = widget.scheduleId;
+      qrData.id = '${widget.id}';
       //updateUI(qrData);
     }
     //pin
@@ -179,9 +185,9 @@ class _Confirm extends State<ConfirmLanch> {
       } else {
         textHolderModalController = "";
         if (widget.type == "pin")
-          context.showToast("Invalid Pin");
+          context.showToast("Invalid PIN");
         else
-          context.showToast("Invalid QRCode");
+          context.showToast("Invalid QR Code");
       }
     });
     Future.delayed(Duration(milliseconds: 5000), () {
@@ -189,8 +195,8 @@ class _Confirm extends State<ConfirmLanch> {
       try {
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
-      }catch(e){
-        print("Error "+e.toString());
+      } catch (e) {
+        print("Error " + e.toString());
       }
     });
   }
@@ -219,8 +225,8 @@ class _Confirm extends State<ConfirmLanch> {
     diveInfo['appState'] = "Foreground";
     try {
       ipv4 = await Ipify.ipv4();
-    }catch(e){
-      ipv4 ="";
+    } catch (e) {
+      ipv4 = "";
     }
     Map<String, dynamic> accessLogs = HashMap();
     accessLogs['id'] = qrData.getId;
@@ -262,29 +268,29 @@ class _Confirm extends State<ConfirmLanch> {
         int.parse(widget.attendanceMode) == 1 &&
         qrData.isValid == true) {
       updateUI(qrData);
-      context.showToast("Check In");
+      context.showToast("You have been Checked-in");
     } else if (accesslogsResponse.responseSubCode == 0 &&
         int.parse(widget.attendanceMode) == 2 &&
         qrData.isValid == true) {
       updateUI(qrData);
-      context.showToast("Check Out");
+      context.showToast("Checked-out");
     } else if (accesslogsResponse.responseSubCode == 103 &&
         int.parse(widget.attendanceMode) == 1 &&
         qrData.isValid == true) {
       navigationHome();
-      context.showToast("Already Check In");
+      context.showToast("Already Checked-in");
     } else if (accesslogsResponse.responseSubCode == 103 &&
         int.parse(widget.attendanceMode) == 2 &&
         qrData.isValid == true) {
       navigationHome();
-      context.showToast("Already Check Out");
+      context.showToast("Already Checked-out");
     } else if (qrData.isValid == false) {
       navigationHome();
       if (widget.type == "pin")
-        context.showToast("Invalid Pin");
+        context.showToast("Invalid PIN");
       else
-        // Util.showToastErrorAccessLogs("Invalid QRCode");
-        context.showToast('Invalid QRCode');
+        // Util.showToastErrorAccessLogs("Invalid QR Code");
+        context.showToast('Invalid QR Code');
     } else {
       updateUI(qrData);
     }

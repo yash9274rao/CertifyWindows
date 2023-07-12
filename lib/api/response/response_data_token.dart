@@ -21,7 +21,7 @@ class ResponseDataToken {
       expires_in: json['expires_in'],
       institutionID: json['InstitutionID'] ?? "",
       command: json['command'] ?? "",
-      expiryTime: json['.expires'],
+      expiryTime: json['.expires']
     );
   }
 }

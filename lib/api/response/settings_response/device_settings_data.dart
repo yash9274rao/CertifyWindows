@@ -25,11 +25,11 @@ class DeviceSettingsData {
     return DeviceSettingsData(
 
         doNotSyncMembers: json['doNotSyncMembers'],
-        syncMemberGroup: json['syncMemberGroup'] ?? "Invalid QRCode",
+        syncMemberGroup: json['syncMemberGroup'] ?? "Invalid QR Code",
         groupId: json['groupId'],
         navigationBar: json['navigationBar'],
         multipleScanMode: json['multipleScanMode'],
-        deviceMasterCode: json['deviceMasterCode'] ?? "Invalid QRCode",
+        deviceMasterCode: json['deviceMasterCode'] ?? "Invalid QR Code",
         allowMultilingual: json['allowMultilingual'],
         debugMode: json['debugMode']);
   }

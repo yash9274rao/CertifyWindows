@@ -16,7 +16,7 @@ class ValidateQrCodeResponse {
     return ValidateQrCodeResponse(
         responseCode: json['responseCode'],
         responseSubCode: json['responseSubCode'],
-        responseMessage: json['responseMessage'] ?? "Invalid QRCode",
+        responseMessage: json['responseMessage'] ?? "Invalid QR Code",
         responseData:
         ResponseDataQrCode.fromJson(json['responseData'] ??  const ResponseDataQrCode(id: "", firstName: "", lastName: "", middleName: "", memberId: "", accessId: ""
             "", trqStatus: 0, memberTypeId: 0, faceTemplate: "", memberTypeName: "", isVisitor: 0, scheduleId: 0)));
