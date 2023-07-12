@@ -360,6 +360,8 @@ class _MyHomePageState extends State<MyHomePage> {
             'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}';
       } else {
         _isAddDevice = false;
+        _isVisibility = true;
+        dropdownVisiability = true;
         textHolderInfo =
             'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}, Serial Number: ${pref.getString(Sharepref.serialNo)}';
       }
