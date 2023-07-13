@@ -17,7 +17,7 @@ class ResponseDataDevice {
     return ResponseDataDevice(
        offlineDeviceData: List.from(json['OfflineDeviceData'] ).map((e) => OfflineDeviceData.fromJson(e)).toList(),
         tabletSettingData : List.from(json['TabletSettingData']).map((e) => TabletSettingData.fromJson(e)).toList(),
-        facilityListData : List.from(json['FacilityListData']).map((e) => FacilityListData.fromJson(e)).toList(),
+        facilityListData :json['FacilityListData'] == null? []: List.from(json['FacilityListData']).map((e) => FacilityListData.fromJson(e)).toList(),
          responseData: ResponseDataToken.fromJson(json['responseString'] ?? {})
         );
   }

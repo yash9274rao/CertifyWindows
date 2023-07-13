@@ -579,6 +579,8 @@ class _MyHome extends State<HomeScreen> {
     volunteerInfo['pin'] = base64Url.encode(utf8.encode(_pinStr));
     volunteerInfo['countrycode'] = _countryCode;
     volunteerInfo['phoneNumber'] = _mobileNumber;
+    volunteerInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
+
 
     VolunteerResponse? volunteerResponse = await ApiService()
         .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
