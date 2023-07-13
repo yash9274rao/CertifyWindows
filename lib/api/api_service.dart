@@ -17,7 +17,7 @@ import 'response/validate_vendor_response.dart';
 
 class ApiService {
   static const String _apiBaseUrl =
-      "https://apiqa.certify.me/"; //"https://apidev.certify.me/";
+      "https://apidev.certify.me/"; //"https://apidev.certify.me/";
   String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
@@ -66,14 +66,14 @@ class ApiService {
           responseSubCode: 0,
           responseMessage: "Invalid Login Credentials",
           responseData: ResponseDataDevice(
-              tabletSettingData: null, offlineDeviceData: null,
+              tabletSettingData: null, offlineDeviceData: null,facilityListData: null,
               responseData: ResponseDataToken(
                   access_token: "",
                   token_type: "",
                   expires_in: 454,
                   institutionID: "",
                   command: "",
-                  expiryTime: ""))
+                  expiryTime: ""),)
               );
     }
   }
