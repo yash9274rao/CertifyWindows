@@ -283,7 +283,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   //Facility
                   Padding(
                       padding: const EdgeInsets.only(
-                          left: 20, right: 20, bottom: 10, top: 20),
+                          left: 20, right: 20, bottom: 0, top: 20),
                       child: Visibility(
                           visible: dropdownFacilityVisiability,
                           child: DropdownButton<String>(
@@ -419,6 +419,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _isAddDevice = false;
         _isVisibility = true;
         dropdownVisiability = true;
+        dropdownFacilityVisiability = true;
         textHolderInfo =
             'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}, Serial Number: ${pref.getString(Sharepref.serialNo)}';
       }
