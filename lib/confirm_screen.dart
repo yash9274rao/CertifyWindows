@@ -113,7 +113,7 @@ class _Confirm extends State<ConfirmLanch> {
     qrData.setIsValid = false;
     qrData.setFirstName = "Anonymous";
     qrData.setQrCodeID = widget.dataStr;
-
+//    print('initPlatformState widget.type  =${widget.type}');
     if (widget.type == "qr") {
       if (widget.dataStr.startsWith("vm") &&
           (pref.getString(Sharepref.enableVolunteerQR) != "1") &&
@@ -177,9 +177,17 @@ class _Confirm extends State<ConfirmLanch> {
         if (pref.getString(Sharepref.enableAnonymousQRCode) == "1" &&
             qrData.getFirstName == "Anonymous") {
           textHolderModalController = "";
-        } else
-          textHolderModalController = qrData.getFirstName;
-
+        } else {
+          if (qrData.middleName!.isNotEmpty && qrData.lastName.isNotEmpty) {
+            textHolderModalController =
+            '${qrData!.firstName} ${qrData!.middleName} ${qrData!.lastName}';
+          } else if (qrData!.lastName.isNotEmpty) {
+            textHolderModalController =
+            '${qrData!.firstName!} ${qrData!.lastName}';
+          }else {
+            textHolderModalController = qrData.getFirstName;
+          }
+        }
         confirmationText = pref.getString(Sharepref.mainText) ?? "";
         confirmationSubText = pref.getString(Sharepref.subText) ?? "";
       } else {

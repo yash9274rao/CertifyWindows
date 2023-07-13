@@ -274,7 +274,7 @@ class _MyHomePageState extends State<MyHomePage> {
           getDeviceTokenResponse.responseData.responseData.access_token);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddDevice(offlineDeviceData: getDeviceTokenResponse.responseData.offlineDeviceData!! , tabletSettingData: getDeviceTokenResponse.responseData.tabletSettingData!!)
+        MaterialPageRoute(builder: (context) => AddDevice(offlineDeviceData: getDeviceTokenResponse.responseData.offlineDeviceData!! , tabletSettingData: getDeviceTokenResponse.responseData.tabletSettingData!!, facilityListData: getDeviceTokenResponse.responseData.facilityListData!!,)
     ));
     } else {
       setState(() {

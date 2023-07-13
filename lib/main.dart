@@ -206,7 +206,7 @@ class _MyHome extends State<MyLanch> {
       pref.setString(Sharepref.platformId, "3");
     }
     pref.setString(Sharepref.deviceModel, _clientInfo.deviceName);
-    pref.setString(Sharepref.appVersion, _clientInfo.applicationVersion);
+    pref.setString(Sharepref.appVersion, 'V${_clientInfo.applicationVersion}');
     pref.setString(Sharepref.osVersion,
         '${_clientInfo.osName} - ${_clientInfo.osVersion}');
     print(

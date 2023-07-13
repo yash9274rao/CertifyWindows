@@ -66,14 +66,14 @@ class ApiService {
           responseSubCode: 0,
           responseMessage: "Invalid Login Credentials",
           responseData: ResponseDataDevice(
-              tabletSettingData: null, offlineDeviceData: null,
+              tabletSettingData: null, offlineDeviceData: null,facilityListData: null,
               responseData: ResponseDataToken(
                   access_token: "",
                   token_type: "",
                   expires_in: 454,
                   institutionID: "",
                   command: "",
-                  expiryTime: ""))
+                  expiryTime: ""),)
               );
     }
   }
@@ -182,7 +182,10 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
-      print('validateQRCode = ${res.body}');
+//      print('validateQRCode = ${res.request}');
+  //    print('validateQRCode = ${jsonEncode(bodys)}');
+  //    print('validateQRCode = ${res.body}');
+
       QrData qrData = new QrData();
       if (res.statusCode == 200) {
         ValidateQrCodeResponse validateQrCodeResponse =
@@ -238,9 +241,9 @@ class ApiService {
             'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
           body: jsonEncode(deviceSetting));
-      print('deviceSetting request = ${res.request}');
-
-      print('deviceSetting body = ${res.body}');
+   //   print('Volunteer request url  =${res.request}');
+   //   print('Volunteer request =${jsonEncode(deviceSetting)}');
+   //   print('Volunteer =${res.body}');
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
             SettingsResponse.fromJson(json.decode(res.body));
