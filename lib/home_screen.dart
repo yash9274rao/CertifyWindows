@@ -222,6 +222,14 @@ class _MyHome extends State<HomeScreen> {
                                                         Sharepref.isQrCodeScan,
                                                         true);
                                                     attendanceMode = "1";
+                                                    try {
+                                                      if (pinVisiable) {
+                                                        delayQRPinUI
+                                                            .cancel();
+                                                      }
+                                                    }catch(e){
+                                                      print(e.toString());
+                                                    }
                                                     Navigator.pushReplacement(
                                                         context,
                                                         MaterialPageRoute(
@@ -267,6 +275,14 @@ class _MyHome extends State<HomeScreen> {
                                                       Sharepref.isQrCodeScan,
                                                       true);
                                                   attendanceMode = "2";
+    try {
+      if (pinVisiable) {
+        delayQRPinUI
+            .cancel();
+      }
+    }catch(e){
+      print(e.toString());
+    }
                                                   Navigator.pushReplacement(
                                                       context,
                                                       MaterialPageRoute(
@@ -317,6 +333,14 @@ class _MyHome extends State<HomeScreen> {
                                                     qrAndpinVisiable = false;
                                                     pinVisiable = false;
                                                     checkOutVisiable = enableVisitorCheckout;
+                                                    delayQRPinUI = Timer(
+                                                        Duration(seconds: 15),
+                                                            () {
+                                                              checkInVisiable = false;
+                                                              checkOutVisiable = false;
+                                                          qrAndpinVisiable = true;
+                                                          pinVisiable = true;
+                                                        });
                                                     });
                                                 },
                                                 child: const AutoSizeText(

@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
+      body:  Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('images/assets/bg.png'),
@@ -127,9 +127,12 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         child: Form(
           key: _formAddDeviceKey,
-          child: Container(
+          child:  SingleChildScrollView(
+            child: Container(
             margin: const EdgeInsets.fromLTRB(180, 80, 180, 80),
             color: Colors.white,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
             child: Column(
                 // crossAxisAlignment : CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -351,8 +354,10 @@ class _MyHomePageState extends State<MyHomePage> {
                               } else if (dropdownDeviceName == "+ Add New" &&
                                   _deviceName.isEmpty) {
                                 context.showToast("Please enter Device Name");
+                              }else if(dropdownFacilityVisiability && deviceFacility =="Select Facility"){
+                                context.showToast("Please Select Facility");
                               } else {
-                                addDevice();
+                                 addDevice();
                               }
                             },
                             style: const ButtonStyle(
@@ -388,6 +393,7 @@ class _MyHomePageState extends State<MyHomePage> {
                    ]),
           ),
         ),
+      ),
       ),
     );
   }
