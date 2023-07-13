@@ -66,14 +66,14 @@ class ApiService {
           responseSubCode: 0,
           responseMessage: "Invalid Login Credentials",
           responseData: ResponseDataDevice(
-              tabletSettingData: null, offlineDeviceData: null,
+              tabletSettingData: null, offlineDeviceData: null,facilityListData: null,
               responseData: ResponseDataToken(
                   access_token: "",
                   token_type: "",
                   expires_in: 454,
                   institutionID: "",
                   command: "",
-                  expiryTime: ""))
+                  expiryTime: ""),)
               );
     }
   }

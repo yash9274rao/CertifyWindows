@@ -13,33 +13,38 @@ import 'common/sharepref.dart';
 
 const List<String> listDeviceData = <String>['Select Device', '+ Add New'];
 const List<String> listSettings = <String>['Default'];
+const List<String> listFacility = <String>['Select Facility'];
 
 class AddDevice extends StatelessWidget {
   const AddDevice(
       {Key? key,
       required this.offlineDeviceData,
-      required this.tabletSettingData})
+      required this.tabletSettingData,
+      required this.facilityListData})
       : super(key: key);
   final List<OfflineDeviceData> offlineDeviceData;
-
   final List<TabletSettingData> tabletSettingData;
+  final List<FacilityListData> facilityListData;
+
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Certify.me Kiosk',
-      home: MyHomePage(offlineDeviceData, tabletSettingData),
+      home: MyHomePage(offlineDeviceData, tabletSettingData, facilityListData),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage(this.offlineDeviceData, this.tabletSettingData);
+  const MyHomePage(this.offlineDeviceData, this.tabletSettingData, this.facilityListData);
 
   final List<OfflineDeviceData> offlineDeviceData;
 
   final List<TabletSettingData> tabletSettingData;
+  final List<FacilityListData> facilityListData;
+
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -60,18 +65,23 @@ class _MyHomePageState extends State<MyHomePage> {
   final _formAddDeviceKey = GlobalKey<FormState>();
   String _deviceName = "";
   // String selectDevicename = "";
-  String dropdownDeviceName = listDeviceData.first;
-  String deviceSettings = listSettings.first;
+  String dropdownDeviceName = "";
+  String deviceSettings = "";
+  String deviceFacility = "";
   int deviceId = 0;
   int settingId = 0;
+  int facilityId = 0;
 
   var _isVisibility = false;
   var dropdownVisiability = false;
+  var dropdownFacilityVisiability = false;
   var _isAddDevice = false;
   List<String>  dropdownDataDeviceName = [];
   List<String> dropdownDataDeviceSetting = [];
+  List<String> dropdownDataFacility = [];
   late String selectDevicename =listSettings.first;
   late OfflineDeviceData offlineDeviceDataSelected;
+  late FacilityListData facilityListDataSelected;
   @override
   void initState() {
     super.initState();
@@ -82,11 +92,18 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var data in widget.tabletSettingData){
       dropdownDataDeviceSetting.add(data.settingName);
     }
+    dropdownDataFacility.add("Select Facility");
+    for (var data in widget.facilityListData){
+      dropdownDataFacility.add(data.facilityName);
+    }
 
     dropdownDataDeviceName.add("+ Add New");
     dropdownDeviceName = dropdownDataDeviceName.first;
+    deviceSettings = dropdownDataDeviceSetting!.first;
+    deviceFacility = dropdownDataFacility.first;
     dropdownDataDeviceName = dropdownDataDeviceName.toSet().toList();
     dropdownDataDeviceSetting = dropdownDataDeviceSetting.toSet().toList();
+    dropdownDataFacility = dropdownDataFacility.toSet().toList();
     initPlatformState();
   }
 
@@ -182,9 +199,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             if (dropdownDeviceName == "+ Add New") {
                                 _isVisibility = true;
                                 dropdownVisiability = true;
+                                dropdownFacilityVisiability = true;
                             } else{
                               _isVisibility = false;
                               dropdownVisiability = false;
+                              dropdownFacilityVisiability = false;
                             }
 
                           });
@@ -258,6 +277,38 @@ class _MyHomePageState extends State<MyHomePage> {
                         );
                           }).toList(),
                       ) )),
+                  //Facility
+                  Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, bottom: 10, top: 20),
+                      child: Visibility(
+                          visible: dropdownFacilityVisiability,
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            alignment: AlignmentDirectional.centerStart,
+                            value: deviceFacility,
+                            icon: const Icon(Icons.arrow_downward),
+                            elevation: 16,
+                            style:
+                            const TextStyle(color: Colors.black, fontSize: 24),
+                            underline: Container(
+                              height: 2,
+                              color: Colors.grey,
+                            ),
+                            onChanged: (newValue) {
+                              // This is called when the user selects an item.
+                              setState(() {
+                                deviceFacility = newValue!;
+                              });
+                            },
+                            items: dropdownDataFacility.map<DropdownMenuItem<String>>((String value)
+                            {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                          ) )),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 20, top: 20),
@@ -384,6 +435,8 @@ class _MyHomePageState extends State<MyHomePage> {
       if(offlineDeviceDataSelected.deviceStatus == 0){
         deviceId = offlineDeviceDataSelected.deviceId;
         settingId = offlineDeviceDataSelected.settingId;
+        facilityId = offlineDeviceDataSelected.facilityId;
+
         addDeviceAPI();
       }else{
         // offline device just active
@@ -405,6 +458,12 @@ class _MyHomePageState extends State<MyHomePage> {
         settingId = data.id;
       }
     }
+    for (var data in widget.facilityListData){
+      if(deviceFacility == data.facilityName){
+        facilityId = data.facilityId;
+      }
+    }
+
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
@@ -414,6 +473,7 @@ class _MyHomePageState extends State<MyHomePage> {
     registerBody['status'] = 1;
     registerBody['settingsId'] = settingId;
     registerBody['deviceId'] = deviceId;
+    registerBody['facilityId'] = facilityId;
 
     RegisterDeviceResponse registerDeviceResponse = await ApiService()
         .registerDeviceForApp(pref, registerBody) as RegisterDeviceResponse;
