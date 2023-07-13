@@ -76,6 +76,7 @@ class _MyHome extends State<HomeScreen> {
                       Expanded(flex: 1, child: _imageToShow),
                       Expanded(
                         flex: 1,
+                          child: SingleChildScrollView(
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,6 +103,7 @@ class _MyHome extends State<HomeScreen> {
                               ),
                             ]),
                       ),
+                      ),
                       Expanded(
                         flex: 1,
                         child: SingleChildScrollView(
@@ -124,7 +126,7 @@ class _MyHome extends State<HomeScreen> {
                                   Center(
                                       child: Padding(
                                     padding:
-                                        const EdgeInsets.fromLTRB(0, 20, 0, 5),
+                                        const EdgeInsets.fromLTRB(0, 15, 0, 0),
                                     child: TextButton.icon(
                                       onPressed: () {},
                                       icon: const Icon(
