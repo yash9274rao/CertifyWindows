@@ -113,7 +113,6 @@ class _Confirm extends State<ConfirmLanch> {
     qrData.setIsValid = false;
     qrData.setFirstName = "Anonymous";
     qrData.setQrCodeID = widget.dataStr;
-//    print('initPlatformState widget.type  =${widget.type}');
     if (widget.type == "qr") {
       if (widget.dataStr.startsWith("vm") &&
           (pref.getString(Sharepref.enableVolunteerQR) != "1") &&
@@ -121,12 +120,12 @@ class _Confirm extends State<ConfirmLanch> {
       } else if (widget.dataStr.startsWith("vi") &&
           (pref.getString(Sharepref.enableVisitorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-      }else if (widget.dataStr.startsWith("vn") &&
+      }else if (widget.dataStr.contains("vn") &&
           (pref.getString(Sharepref.enableVendorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
       }
-      else if (widget.dataStr.startsWith("vn")) {
-        Map<String, dynamic> validateVendor = new HashMap();
+      else if (widget.dataStr.contains("vn")) { // Vendor QR code will come url base so we need use contains
+       Map<String, dynamic> validateVendor = new HashMap();
         validateVendor['vendorGuid'] = widget.dataStr;
         validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
         qrData = await ApiService().validateVendor(
@@ -297,7 +296,6 @@ class _Confirm extends State<ConfirmLanch> {
       if (widget.type == "pin")
         context.showToast("Invalid PIN");
       else
-        // Util.showToastErrorAccessLogs("Invalid QR Code");
         context.showToast('Invalid QR Code');
     } else {
       updateUI(qrData);

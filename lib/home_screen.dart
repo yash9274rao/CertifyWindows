@@ -44,7 +44,6 @@ class _MyHome extends State<HomeScreen> {
   String name = "";
   List<VolunteerSchedulingDetailList> volunteerList = [];
   Map<String, dynamic> diveInfo = HashMap();
-
   @override
   void initState() {
     super.initState();
@@ -76,33 +75,33 @@ class _MyHome extends State<HomeScreen> {
                       Expanded(flex: 1, child: _imageToShow),
                       Expanded(
                         flex: 1,
-                          child: SingleChildScrollView(
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(25, 20, 25, 15),
-                                child: Text(
-                                  lineOneText,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22),
+                        child: SingleChildScrollView(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 20, 25, 15),
+                                  child: Text(
+                                    lineOneText,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(25, 0, 25, 0),
-                                child: Text(
-                                  lineTwoText,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 18),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(25, 0, 25, 0),
+                                  child: Text(
+                                    lineTwoText,
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 18),
+                                  ),
                                 ),
-                              ),
-                            ]),
-                      ),
+                              ]),
+                        ),
                       ),
                       Expanded(
                         flex: 1,
@@ -226,10 +225,9 @@ class _MyHome extends State<HomeScreen> {
                                                     attendanceMode = "1";
                                                     try {
                                                       if (pinVisiable) {
-                                                        delayQRPinUI
-                                                            .cancel();
+                                                        delayQRPinUI.cancel();
                                                       }
-                                                    }catch(e){
+                                                    } catch (e) {
                                                       print(e.toString());
                                                     }
                                                     Navigator.pushReplacement(
@@ -277,14 +275,13 @@ class _MyHome extends State<HomeScreen> {
                                                       Sharepref.isQrCodeScan,
                                                       true);
                                                   attendanceMode = "2";
-    try {
-      if (pinVisiable) {
-        delayQRPinUI
-            .cancel();
-      }
-    }catch(e){
-      print(e.toString());
-    }
+                                                  try {
+                                                    if (pinVisiable) {
+                                                      delayQRPinUI.cancel();
+                                                    }
+                                                  } catch (e) {
+                                                    print(e.toString());
+                                                  }
                                                   Navigator.pushReplacement(
                                                       context,
                                                       MaterialPageRoute(
@@ -334,16 +331,17 @@ class _MyHome extends State<HomeScreen> {
                                                     checkInVisiable = true;
                                                     qrAndpinVisiable = false;
                                                     pinVisiable = false;
-                                                    checkOutVisiable = enableVisitorCheckout;
+                                                    checkOutVisiable =
+                                                        enableVisitorCheckout;
                                                     delayQRPinUI = Timer(
                                                         Duration(seconds: 15),
-                                                            () {
-                                                              checkInVisiable = false;
-                                                              checkOutVisiable = false;
-                                                          qrAndpinVisiable = true;
-                                                          pinVisiable = true;
-                                                        });
+                                                        () {
+                                                      checkInVisiable = false;
+                                                      checkOutVisiable = false;
+                                                      qrAndpinVisiable = true;
+                                                      pinVisiable = true;
                                                     });
+                                                  });
                                                 },
                                                 child: const AutoSizeText(
                                                     "QR Code",
@@ -372,7 +370,7 @@ class _MyHome extends State<HomeScreen> {
                                                       const Size.fromHeight(40),
                                                 ),
                                                 onPressed: () async {
-                                                    setState(() {
+                                                  setState(() {
                                                     pinPageVisiable = true;
                                                     checkInVisiable = false;
                                                     checkOutVisiable = false;
@@ -380,13 +378,11 @@ class _MyHome extends State<HomeScreen> {
                                                     pinVisiable = false;
                                                     delayQRPinUI = Timer(
                                                         Duration(seconds: 35),
-                                                            () {
-                                                          pinPageVisiable =
-                                                          false;
-                                                          qrAndpinVisiable =
-                                                          true;
-                                                          pinVisiable = true;
-                                                        });
+                                                        () {
+                                                      pinPageVisiable = false;
+                                                      qrAndpinVisiable = true;
+                                                      pinVisiable = true;
+                                                    });
                                                     _pinStr = "";
                                                     _mobileNumber = "";
                                                   });
@@ -421,6 +417,7 @@ class _MyHome extends State<HomeScreen> {
                                                     TextInputType.number,
                                                 maxLength: 5,
                                                 obscureText: true,
+                                                autofocus: true,
                                                 obscuringCharacter: '*',
                                                 onChanged: (pin) {
                                                   _pinStr = pin;
@@ -468,6 +465,9 @@ class _MyHome extends State<HomeScreen> {
                                                       phone.countryCode;
                                                   print(_countryCode);
                                                 },
+                                                onCountryChanged: (country){
+                                                  _countryCode = '+${country.fullCountryCode}';
+                                                },
                                                 style: const TextStyle(
                                                   fontSize: 30,
                                                   color: Colors.black,
@@ -497,10 +497,12 @@ class _MyHome extends State<HomeScreen> {
                                                             Colors.blue,
                                                       ),
                                                       onPressed: () {
+                                                        FocusScope.of(context).unfocus();
                                                         if (_pinStr.isEmpty) {
                                                           context.showToast(
                                                               "Please Enter pin");
-                                                        } else if (_mobileNumber
+                                                        }
+                                                        else if (_mobileNumber
                                                             .isEmpty) {
                                                           context.showToast(
                                                               "Please Enter Mobile Number");
@@ -608,7 +610,6 @@ class _MyHome extends State<HomeScreen> {
     volunteerInfo['phoneNumber'] = _mobileNumber;
     volunteerInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
 
-
     VolunteerResponse? volunteerResponse = await ApiService()
         .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
     if (volunteerResponse?.responseCode == 1) {
@@ -646,13 +647,15 @@ class _MyHome extends State<HomeScreen> {
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    print("ddddddddd pref.getString(Sharepref.enableVisitorCheckout)= ${pref.getString(Sharepref.enableVisitorCheckout)},pref.getString(Sharepref.enableVisitorQR) =${pref.getString(Sharepref.enableVisitorQR)}");
-   if(pref.getString(Sharepref.enableVisitorQR) == "0")
-     {
-       enableVisitorCheckout = true;
-     } else if(pref.getString(Sharepref.enableVisitorCheckout) == "1" && pref.getString(Sharepref.enableVisitorQR) == "1"){
-     enableVisitorCheckout = true;
-   }else enableVisitorCheckout = false;
+    print(
+        "ddddddddd pref.getString(Sharepref.enableVisitorCheckout)= ${pref.getString(Sharepref.enableVisitorCheckout)},pref.getString(Sharepref.enableVisitorQR) =${pref.getString(Sharepref.enableVisitorQR)}");
+    if (pref.getString(Sharepref.enableVisitorQR) == "0") {
+      enableVisitorCheckout = true;
+    } else if (pref.getString(Sharepref.enableVisitorCheckout) == "1" &&
+        pref.getString(Sharepref.enableVisitorQR) == "1") {
+      enableVisitorCheckout = true;
+    } else
+      enableVisitorCheckout = false;
     setState(() {
       if (pref.getString(Sharepref.checkInMode) == "0") {
         checkInVisiable = true;
@@ -680,17 +683,16 @@ class _MyHome extends State<HomeScreen> {
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
-
   }
 
-  Future<void> SetDefaultUI() async{
-setState(() {
-   checkInVisiable = false;
-   checkOutVisiable = false;
-   qrAndpinVisiable = false;
-   pinPageVisiable = false;
-   pinVisiable = false;
-});
+  Future<void> SetDefaultUI() async {
+    setState(() {
+      checkInVisiable = false;
+      checkOutVisiable = false;
+      qrAndpinVisiable = false;
+      pinPageVisiable = false;
+      pinVisiable = false;
+    });
   }
 
   @override

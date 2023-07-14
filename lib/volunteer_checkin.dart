@@ -274,20 +274,20 @@ class _Confirm extends State<ConfirmLanch> {
 
   Future<void> CheckInOutValidations() async {
     try {
-      final List<VolunteerSchedulingDetailList> volunteerListCheckIn = [];
+     // final List<VolunteerSchedulingDetailList> volunteerListCheckIn = [];
       final List<VolunteerSchedulingDetailList> volunteerListCheckOut = [];
 
       for (var item in widget.volunteerList) {
         if (item.checkIndate.isEmpty ||
             (item.checkIndate.isNotEmpty && item.checkOutDate.isNotEmpty)) {
-          volunteerListCheckIn.add(item);
+        //  volunteerListCheckIn.add(item);
         } else {
           volunteerListCheckOut.add(item);
         }
       }
       if (attendanceMode == "1") {
-        if (volunteerListCheckOut.isEmpty) {
-          if (volunteerListCheckIn.length == 1) {
+      //  if (volunteerListCheckOut.isEmpty) {
+          if (widget.volunteerList.length == 1) {
             cancelTimer();
             Navigator.pushReplacement(
                 context,
@@ -298,7 +298,7 @@ class _Confirm extends State<ConfirmLanch> {
                         type: "pin",
                         name: widget.name,
                         id: widget.itemId,
-                        scheduleId: volunteerListCheckIn[0].scheduleId!)));
+                        scheduleId: widget.volunteerList[0].scheduleId!)));
           } else {
             cancelTimer();
             Navigator.push(
@@ -308,11 +308,11 @@ class _Confirm extends State<ConfirmLanch> {
                         itemId: widget.itemId,
                         name: widget.name,
                         attendanceMode: attendanceMode,
-                        volunteerList: volunteerListCheckIn)));
+                        volunteerList: widget.volunteerList)));
           }
-        } else {
-          context.showToast("Already Checked-in");
-        }
+        // } else {
+        //   context.showToast("Already Checked-in");
+        // }
       } else {
         if (volunteerListCheckOut.isEmpty) {
           context.showToast("Not Checked-in");
