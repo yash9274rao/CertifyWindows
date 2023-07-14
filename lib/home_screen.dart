@@ -7,7 +7,6 @@ import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_checkin.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:keyboard_service/keyboard_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
@@ -45,6 +44,7 @@ class _MyHome extends State<HomeScreen> {
   String name = "";
   List<VolunteerSchedulingDetailList> volunteerList = [];
   Map<String, dynamic> diveInfo = HashMap();
+  FocusNode name_focus = FocusNode();
 
   @override
   void initState() {
@@ -411,6 +411,7 @@ class _MyHome extends State<HomeScreen> {
                                             child: Visibility(
                                               visible: pinPageVisiable,
                                               child: TextFormField(
+                                                focusNode: name_focus,
                                                 onSaved: (val) =>
                                                     _pinStr = val!,
                                                 decoration: InputDecoration(
@@ -419,9 +420,13 @@ class _MyHome extends State<HomeScreen> {
                                                     TextInputType.number,
                                                 maxLength: 5,
                                                 obscureText: true,
+                                                autofocus: true,
                                                 obscuringCharacter: '*',
                                                 onChanged: (pin) {
                                                   _pinStr = pin;
+                                                  if(_pinStr.length == 5){
+                                                    name_focus.nextFocus();
+                                                  }
                                                 },
                                                 validator: (Pin) {
                                                   if ((Pin!.length != 5)) {
@@ -495,10 +500,12 @@ class _MyHome extends State<HomeScreen> {
                                                             Colors.blue,
                                                       ),
                                                       onPressed: () {
+                                                        FocusScope.of(context).unfocus();
                                                         if (_pinStr.isEmpty) {
                                                           context.showToast(
                                                               "Please Enter pin");
-                                                        } else if (_mobileNumber
+                                                        }
+                                                        else if (_mobileNumber
                                                             .isEmpty) {
                                                           context.showToast(
                                                               "Please Enter Mobile Number");
