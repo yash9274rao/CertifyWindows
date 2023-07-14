@@ -117,7 +117,7 @@ class _MyHome extends State<MyLanch> {
                                     builder: (context) => login()));
                           },
                           child: const AutoSizeText(
-                              "Login to Register the Device",
+                              "Login to register the device",
                               style: TextStyle(fontSize: 26),
                               minFontSize: 18,
                               maxLines: 1,
