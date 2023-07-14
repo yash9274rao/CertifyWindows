@@ -286,7 +286,7 @@ class _Confirm extends State<ConfirmLanch> {
         }
       }
       if (attendanceMode == "1") {
-        if (volunteerListCheckOut.isEmpty) {
+      //  if (volunteerListCheckOut.isEmpty) {
           if (volunteerListCheckIn.length == 1) {
             cancelTimer();
             Navigator.pushReplacement(
@@ -310,9 +310,9 @@ class _Confirm extends State<ConfirmLanch> {
                         attendanceMode: attendanceMode,
                         volunteerList: volunteerListCheckIn)));
           }
-        } else {
-          context.showToast("Already Checked-in");
-        }
+        // } else {
+        //   context.showToast("Already Checked-in");
+        // }
       } else {
         if (volunteerListCheckOut.isEmpty) {
           context.showToast("Not Checked-in");
