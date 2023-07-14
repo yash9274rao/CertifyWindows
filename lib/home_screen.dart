@@ -44,8 +44,6 @@ class _MyHome extends State<HomeScreen> {
   String name = "";
   List<VolunteerSchedulingDetailList> volunteerList = [];
   Map<String, dynamic> diveInfo = HashMap();
-  FocusNode name_focus = FocusNode();
-
   @override
   void initState() {
     super.initState();
@@ -411,7 +409,6 @@ class _MyHome extends State<HomeScreen> {
                                             child: Visibility(
                                               visible: pinPageVisiable,
                                               child: TextFormField(
-                                                focusNode: name_focus,
                                                 onSaved: (val) =>
                                                     _pinStr = val!,
                                                 decoration: InputDecoration(
@@ -424,9 +421,6 @@ class _MyHome extends State<HomeScreen> {
                                                 obscuringCharacter: '*',
                                                 onChanged: (pin) {
                                                   _pinStr = pin;
-                                                  if(_pinStr.length == 5){
-                                                    name_focus.nextFocus();
-                                                  }
                                                 },
                                                 validator: (Pin) {
                                                   if ((Pin!.length != 5)) {
@@ -470,6 +464,9 @@ class _MyHome extends State<HomeScreen> {
                                                   _countryCode =
                                                       phone.countryCode;
                                                   print(_countryCode);
+                                                },
+                                                onCountryChanged: (country){
+                                                  _countryCode = '+${country.fullCountryCode}';
                                                 },
                                                 style: const TextStyle(
                                                   fontSize: 30,
