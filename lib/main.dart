@@ -60,28 +60,26 @@ class _MyHome extends State<MyLanch> {
     return MaterialApp(
       title: 'Certify.me Kiosk',
       home: Scaffold(
-        body: Container(
+        body:  Container(
           color: Colors.white,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
           child: Visibility(
             visible: _isVisibility,
-            child: Row(
-              children: [
-                const Expanded(
-                  flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(45, 55, 45, 0),
                   child: Image(
-                    image: AssetImage('images/assets/image.png'),
+                    image: AssetImage('images/assets/final_logo.png'),
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
                       const Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                        padding: EdgeInsets.fromLTRB(45, 40, 45, 0),
                         child: AutoSizeText(
-                          'Register Device',
+                          'Register the device',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 40),
                           maxLines: 1,
@@ -91,82 +89,139 @@ class _MyHome extends State<MyLanch> {
                       const Padding(
                           padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
                           child: Divider(color: Colors.grey)),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+            Container(
+            padding: EdgeInsets.fromLTRB(45, 15, 0, 0),
+            child:  Icon(Icons.error_outline, ) ,
+          ),
+          // Spacer(),  const Padding(
+                  const Padding(      padding: EdgeInsets.fromLTRB(5, 15, 10, 0),
                         child: AutoSizeText(
                             'This device is not configured to work online. If'
                             ' you already have a cloud account',
-                            style: TextStyle(fontSize: 18),
+                            style: TextStyle(fontSize: 20),
                             minFontSize: 12,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis),
                       ),
+  ],
+        ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
+                        padding: EdgeInsets.fromLTRB(45,15,45,0),
                         child: TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: Colors.blue,
-                          ),
+
                           onPressed: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => login()));
                           },
-                          child: const AutoSizeText(
-                              "Login to register the device",
-                              style: TextStyle(fontSize: 26),
-                              minFontSize: 18,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis),
+                          style: TextButton.styleFrom(elevation: 20,
+                            shadowColor: Colors.grey,),
+                          child: Ink(
+                            decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [Color(0xff175EA5),Color(0xff163B60)],
+                                  begin: Alignment.topLeft,
+                                  end:Alignment.bottomRight,
+                                  tileMode: TileMode.repeated,
+                                  stops: [0.0, 1.7],
+                                ),
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                // boxShadow: <BoxShadow>[BoxShadow(
+                                //     color: Colors.grey,
+                                //   spreadRadius: 1,
+                                //   blurRadius: 5,
+                                // offset: Offset(0, 5)),],
+                            ),
+                              //     borderRadius: BorderRadiusGeometry.circular(30.0),
+
+                            child: Container(
+                              constraints:
+                              const BoxConstraints(  maxWidth: 300.0, minHeight: 50.0),
+                              padding: const EdgeInsets.all(20.0),
+                              alignment: Alignment.center,
+                              child:const AutoSizeText(
+                                  "Log-In to Register",
+                                  style: TextStyle(fontSize: 26,color: Colors.white),
+                                  minFontSize: 18,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                              ),
+
+                              ),
+
+                            ),
+
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+
+            children: [
+              Container(
+                padding: EdgeInsets.fromLTRB(45, 45, 0, 0),
+                child: Visibility(
+                  visible: _is_web,
+                  child: Icon(Icons.error_outline, ) ,
+                ),
+              ),
+              Padding(
+                        padding: EdgeInsets.fromLTRB(5, 45, 45, 0),
                         child: Visibility(
                           visible: _is_web,
-                          child: AutoSizeText('${textHolderModalController}',
-                              style: const TextStyle(fontSize: 18),
+                          child: AutoSizeText('${textHolderModalController}, then',
+                              style: const TextStyle(fontSize: 20),
                               minFontSize: 12,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
                       ),
+                      ],
+          ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
+                        padding: EdgeInsets.fromLTRB(55, 20, 45, 0),
                         child: Visibility(
                           visible: _is_web,
                           child: TextButton(
                             style: TextButton.styleFrom(
-                              foregroundColor: Colors.blue,
-                              padding: const EdgeInsets.all(16.0),
-                              textStyle: const TextStyle(fontSize: 20),
-                              side: BorderSide(color: Colors.blue, width: 1),
+                              side: const BorderSide(color: Color(0xff163A5F), width: 2),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),),
+                              elevation: 9, //Defines Elevation
+                              shadowColor: Color(0xff175EA5), //Defines shadowColor
+                               backgroundColor: Colors.white,
                             ),
+
                             onPressed: () {
-                              print("BBBBBBBBBBBBBBBBBBBB");
                               activiAPI();
                             },
-                            child: const AutoSizeText("Try Activation Again",
-                                style: TextStyle(fontSize: 26),
+                            child: Container(
+                              constraints:
+                              const BoxConstraints(  maxWidth: 280.0, minHeight: 50.0),
+                              padding: const EdgeInsets.all(14.0),
+                              alignment: Alignment.center,
+                              child: const AutoSizeText("Try Re-activation",
+                                style: TextStyle(fontSize: 26,color: Color(0xff163A5F)),
                                 minFontSize: 18,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis),
                           ),
                         ),
                       ),
+                      ),
                     ],
                   ),
                 )
-              ],
-            ),
           ),
         ),
       ),
-    );
+      );
+
   }
 
   Future<void> getDeviceToken() async {
