@@ -65,6 +65,7 @@ class _QRViewExampleState extends State<QRViewExample> {
           borderRadius: 10,
           borderLength: 30,
           borderWidth: 10,
+
           cutOutWidth: MediaQuery.of(context).size.width,
           cutOutHeight: MediaQuery.of(context).size.height),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
@@ -89,11 +90,20 @@ class _QRViewExampleState extends State<QRViewExample> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      ConfirmScreen(dataStr: '${result!.code}',attendanceMode : widget.attendanceMode,type:"qr",name: "",id: 0,scheduleId: 0,)));
-          if (defaultTargetPlatform == TargetPlatform.android) {
-            controller!.pauseCamera();
+                      ConfirmScreen(dataStr: '${result!.code}',
+                        attendanceMode: widget.attendanceMode,
+                        type: "qr",
+                        name: "",
+                        id: 0,
+                        scheduleId: 0,)));
+          try {
+            if (defaultTargetPlatform == TargetPlatform.android) {
+              controller!.pauseCamera();
+            }
+            controller!.resumeCamera();
+          }catch(e){
+            print("_onQRViewCreated :$e");
           }
-          controller!.resumeCamera();
         }
 
       });
