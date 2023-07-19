@@ -10,6 +10,7 @@ import 'package:certify_me_kiosk/toast.dart';
 import 'api/api_service.dart';
 import 'api/response/register_device/response_data.dart';
 import 'common/sharepref.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 const List<String> listDeviceData = <String>['Select Device', '+ Add New'];
 const List<String> listSettings = <String>['Default'];
@@ -71,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
   int deviceId = 0;
   int settingId = 0;
   int facilityId = 0;
-
   var _isVisibility = false;
   var dropdownVisiability = false;
   var dropdownFacilityVisiability = false;
@@ -82,10 +82,13 @@ class _MyHomePageState extends State<MyHomePage> {
   late String selectDevicename =listSettings.first;
   late OfflineDeviceData offlineDeviceDataSelected;
   late FacilityListData facilityListDataSelected;
+  String _selectedValue = '';
+  TextEditingController _textEditingController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    dropdownDataDeviceName.add("Select Device");
+    dropdownDataDeviceName.add("+ Add New");
     for (var data in widget.offlineDeviceData){
       dropdownDataDeviceName.add(data.deviceName);
     }
@@ -97,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
       dropdownDataFacility.add(data.facilityName);
     }
 
-    dropdownDataDeviceName.add("+ Add New");
+    // dropdownDataDeviceName.add("+ Add New");
     dropdownDeviceName = dropdownDataDeviceName.first;
     deviceSettings = dropdownDataDeviceSetting!.first;
     deviceFacility = dropdownDataFacility.first;
@@ -129,7 +132,7 @@ class _MyHomePageState extends State<MyHomePage> {
           key: _formAddDeviceKey,
           child:  SingleChildScrollView(
             child: Container(
-            margin: const EdgeInsets.fromLTRB(180, 80, 180, 80),
+            margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
             color: Colors.white,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -179,49 +182,110 @@ class _MyHomePageState extends State<MyHomePage> {
                   // Image.asset("Assets/images/aerrow.png"),
 
                   Padding(
-                    padding: const EdgeInsets.only(
+                    padding: EdgeInsets.only(
                         left: 20, right: 20, bottom: 5, top: 20),
-                    child: Visibility(
-                      visible: _isAddDevice,
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        alignment: AlignmentDirectional.centerStart,
-                        value: dropdownDeviceName,
-                        icon: const Icon(Icons.arrow_downward),
-                        elevation: 16,
-                        style:
-                            const TextStyle(color: Colors.black, fontSize: 24),
-                        underline: Container(
-                          height: 2,
-                          color: Colors.grey,
+                    // child: Visibility(
+                    //   visible: _isAddDevice,
+                      // child: DropdownButton<String>(
+                      //   isExpanded: true,
+                      //   alignment: AlignmentDirectional.centerStart,
+                      //   value: dropdownDeviceName,
+                      //   icon: const Icon(Icons.arrow_downward),
+                      //   elevation: 16,
+                      //   style:
+                      //       const TextStyle(color: Colors.black, fontSize: 24),
+                      //   underline: Container(
+                      //     height: 2,
+                      //     color: Colors.grey,
+                      //   ),
+                      //   onChanged: (String? value) {
+                      //     // This is called when the user selects an item.
+                      //     setState(() {
+                      //       dropdownDeviceName = value!;
+                      //       if (dropdownDeviceName == "+ Add New") {
+                      //           _isVisibility = true;
+                      //           dropdownVisiability = true;
+                      //           dropdownFacilityVisiability = true;
+                      //       } else{
+                    //           _isVisibility = false;
+                    //           dropdownVisiability = false;
+                    //           dropdownFacilityVisiability = false;
+                    //         }
+                    //
+                    //       });
+                    //     },
+                    //     items: dropdownDataDeviceName
+                    //         .map<DropdownMenuItem<String>>((String value) {
+                    //       return DropdownMenuItem<String>(
+                    //         value: value,
+                    //         child: Text(value),
+                    //       );
+                    //     }).toList(),
+                    //   ),
+                    // ),
+                    child: Row(
+                        children:[
+                          Expanded(
+                        child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            controller: _textEditingController,
+                            autofocus: false,
+                            decoration: InputDecoration(
+                              labelText: 'Add Device',
+                            ),
+
+                          ),
+
+                          suggestionsCallback: (pattern) async {
+                            return dropdownDataDeviceName.where((item) => item.startsWith(pattern)).toList();
+
+                          },
+
+                          itemBuilder: (context, suggestion) {
+
+                            return ListTile(
+
+                              title: Text(suggestion),
+
+                            );
+
+                          },
+
+                          onSuggestionSelected: (suggestion) {
+                            setState(() {
+                              _selectedValue = suggestion;
+                              _textEditingController.text = suggestion;
+                              dropdownDeviceName = suggestion!;
+                                    if (dropdownDeviceName == "+ Add New") {
+                                        _isVisibility = true;
+                                        dropdownVisiability = true;
+                                        dropdownFacilityVisiability = true;
+                                    } else{
+                                        _isVisibility = false;
+                                        dropdownVisiability = false;
+                                        dropdownFacilityVisiability = false;
+                                      }
+
+                            });
+
+                            print('Selected: $suggestion');
+
+                          },
+
                         ),
-                        onChanged: (String? value) {
-                          // This is called when the user selects an item.
-                          setState(() {
-                            dropdownDeviceName = value!;
-                            if (dropdownDeviceName == "+ Add New") {
-                                _isVisibility = true;
-                                dropdownVisiability = true;
-                                dropdownFacilityVisiability = true;
-                            } else{
-                              _isVisibility = false;
-                              dropdownVisiability = false;
-                              dropdownFacilityVisiability = false;
-                            }
 
-                          });
-                        },
-                        items: dropdownDataDeviceName
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-
+                        ),
+                          PopupMenuButton<String>(icon: Icon(Icons.arrow_drop_down)
+                            ,onSelected: (value) {
+                            setState(() {_selectedValue = value;
+                              _textEditingController.text = value;
+                            });
+                            },
+                            itemBuilder: (BuildContext context) {
+                            return dropdownDataDeviceName.map((String suggestion)
+                            {return PopupMenuItem<String>(value: suggestion,child: Text(suggestion),);
+                            }).toList();},),]),
+            ),
                   Padding(
                     padding: const EdgeInsets.only(
                         left: 20, right: 20, bottom: 20, top: 20),
