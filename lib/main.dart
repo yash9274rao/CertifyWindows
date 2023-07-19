@@ -81,7 +81,7 @@ class _MyHome extends State<MyLanch> {
                         child: AutoSizeText(
                           'Register the device',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
+                              fontWeight: FontWeight.bold, fontSize: 32,color:Color(0xff273C51) ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -102,9 +102,10 @@ class _MyHome extends State<MyLanch> {
                         child: AutoSizeText(
                             'This device is not configured to work online. If'
                             ' you already have a cloud account',
-                            style: TextStyle(fontSize: 20),
+                            style: TextStyle(fontSize: 24,color:Color(0xff66717B),),
                             minFontSize: 12,
                             maxLines: 2,
+
                             overflow: TextOverflow.ellipsis),
                       ),
   ],
@@ -131,22 +132,15 @@ class _MyHome extends State<MyLanch> {
                                   stops: [0.0, 1.7],
                                 ),
                                 borderRadius: BorderRadius.all(Radius.circular(10)),
-                                // boxShadow: <BoxShadow>[BoxShadow(
-                                //     color: Colors.grey,
-                                //   spreadRadius: 1,
-                                //   blurRadius: 5,
-                                // offset: Offset(0, 5)),],
                             ),
-                              //     borderRadius: BorderRadiusGeometry.circular(30.0),
-
                             child: Container(
                               constraints:
                               const BoxConstraints(  maxWidth: 300.0, minHeight: 50.0),
-                              padding: const EdgeInsets.all(20.0),
+                              padding: const EdgeInsets.all(16.0),
                               alignment: Alignment.center,
                               child:const AutoSizeText(
                                   "Log-In to Register",
-                                  style: TextStyle(fontSize: 26,color: Colors.white),
+                                  style: TextStyle(fontSize: 28,color: Colors.white),
                                   minFontSize: 18,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -175,7 +169,7 @@ class _MyHome extends State<MyLanch> {
                         child: Visibility(
                           visible: _is_web,
                           child: AutoSizeText('${textHolderModalController}, then',
-                              style: const TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 24,color: Color(0xff66717B)),
                               minFontSize: 12,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
@@ -206,7 +200,7 @@ class _MyHome extends State<MyLanch> {
                               padding: const EdgeInsets.all(14.0),
                               alignment: Alignment.center,
                               child: const AutoSizeText("Try Re-activation",
-                                style: TextStyle(fontSize: 26,color: Color(0xff163A5F)),
+                                style: TextStyle(fontSize: 28,color: Color(0xff163A5F)),
                                 minFontSize: 18,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis),
