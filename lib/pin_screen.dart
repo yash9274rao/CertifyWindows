@@ -118,8 +118,10 @@ class _MyPinScreen extends State<PinScreen> {
                               ),
                               splashColor: Colors.lime,
                               onPressed: () {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop(context);
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) => HomeScreen()));
                               },
                             ),
                           ),
