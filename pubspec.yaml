@@ -51,7 +51,7 @@ dependencies:
   cloud_firestore_web: ^3.6.0
   intl_phone_field: ^3.0.1
   auto_size_text: ^3.0.0
-  flutter_typeahead: ^3.2.3
+  flutter_typeahead: ^4.6.2
 
 dev_dependencies:
   flutter_test:

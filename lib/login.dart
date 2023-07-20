@@ -291,7 +291,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
                         ),
                         const Padding(
-                          padding: EdgeInsets.fromLTRB(5, 45, 45, 0),
+                          padding: EdgeInsets.fromLTRB(5, 45, 45, 10),
                             child: AutoSizeText('User should have administrative rights on the account',
                                 style: TextStyle(fontSize: 24,color: Color(0xff66717B)),
                                 minFontSize: 12,
