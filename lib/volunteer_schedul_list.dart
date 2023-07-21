@@ -47,6 +47,7 @@ class CheckInSlots extends State<ConfirmLanch> {
   var _imageToShow = const Image(image: AssetImage('images/assets/final_logo.png'));
   late Timer timerDelay;
 
+
   @override
   void initState() {
     super.initState();
@@ -72,14 +73,29 @@ class CheckInSlots extends State<ConfirmLanch> {
                     color: Colors.white,
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.fromLTRB(45, 55, 45, 0),
                     child: Column(mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Padding(
-                          padding: const EdgeInsets.fromLTRB(120, 50, 10, 0),
-                      child: Container(
-                        child: _imageToShow,
-                      ),),
+                          Container(child: _imageToShow,),
+                          const SizedBox(height: 20, ),
+                          Text(
+                              'Hi ${widget.name} !',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Color(0xff273C51)),
+                            ),
+                          const SizedBox(height: 20, ),
+                          const Text(
+                              'Thank you for showing interest in volunteering for us.',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 18,
+                                  color: Color(0xff245F99)),
+                            ),
+
+                          const SizedBox(height: 50, ),
                       Expanded(
                           flex: 1,
                           child: Padding(
@@ -124,7 +140,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                   EdgeInsets.fromLTRB(
                                                       3, 10, 10, 0),
                                               child: Text(
-                                                'Select the assignment',
+                                                'Select the Event',
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 25,
@@ -170,14 +186,24 @@ class CheckInSlots extends State<ConfirmLanch> {
                                               margin: EdgeInsets.all(15),
                                               padding: EdgeInsets.all(15),
                                               alignment: Alignment.center,
-                                              child: Text(
-                                                  '(${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}) ${widget.volunteerList[index].scheduleTitle}',
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 22,
+                                                  child:  Row( children: [
+                                                    Text(
+                                                      '(${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime})',
+                                                      style: const TextStyle(
+                                                        color: Color(0xff245F99),
+                                                        fontSize: 16,
+                                                      ),
                                                   ),
+                                                  const SizedBox(width: 20, ),
+                                                      Text(
+                                                        ' Log lent Testing ASCawfgxv widget.volunteerList[index].scheduleTitle ${widget.volunteerList[index].scheduleTitle}',
+                                                        style: const TextStyle(
+                                                          color: Color(0xff15395C),
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                  ],)
 
-                                                ),
                                                 )
                                               );
                                             }),
