@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +49,7 @@ class CheckInSlots extends State<ConfirmLanch> {
   late Timer timerDelay;
 
 
+
   @override
   void initState() {
     super.initState();
@@ -65,6 +67,8 @@ class CheckInSlots extends State<ConfirmLanch> {
   }
   @override
   Widget build(BuildContext context) {
+    final _height= MediaQuery.of(context).size.height;
+    final _width= MediaQuery.of(context).size.width;
     return MaterialApp(
         title: 'Certify.me Kiosk',
         home: Scaffold(
@@ -96,119 +100,126 @@ class CheckInSlots extends State<ConfirmLanch> {
                             ),
 
                           const SizedBox(height: 50, ),
-                      Expanded(
-                          flex: 1,
-                          child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(120, 10, 120, 50),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.shade200,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(7.0))),
-                                  child: ListView(
-                                      // mainAxisAlignment:
-                                      //     MainAxisAlignment.center,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        80, 10, 10, 0),
-                                                child: Container(
-                                                  decoration: const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  7.0))),
-                                                  child: IconButton(
-                                                      icon: const ImageIcon(
-                                                        AssetImage(
-                                                            'images/assets/aerrow.png'),
-                                                        size: 30,
-                                                        // color: Colors.red,
-                                                      ),
-                                                      onPressed: () {
-                                                        Navigator.of(context, rootNavigator: true).pop(context);
-    cancelTimer();
-                                                      }),
-                                                )),
-                                            const Padding(
-                                              padding:
-                                                  EdgeInsets.fromLTRB(
-                                                      3, 10, 10, 0),
-                                              child: Text(
-                                                'Select the Event',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 25,
-                                                  // height: 2, //line height 200%, 1= 100%, were 0.9 = 90% of actual line height
-                                                  color: Colors.black87,
-                                                  //font color
-                                                  decorationThickness:
-                                                      2, //decoration 'underline' thickness
-                                                  // fontStyle: FontStyle.italic
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(padding:  const EdgeInsets.fromLTRB(
-                                            70, 5, 70, 0),
-                                        child: ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: widget.volunteerList.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              return InkWell(
-                                                // color: Colors.white,
-                                                // margin: EdgeInsets.all(15),
-                                                // alignment: Alignment.center,
-                                                onTap: () {
-                                                  Navigator.pushReplacement(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ConfirmScreen(
-                                                                  dataStr: '',
-                                                                  attendanceMode: widget
-                                                                      .attendanceMode,
-                                                                  type: "pin",
-                                                                  name: widget.name,
-                                                                  id: widget.itemId,
-                                                                  scheduleId: widget.volunteerList[index].scheduleId!)));
-                                                  cancelTimer();
-                                                },
-                                                child:Container(
-                                                color: Colors.white,
-                                              margin: EdgeInsets.all(15),
-                                              padding: EdgeInsets.all(15),
-                                              alignment: Alignment.center,
-                                                  child:  Row( children: [
-                                                    Text(
-                                                      '(${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime})',
-                                                      style: const TextStyle(
-                                                        color: Color(0xff245F99),
-                                                        fontSize: 16,
-                                                      ),
-                                                  ),
-                                                  const SizedBox(width: 20, ),
-                                                      Text(
-                                                        ' Log lent Testing ASCawfgxv widget.volunteerList[index].scheduleTitle ${widget.volunteerList[index].scheduleTitle}',
-                                                        style: const TextStyle(
-                                                          color: Color(0xff15395C),
-                                                          fontSize: 20,
-                                                        ),
-                                                      ),
-                                                  ],)
+                          Container(
+                            margin: EdgeInsets.only(
+                                top: 20, left: _width * 0.15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xffE0E9F2),
+                                      shape: BoxShape.rectangle,
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                    ),
+                                    child: IconButton(
+                                      icon: const Icon(
+                                        Icons.arrow_back,
+                                        color: Colors.black,
+                                      ),
+                                      splashColor: Colors.lime,
+                                      onPressed: () {
+                                        cancelTimer();
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (BuildContext context) =>
+                                                    HomeScreen()));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                                  child: const AutoSizeText('Select the event',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 32,
+                                          color: Color(0xff273C51)),
+                                      minFontSize: 22,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                              ],
+                            ),
+                          ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: 20, left: _width * 0.20,right:  _width * 0.20),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: widget.volunteerList.length,
+                          itemBuilder: (BuildContext context,
+                              int index) {
+                            return InkWell(
+                              // color: Colors.white,
+                              // margin: EdgeInsets.all(15),
+                              // alignment: Alignment.center,
 
-                                                )
-                                              );
-                                            }),
-                                        )]))))
-                    ])))));
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ConfirmScreen(
+                                                  dataStr: '',
+                                                  attendanceMode: widget
+                                                      .attendanceMode,
+                                                  type: "pin",
+                                                  name: widget.name,
+                                                  id: widget.itemId,
+                                                  scheduleId: widget.volunteerList[index].scheduleId!)));
+                                  cancelTimer();
+                                },
+                                child:Container(
+                                    margin: EdgeInsets.all(10),
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(width: 1,color: Color(0xffE0E9F2)),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                        boxShadow: const [ BoxShadow(
+                                          color:  Color(0xffE0E9F2),
+                                          blurRadius: 5.0, // soften the shadow
+                                          spreadRadius: 3.0, //extend the shadow
+                                          offset: Offset(
+                                            3.0, // Move to right 5  horizontally
+                                            3.0, // Move to bottom 5 Vertically
+                                          ),
+                                        )
+                                    ]
+                                    ),
+                                    child:  Row(
+                                      children: [
+                                     AutoSizeText(
+                                        '${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}',
+                                        style: const TextStyle(
+                                          color: Color(0xff245F99),
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20, ),
+                                Flexible(child: AutoSizeText(
+                                        '${widget.volunteerList[index].scheduleTitle}',
+                                        style: const TextStyle(
+                                          color: Color(0xff15395C),
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                ),
+                                    ],)
+
+                                )
+                            );
+                          }),
+                    ),
+                ]))
+    )
+    )
+    );
   }
 
   Future<void> updateUI() async {
