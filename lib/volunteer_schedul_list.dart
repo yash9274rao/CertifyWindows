@@ -171,7 +171,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                               padding: EdgeInsets.all(15),
                                               alignment: Alignment.center,
                                               child: Text(
-                                                  '${widget.volunteerList[index].scheduleTitle}   (${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime})',
+                                                  '(${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}) ${widget.volunteerList[index].scheduleTitle}',
                                                   style: const TextStyle(
                                                     color: Colors.black,
                                                     fontSize: 22,

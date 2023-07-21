@@ -3,8 +3,10 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:certify_me_kiosk/confirm_screen.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_checkin.dart';
+import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
@@ -46,6 +48,8 @@ class _MyPinScreen extends State<PinScreen> {
   int itemId = 0;
   String name = "";
   String checkInMode = "0";
+  String nameFull = "";
+  late Timer timerDelay;
   List<VolunteerSchedulingDetailList> volunteerList = [];
   Map<String, dynamic> diveInfo = HashMap();
 
@@ -141,6 +145,9 @@ class _MyPinScreen extends State<PinScreen> {
                     ),
                 ),
               ),
+                    const SizedBox(
+                      height: 35, //<-- SEE HERE
+                    ),
                     Center(
                       child: Container(
                         width: 450,
@@ -173,7 +180,7 @@ class _MyPinScreen extends State<PinScreen> {
                               // borderSide: BorderSide.none,
                                 borderRadius:
                                 BorderRadius.all(Radius.circular(5))),
-                              prefixIcon: Icon(Icons.password,color: Colors.black,),
+                            //  prefixIcon: Icon(Icons.password,color: Colors.black,),
                             filled: true,
                             fillColor: Colors.white,
                             labelText: "Enter PIN",
@@ -196,7 +203,7 @@ class _MyPinScreen extends State<PinScreen> {
                           decoration: const InputDecoration(
                             counter: Offstage(),
                             hintText: 'Enter Mobile Number',
-                            prefixIcon: Icon(Icons.wifi_calling_3_sharp,color: Colors.black,),
+                         //   prefixIcon: Icon(Icons.wifi_calling_3_sharp,color: Colors.black,),
                           ),
                           initialCountryCode: 'US',
                           showDropdownIcon: true,
@@ -299,7 +306,7 @@ class _MyPinScreen extends State<PinScreen> {
         .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
     if (volunteerResponse?.responseCode == 1) {
       if (volunteerResponse?.responseData!.volunteerList != null) {
-        String nameFull = volunteerResponse!.responseData!.firstName;
+        nameFull = volunteerResponse!.responseData!.firstName;
         if (volunteerResponse!.responseData!.middleName.isNotEmpty &&
             volunteerResponse!.responseData!.lastName.isNotEmpty) {
           nameFull =
@@ -311,15 +318,18 @@ class _MyPinScreen extends State<PinScreen> {
         if (volunteerResponse!.responseData!.volunteerList!.length == 0) {
           context.showToast("No active slots");
         } else {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => VolunteerCheckIn(
-                      itemId: volunteerResponse!.responseData!.id,
-                      name: nameFull,
-                      volunteerList:
-                          volunteerResponse!.responseData!.volunteerList!)));
-        }
+          volunteerList = volunteerResponse!.responseData!.volunteerList!;
+          CheckInOutValidations(volunteerResponse!.responseData!.id);
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //         builder: (context) => VolunteerSchedulingList(
+          //             itemId: volunteerResponse!.responseData!.id,
+          //             name: nameFull,
+          //             attendanceMode: attendanceMode,
+          //             volunteerList:
+          //                 volunteerResponse!.responseData!.volunteerList!)));
+            }
       }
     } else {
       if (volunteerResponse?.responseMessage != null) {
@@ -340,7 +350,7 @@ class _MyPinScreen extends State<PinScreen> {
             "Enter the 5 digit secure PIN along with the registered phone number and click on continue to Check-Out.";
       }
     });
-    Future.delayed(Duration(seconds: 60), () {
+    timerDelay = Timer(Duration(seconds: 60), () {
       try {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
@@ -349,7 +359,86 @@ class _MyPinScreen extends State<PinScreen> {
       }
     });
   }
+  Future<void> CheckInOutValidations(int id) async {
+    try {
+      // final List<VolunteerSchedulingDetailList> volunteerListCheckIn = [];
+      final List<VolunteerSchedulingDetailList> volunteerListCheckOut = [];
 
+      for (var item in volunteerList) {
+        if (item.checkIndate.isEmpty ||
+            (item.checkIndate.isNotEmpty && item.checkOutDate.isNotEmpty)) {
+          //  volunteerListCheckIn.add(item);
+        } else {
+          volunteerListCheckOut.add(item);
+        }
+      }
+      if (attendanceMode == "1") {
+        //  if (volunteerListCheckOut.isEmpty) {
+        if (volunteerList.length == 1) {
+          cancelTimer();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmScreen(
+                      dataStr: '',
+                      attendanceMode: attendanceMode,
+                      type: "pin",
+                      name: nameFull,
+                      id: id,
+                      scheduleId: volunteerList[0].scheduleId!)));
+        } else {
+          cancelTimer();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VolunteerSchedulingList(
+                      itemId: id,
+                      name: nameFull,
+                      attendanceMode: attendanceMode,
+                      volunteerList: volunteerList)));
+        }
+        // } else {
+        //   context.showToast("Already Checked-in");
+        // }
+      } else {
+        if (volunteerListCheckOut.isEmpty) {
+          context.showToast("Not Checked-in");
+        } else if (volunteerListCheckOut.length == 1) {
+          cancelTimer();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ConfirmScreen(
+                      dataStr: '',
+                      attendanceMode: attendanceMode,
+                      type: "pin",
+                      name: nameFull,
+                      id: id,
+                      scheduleId: volunteerListCheckOut[0].scheduleId!)));
+        } else {
+          cancelTimer();
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VolunteerSchedulingList(
+                      itemId: id,
+                      name: nameFull,
+                      attendanceMode: attendanceMode,
+                      volunteerList: volunteerListCheckOut)));
+        }
+      }
+    } catch (e) {
+      print("CheckInOutValidations :" + e.toString());
+    }
+  }
+
+  Future<void> cancelTimer() async {
+    try {
+      timerDelay.cancel();
+    } catch (e) {
+      print("cancelTimer ${e.toString()}");
+    }
+  }
   @override
   void dispose() {
     super.dispose();
