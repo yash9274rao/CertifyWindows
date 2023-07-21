@@ -73,8 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int settingId = 0;
   int facilityId = 0;
   var _isVisibility = false;
-  var dropdownVisiability = false;
-  var dropdownFacilityVisiability = false;
+  var dropdownVisiability = true;
+  var dropdownFacilityVisiability = true;
   var _isAddDevice = false;
   List<String> dropdownDataDeviceName = [];
   List<String> dropdownDataDeviceSetting = [];
@@ -83,7 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
   late OfflineDeviceData offlineDeviceDataSelected;
   late FacilityListData facilityListDataSelected;
   TextEditingController _textEditingController = TextEditingController();
-
+  TextEditingController _textEditingControllerSettings = TextEditingController();
+  TextEditingController _textEditingControllerFacility = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -244,19 +245,19 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                                 onSuggestionSelected: (suggestion) {
                                   _textEditingController.text = suggestion;
-                                  setState(() {
-                                    dropdownDeviceName = suggestion!;
-                                    if (!dropdownDataDeviceName
-                                        .contains(suggestion)) {
-                                      //  _isVisibility = true;
-                                      dropdownVisiability = true;
-                                      dropdownFacilityVisiability = true;
-                                    } else {
-                                      // _isVisibility = false;
-                                      dropdownVisiability = false;
-                                      dropdownFacilityVisiability = false;
-                                    }
-                                  });
+                                  // setState(() {
+                                  //   dropdownDeviceName = suggestion!;
+                                  //   if (!dropdownDataDeviceName
+                                  //       .contains(suggestion)) {
+                                  //     //  _isVisibility = true;
+                                  //     dropdownVisiability = true;
+                                  //     dropdownFacilityVisiability = true;
+                                  //   } else {
+                                  //     // _isVisibility = false;
+                                  //     dropdownVisiability = false;
+                                  //     dropdownFacilityVisiability = false;
+                                  //   }
+                                  // });
 
                                   print('Selected: $suggestion');
                                 },
@@ -317,52 +318,124 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
+                                  // Expanded(
+                                  //     child: DropdownButtonFormField<String>(
+                                  //   hint: Text("Device Settings"),
+                                  //   isExpanded: true,
+                                  //   alignment: AlignmentDirectional.centerStart,
+                                  //   value: deviceSettings,
+                                  //   icon: const ImageIcon(
+                                  //     AssetImage(
+                                  //         'images/assets/aerrowdown.png'),
+                                  //     size: 24,
+                                  //   ),
+                                  //   elevation: 16,
+                                  //   style: const TextStyle(
+                                  //       color: Colors.black, fontSize: 24),
+                                  //   decoration: InputDecoration(
+                                  //     hintText: 'Device Settings',
+                                  //     border: OutlineInputBorder(
+                                  //       borderSide: const BorderSide(
+                                  //           color: Colors.grey, width: 1.0),
+                                  //     ),
+                                  //   ),
+                                  //   onChanged: (newValue) {
+                                  //     // This is called when the user selects an item.
+                                  //     setState(() {
+                                  //       deviceSettings = newValue!;
+                                  //     });
+                                  //   },
+                                  //   items: dropdownDataDeviceSetting
+                                  //       .map<DropdownMenuItem<String>>(
+                                  //           (String value) {
+                                  //     return DropdownMenuItem<String>(
+                                  //         value: value,
+                                  //         child: AutoSizeText(
+                                  //           (value),
+                                  //           style: TextStyle(
+                                  //               fontWeight: FontWeight.w300,
+                                  //               fontSize: 28,
+                                  //               color: Color.fromRGBO(
+                                  //                   21, 57, 92, 1)),
+                                  //           minFontSize: 18,
+                                  //           maxLines: 1,
+                                  //           overflow: TextOverflow.ellipsis,
+                                  //         ));
+                                  //   }).toList(),
+                                  // ))
+                                  //Device Settings
                                   Expanded(
-                                      child: DropdownButtonFormField<String>(
-                                    hint: Text("Device Settings"),
-                                    isExpanded: true,
-                                    alignment: AlignmentDirectional.centerStart,
-                                    value: deviceSettings,
-                                    icon: const ImageIcon(
-                                      AssetImage(
-                                          'images/assets/aerrowdown.png'),
-                                      size: 24,
-                                    ),
-                                    elevation: 16,
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 24),
-                                    decoration: InputDecoration(
-                                      hintText: 'Device Settings',
-                                      border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.grey, width: 1.0),
+                                  child: TypeAheadField(
+                                    textFieldConfiguration: TextFieldConfiguration(
+                                      controller: _textEditingControllerSettings,
+                                      autofocus: false,
+                                      decoration: const InputDecoration(
+                                        hintText: 'Device Settings',
+                                        hintStyle: TextStyle(fontSize: 18),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.grey, width: 1.0),
+                                        ),
+                                        suffixIcon: ImageIcon(
+                                          AssetImage(
+                                              'images/assets/aerrowdown.png'),
+                                          size: 24,
+                                        ),
                                       ),
                                     ),
-                                    onChanged: (newValue) {
-                                      // This is called when the user selects an item.
-                                      setState(() {
-                                        deviceSettings = newValue!;
-                                      });
+                                    suggestionsCallback: (pattern) async {
+
+                                      print('Selected: $pattern');
+
+                                      // setState(() {
+                                      //   if (dropdownDataDeviceName.length == 0) {
+                                      //     //  _isVisibility = true;
+                                      //     dropdownVisiability = true;
+                                      //     dropdownFacilityVisiability = true;
+                                      //   } else {
+                                      //     // _isVisibility = false;
+                                      //     dropdownVisiability = false;
+                                      //     dropdownFacilityVisiability = false;
+                                      //   }
+                                      // });
+                                      return  dropdownDataDeviceSetting
+                                          .where((item) => item.startsWith(pattern))
+                                          .toList();
                                     },
-                                    items: dropdownDataDeviceSetting
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: AutoSizeText(
-                                            (value),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 28,
-                                                color: Color.fromRGBO(
-                                                    21, 57, 92, 1)),
-                                            minFontSize: 18,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ));
-                                    }).toList(),
-                                  ))
-                                ]))),
+                                    itemBuilder: (context, suggestion) {
+                                      return ListTile(
+                                        title: AutoSizeText(
+                                          suggestion,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: 28,
+                                              color: Color.fromRGBO(21, 57, 92, 1)),
+                                          minFontSize: 18,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
+                                    onSuggestionSelected: (suggestion) {
+                                      _textEditingControllerSettings.text = suggestion;
+                                      // setState(() {
+                                      //   dropdownDeviceName = suggestion!;
+                                      //   if (!dropdownDataDeviceName
+                                      //       .contains(suggestion)) {
+                                      //     //  _isVisibility = true;
+                                      //     dropdownVisiability = true;
+                                      //     dropdownFacilityVisiability = true;
+                                      //   } else {
+                                      //     // _isVisibility = false;
+                                      //     dropdownVisiability = false;
+                                      //     dropdownFacilityVisiability = false;
+                                      //   }
+                                      // });
+
+                                      print('Selected: $suggestion');
+                                    },
+                                  ),
+                                  )]))),
                         //Facility
                         Padding(
                             padding: const EdgeInsets.only(
@@ -378,50 +451,120 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 20, //<-- SEE HERE
                                   ),
                                   Expanded(
-                                      child: DropdownButtonFormField<String>(
-                                    isExpanded: true,
-                                    alignment: AlignmentDirectional.centerStart,
-                                    value: deviceFacility,
-                                    icon: const ImageIcon(
-                                      AssetImage(
-                                          'images/assets/aerrowdown.png'),
-                                      size: 24,
-                                    ),
-                                    elevation: 16,
-                                    style: const TextStyle(
-                                        color: Colors.black, fontSize: 24),
-                                    onChanged: (newValue) {
-                                      // This is called when the user selects an item.
-                                      setState(() {
-                                        deviceFacility = newValue!;
-                                      });
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: 'Facility Name',
-                                      border: OutlineInputBorder(
-                                        borderSide: const BorderSide(
-                                            color: Colors.grey, width: 1.0),
+                                  //     child: DropdownButtonFormField<String>(
+                                  //   isExpanded: true,
+                                  //   alignment: AlignmentDirectional.centerStart,
+                                  //   value: deviceFacility,
+                                  //   icon: const ImageIcon(
+                                  //     AssetImage(
+                                  //         'images/assets/aerrowdown.png'),
+                                  //     size: 24,
+                                  //   ),
+                                  //   elevation: 16,
+                                  //   style: const TextStyle(
+                                  //       color: Colors.black, fontSize: 24),
+                                  //   onChanged: (newValue) {
+                                  //     // This is called when the user selects an item.
+                                  //     setState(() {
+                                  //       deviceFacility = newValue!;
+                                  //     });
+                                  //   },
+                                  //   decoration: InputDecoration(
+                                  //     hintText: 'Facility Name',
+                                  //     border: OutlineInputBorder(
+                                  //       borderSide: const BorderSide(
+                                  //           color: Colors.grey, width: 1.0),
+                                  //     ),
+                                  //   ),
+                                  //   items: dropdownDataFacility
+                                  //       .map<DropdownMenuItem<String>>(
+                                  //           (String value) {
+                                  //     return DropdownMenuItem<String>(
+                                  //         value: value,
+                                  //         child: AutoSizeText(
+                                  //           (value),
+                                  //           style: TextStyle(
+                                  //               fontWeight: FontWeight.w300,
+                                  //               fontSize: 28,
+                                  //               color: Color.fromRGBO(
+                                  //                   21, 57, 92, 1)),
+                                  //           minFontSize: 18,
+                                  //           maxLines: 1,
+                                  //           overflow: TextOverflow.ellipsis,
+                                  //         ));
+                                  //   }).toList(),
+                                  // ))
+                                      child: TypeAheadField(
+                                        textFieldConfiguration: TextFieldConfiguration(
+                                          controller: _textEditingControllerFacility,
+                                          autofocus: false,
+                                          decoration: const InputDecoration(
+                                            hintText: 'Facility Name',
+                                            hintStyle: TextStyle(fontSize: 18),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey, width: 1.0),
+                                            ),
+                                            suffixIcon: ImageIcon(
+                                              AssetImage(
+                                                  'images/assets/aerrowdown.png'),
+                                              size: 24,
+                                            ),
+                                          ),
+                                        ),
+                                        suggestionsCallback: (pattern) async {
+
+                                          print('Selected: $pattern');
+
+                                          // setState(() {
+                                          //   if (dropdownDataDeviceName.length == 0) {
+                                          //     //  _isVisibility = true;
+                                          //     dropdownVisiability = true;
+                                          //     dropdownFacilityVisiability = true;
+                                          //   } else {
+                                          //     // _isVisibility = false;
+                                          //     dropdownVisiability = false;
+                                          //     dropdownFacilityVisiability = false;
+                                          //   }
+                                          // });
+                                          return  dropdownDataFacility
+                                              .where((item) => item.startsWith(pattern))
+                                              .toList();
+                                        },
+                                        itemBuilder: (context, suggestion) {
+                                          return ListTile(
+                                            title: AutoSizeText(
+                                              suggestion,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 28,
+                                                  color: Color.fromRGBO(21, 57, 92, 1)),
+                                              minFontSize: 18,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          );
+                                        },
+                                        onSuggestionSelected: (suggestion) {
+                                          _textEditingControllerFacility.text = suggestion;
+                                          // setState(() {
+                                          //   dropdownDeviceName = suggestion!;
+                                          //   if (!dropdownDataDeviceName
+                                          //       .contains(suggestion)) {
+                                          //     //  _isVisibility = true;
+                                          //     dropdownVisiability = true;
+                                          //     dropdownFacilityVisiability = true;
+                                          //   } else {
+                                          //     // _isVisibility = false;
+                                          //     dropdownVisiability = false;
+                                          //     dropdownFacilityVisiability = false;
+                                          //   }
+                                          // });
+
+                                          print('Selected: $suggestion');
+                                        },
                                       ),
-                                    ),
-                                    items: dropdownDataFacility
-                                        .map<DropdownMenuItem<String>>(
-                                            (String value) {
-                                      return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: AutoSizeText(
-                                            (value),
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w300,
-                                                fontSize: 28,
-                                                color: Color.fromRGBO(
-                                                    21, 57, 92, 1)),
-                                            minFontSize: 18,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                          ));
-                                    }).toList(),
-                                  ))
-                                ]))),
+                                  )]))),
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: 50, right: 60, bottom: 20, top: 30),
