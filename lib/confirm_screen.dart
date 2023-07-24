@@ -1,5 +1,5 @@
 import 'dart:collection';
-
+import 'dart:convert';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,6 +26,7 @@ class ConfirmScreen extends StatelessWidget {
   final String name;
   final int id;
   final int scheduleId;
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +55,9 @@ class _Confirm extends State<ConfirmLanch> {
   var confirmationSubText = "";
   var screenDelayValue = "120";
   var result;
+  var _imageToShow =
+  const Image(image: AssetImage('images/assets/final_logo.png'));
+  var containerVisibility = false;
   QrData qrData = QrData();
 
   @override
@@ -61,6 +65,7 @@ class _Confirm extends State<ConfirmLanch> {
     super.initState();
     initPlatformState();
     screenDelay();
+    UpdateLogo();
   }
 
   Future<void> screenDelay() async {
@@ -75,34 +80,92 @@ class _Confirm extends State<ConfirmLanch> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body:SingleChildScrollView(
           child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
+          Padding(
+            padding: const EdgeInsets.fromLTRB(40, 40, 15, 0),
+            child: _imageToShow,
+          ),
+            Center(
+            child: Padding(
+            padding: const EdgeInsets.only(top:40,left:0,right: 0,bottom: 0),
             child: !_isLoading
                 ? const Text("")
                 : const CircularProgressIndicator(),
+            ),
           ),
-          Text(
+          const SizedBox(
+            height: 60,
+          ),
+          Center(
+            child: Padding(padding:EdgeInsets.only(bottom: 20),
+            child: Visibility(
+                visible: containerVisibility,
+                child: Container(
+                    alignment: Alignment.center,
+            color:Color.fromRGBO(220, 220, 220, 1),
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.5,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.7,
+          child:SingleChildScrollView(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(padding: EdgeInsets.all(10),
+            child: Text(
             textHolderModalController,
             style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 40, color: Colors.black),
+                fontWeight: FontWeight.bold, fontSize: 32, color: Colors.black),
           ),
-          Text(
+                ),
+                  Padding(padding: EdgeInsets.all(10),
+           child: Text(
             confirmationText,
             style: const TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
           ),
-          Text(
+                  ),
+                  Padding(padding: EdgeInsets.all(10),
+           child: Text(
             confirmationSubText,
             style: const TextStyle(
                 fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
+          )
+                  )
+
+    ]
           ),
+          )
+
+          )
+          )
+          )
+          )
         ],
       )),
     );
+  }
+  Future<void> UpdateLogo() async{
+    var pref = await SharedPreferences.getInstance();
+    String? base64 = pref.getString(Sharepref.logoHomePageView) ?? "";
+    setState(() {
+      if (base64.isNotEmpty) {
+        _imageToShow = Image.memory(const Base64Decoder().convert(base64));
+      } else {
+        _imageToShow =
+        const Image(image: AssetImage('images/assets/final_logo.png'));
+      }
+    });
+
   }
 
   Future<void> initPlatformState() async {
@@ -171,6 +234,7 @@ class _Confirm extends State<ConfirmLanch> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
       _isLoading = false;
+      containerVisibility = true;
       if (pref.getString(Sharepref.enableConfirmationScreen) == "1" &&
           qrData.isValid) {
         if (pref.getString(Sharepref.enableAnonymousQRCode) == "1" &&

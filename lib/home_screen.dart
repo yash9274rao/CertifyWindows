@@ -79,7 +79,7 @@ class _MyHome extends State<HomeScreen> {
                         children: <Widget>[
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 40, 15, 0),
-                            child: Expanded(child: _imageToShow),
+                            child: _imageToShow,
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
