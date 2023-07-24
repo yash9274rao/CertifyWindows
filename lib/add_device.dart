@@ -43,7 +43,6 @@ class MyHomePage extends StatefulWidget {
       this.offlineDeviceData, this.tabletSettingData, this.facilityListData);
 
   final List<OfflineDeviceData> offlineDeviceData;
-
   final List<TabletSettingData> tabletSettingData;
   final List<FacilityListData> facilityListData;
 
@@ -73,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int deviceId = 0;
   int settingId = 0;
   int facilityId = 0;
-  var _isVisibility = false;
+  var _isVisibility = false,_isWebDevice = false;
   var dropdownVisiability = false;
   var dropdownFacilityVisiability = false;
   var _isAddDevice = false;
@@ -83,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
   late String selectDevicename = listSettings.first;
   late OfflineDeviceData offlineDeviceDataSelected;
   late FacilityListData facilityListDataSelected;
-  TextEditingController _textEditingController = TextEditingController();
+  TextEditingController _textEditingControllerDeviceName = TextEditingController();
   TextEditingController _textEditingControllerSettings = TextEditingController();
   TextEditingController _textEditingControllerFacility = TextEditingController();
   @override
@@ -130,7 +129,9 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Form(
                   key: _formAddDeviceKey,
                   child: SingleChildScrollView(
-                      child: Column(
+                      reverse: true,
+                  child: Container(
+    child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                         const Padding(
@@ -185,6 +186,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         Padding(
                           padding: EdgeInsets.only(
                               left: 20, right: 20, bottom: 5, top: 15),
+                            child: Visibility(
+                              visible: _isWebDevice,
                           child: Row(children: [
                             ImageIcon(
                               AssetImage('images/assets/add.png'),
@@ -195,11 +198,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             Expanded(
                               child: TypeAheadField(
                                 textFieldConfiguration: TextFieldConfiguration(
-                                  controller: _textEditingController,
+                                  controller: _textEditingControllerDeviceName,
                                   autofocus: false,
                                   decoration: const InputDecoration(
-                                    hintText: 'Add Device',
-                                    hintStyle: TextStyle(fontSize: 18),
+                                   // hintText: 'Device Name',
+                                      labelText: 'Device Name',
+                                    labelStyle: TextStyle(fontSize: 18),
                                     border: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           color: Colors.grey, width: 1.0),
@@ -222,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return ListTile(
                                     title: AutoSizeText(
                                       suggestion,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w300,
                                           fontSize: 28,
                                           color: Color.fromRGBO(21, 57, 92, 1)),
@@ -239,10 +243,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       dropdownFacilityVisiability = true;
                                     });
                                   });
-                                  return Padding(
-                                      padding: const EdgeInsets.all(16.0),
+                                  return const Padding(
+                                      padding: EdgeInsets.all(16.0),
                                       child:Text(
-                                        'No Match Found',
+                                        'No match found. Continue to add this as a new.',
                                         style: TextStyle(fontSize: 17),
                                         // semanticsLabel: _textEditingControllerFacility.text = ""
 
@@ -250,8 +254,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                   );
                                 },
                                 onSuggestionSelected: (suggestion) {
-                                  _textEditingController.text = suggestion;
-                                  _deviceName = _textEditingController.text;
+                                  _textEditingControllerDeviceName.text = suggestion;
+                                  _deviceName = _textEditingControllerDeviceName.text;
                                   setState(() {
                                     dropdownVisiability = false;
                                     dropdownFacilityVisiability = false;
@@ -262,7 +266,48 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ]),
                         ),
+                        ),
+                            Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, bottom: 5),
+                                child: Visibility(
+                      visible: _isVisibility,
+                      child: Row(children: [
+                        ImageIcon(
+                          AssetImage('images/assets/device.png'),
+                        ),
+                        const SizedBox(
+                          width: 20, //<-- SEE HERE
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                              onSaved: (val) => _deviceName = val!,
+                              decoration: const InputDecoration(
+                                border: UnderlineInputBorder(),
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                    BorderSide(color: Colors.grey),
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(5))),
+                                enabledBorder: UnderlineInputBorder(
+                                  // borderSide: BorderSide.none,
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(5))),
 
+                                filled: true,
+                                fillColor: Colors.white,
+                                labelText: "Enter Device Name",
+                                // hintText: 'your-email@domain.com',
+                                labelStyle: TextStyle(color: Color.fromRGBO(180, 193, 205, 1),fontSize: 18),
+                              ),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 28)),
+
+                        )]
+                      )
+                                )
+                      ),
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, bottom: 5, top: 20),
@@ -281,8 +326,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                       controller: _textEditingControllerSettings,
                                       autofocus: false,
                                       decoration: const InputDecoration(
-                                        hintText: 'Device Settings',
-                                        hintStyle: TextStyle(fontSize: 18),
+                                        labelText: 'Device Settings',
+                                        labelStyle: TextStyle(fontSize: 18),
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.grey, width: 1.0),
@@ -301,11 +346,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                           .where((item) => item.startsWith(pattern))
                                           .toList();
                                     },
+
                                     itemBuilder: (context, suggestion) {
                                       return ListTile(
                                         title: AutoSizeText(
                                           suggestion,
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontWeight: FontWeight.w300,
                                               fontSize: 28,
                                               color: Color.fromRGBO(21, 57, 92, 1)),
@@ -316,10 +362,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       );
                                     },
                                     noItemsFoundBuilder:(context){
-                                      return Padding(
-                                          padding: const EdgeInsets.all(16.0),
+                                      return const Padding(
+                                          padding: EdgeInsets.all(16.0),
                                           child:Text(
-                                            'No Settings Found Please Select atleast one',
+                                            'No records found',
                                             style: TextStyle(fontSize: 17),
                                             // semanticsLabel: _textEditingControllerFacility.text = ""
 
@@ -340,10 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownFacilityVisiability,
                                 child: Row(children: [
-                                  ImageIcon(
-                                    AssetImage(
-                                        'images/assets/hospitalline.png'),
-                                  ),
+                                  const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
@@ -353,15 +396,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                           controller: _textEditingControllerFacility,
                                           autofocus: false,
                                           decoration: const InputDecoration(
-                                            hintText: 'Facility Name',
-                                            hintStyle: TextStyle(fontSize: 18),
+                                            labelText: 'Facility Name',
+                                            labelStyle: TextStyle(fontSize: 18),
                                             border: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Colors.grey, width: 1.0),
                                             ),
-                                            suffixIcon: ImageIcon(
-                                              AssetImage(
-                                                  'images/assets/aerrowdown.png'),
+                                            suffixIcon: ImageIcon(AssetImage('images/assets/aerrowdown.png'),
                                               size: 24,
                                             ),
                                           ),
@@ -376,7 +417,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           return ListTile(
                                             title: AutoSizeText(
                                               suggestion,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.w300,
                                                   fontSize: 28,
                                                   color: Color.fromRGBO(21, 57, 92, 1)),
@@ -387,10 +428,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           );
                                         },
                                         noItemsFoundBuilder:(context){
-                                          return Padding(
-                                            padding: const EdgeInsets.all(16.0),
-                                            child:Text(
-                                              'No Facility Found Please Select atleast one',
+                                          return const Padding(
+                                            padding: EdgeInsets.all(16.0),
+                                            child:Text('No records found',
                                               style: TextStyle(fontSize: 17),
                                                // semanticsLabel: _textEditingControllerFacility.text = ""
 
@@ -415,19 +455,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: TextButton(
                                 onPressed: () {
                                   _formAddDeviceKey.currentState!.save();
+                                  print("fffffffffffff dropdownValue =" + dropdownDeviceName);
+                                  addDevice();
 
-                                  print("fffffffffffff dropdownValue =" +
-                                      dropdownDeviceName);
-
-                                  if (_isAddDevice &&
-                                      _textEditingController.text == "") {
-                                    context.showToast("Please Select Device");
-                                  } else if (dropdownFacilityVisiability &&
-                                      deviceFacility == "") {
-                                    context.showToast("Please Select Facility");
-                                  } else {
-                                    addDevice();
-                                  }
                                 },
                                 style: TextButton.styleFrom(
                                   elevation: 20,
@@ -465,8 +495,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                             )),
+                            const SizedBox(
+                              width: 30, //<-- SEE HERE
+                            ), Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+
+                      children: [
+
+                        Container(
+                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                          child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
+                        ),
+                        const SizedBox(
+                          width: 20, //<-- SEE HERE
+                        ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(50, 10, 20, 15),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           child: AutoSizeText('$textHolderInfo',
                               style: const TextStyle(
                                   fontWeight: FontWeight.normal,
@@ -478,7 +523,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis),
                         ),
+          ])
                       ])))),
+        )
         ));
   }
 
@@ -486,24 +533,17 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> initPlatformState() async {
     var pref = await SharedPreferences.getInstance();
     setState(() {
-      // listDeviceData.clear();
-      // for(var item in widget.offlineDeviceData){
-      //   listDeviceData.add(item.deviceName);
-      // }
-      //
-      // listSettings.clear();
-      // for(var itemS in widget.tabletSettingData){
-      //   listSettings.add(itemS.settingName);
-      // }
       textHolderModalController = pref.getString(Sharepref.platform);
       if (pref.getString(Sharepref.platform) == "web") {
         _isAddDevice = true;
+        _isWebDevice = true;
         textHolderInfo =
             'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}';
         textHolderInfo = '';
       } else {
         _isAddDevice = false;
         _isVisibility = true;
+        _isWebDevice = false;
         dropdownVisiability = true;
         dropdownFacilityVisiability = true;
         textHolderInfo =
@@ -515,21 +555,24 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> addDevice() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (_isAddDevice) {
-      if (_textEditingController.text.isEmpty) {
-        _deviceName = dropdownDeviceName;
+      if (_textEditingControllerDeviceName.text.isEmpty) {
+        context.showToast("Please enter device name");
+      } else {
+        _deviceName = _textEditingControllerDeviceName.text.trim();
         pref.setString(Sharepref.serialNo, _deviceName);
+        bool isDeviceName = false;
         for (var data in widget.offlineDeviceData) {
-          if (dropdownDeviceName == data.deviceName) {
+          if (_deviceName.trim() == data.deviceName) {
             offlineDeviceDataSelected = data;
+            isDeviceName = true;
             break;
           }
         }
-        if (offlineDeviceDataSelected != null) {
+        if (isDeviceName) {
           if (offlineDeviceDataSelected.deviceStatus == 0) {
             deviceId = offlineDeviceDataSelected.deviceId;
             settingId = offlineDeviceDataSelected.settingId;
             facilityId = offlineDeviceDataSelected.facilityId;
-
             addDeviceAPI();
           } else {
             // offline device just active
@@ -538,32 +581,60 @@ class _MyHomePageState extends State<MyHomePage> {
               MaterialPageRoute(builder: (context) => MyApp()),
             );
           }
+        } else {
+          pref.setString(Sharepref.serialNo, _deviceName);
+          newDeviceAdding();
         }
-      } else {
-        pref.setString(Sharepref.serialNo, _deviceName);
-        addDeviceAPI();
       }
     } else {
-      addDeviceAPI();
-    }
+      if (_deviceName.isEmpty) {
+        context.showToast("Please enter device name");
+      }else
+      newDeviceAdding();
   }
-
-  Future<void> addDeviceAPI() async {
+  }
+  Future<void> newDeviceAdding() async {
+    settingId = 0;
+    facilityId = 0;
     for (var data in widget.tabletSettingData) {
-      if (deviceSettings == data.settingName) {
-        settingId = data.id;
-      }
+    if (_textEditingControllerSettings.text.trim() == data.settingName) {
+    settingId = data.id;
+    break;
+    }
     }
     for (var data in widget.facilityListData) {
-      if (deviceFacility == data.facilityName) {
-        facilityId = data.facilityId;
-      }
+    if (_textEditingControllerFacility.text.trim() == data.facilityName) {
+    facilityId = data.facilityId;
+    break;
     }
+    }
+    if(settingId == 0){
+    context.showToast("Invalid device settings");
+
+    }else if(facilityId == 0){
+    context.showToast("Invalid facility");
+
+    }else {
+    addDeviceAPI();
+    }
+    }
+
+  Future<void> addDeviceAPI() async {
+    // for (var data in widget.tabletSettingData) {
+    //   if (deviceSettings == data.settingName) {
+    //     settingId = data.id;
+    //   }
+    // }
+    // for (var data in widget.facilityListData) {
+    //   if (deviceFacility == data.facilityName) {
+    //     facilityId = data.facilityId;
+    //   }
+    // }
 
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
-    registerBody['deviceName'] = _deviceName;
+    registerBody['deviceName'] = _deviceName.trim();
     registerBody['serialNumber'] = pref.getString(Sharepref.serialNo);
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;

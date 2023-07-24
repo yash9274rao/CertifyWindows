@@ -96,7 +96,7 @@ class _MyHome extends State<MyLanch> {
                       width: 45,
                     ),
                     Icon(
-                      Icons.error_outline,
+                      Icons.error_outline,color:Color(0xff66717B) ,
                     ),
                     SizedBox(
                       width: 5,
@@ -158,7 +158,7 @@ class _MyHome extends State<MyLanch> {
                     const SizedBox(width: 45,),
                     Visibility(
                       visible: _is_web,
-                      child: const Icon(Icons.error_outline,),
+                      child: const Icon(Icons.error_outline,color: Color(0xff66717B),),
                     ),
                     const SizedBox(width: 5,),
                     Flexible(
