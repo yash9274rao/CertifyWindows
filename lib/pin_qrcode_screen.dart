@@ -1,21 +1,12 @@
 import 'dart:async';
-import 'dart:collection';
-import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:certify_me_kiosk/pin_screen.dart';
-import 'package:certify_me_kiosk/toast.dart';
-import 'package:certify_me_kiosk/volunteer_checkin.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
-import 'package:certify_me_kiosk/api/api_service.dart';
-import 'api/response/VoluntearResponse.dart';
-import 'api/response/response_data_voluntear.dart';
-import 'common/sharepref.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:certify_me_kiosk/pin_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'common/sharepref.dart';
 import 'home_screen.dart';
 
 class PinQrCodeScreen extends StatefulWidget {
@@ -55,7 +46,7 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                   children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 40, 15, 0),
-                  child: Expanded(child: _imageToShow),
+                  child: _imageToShow,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),

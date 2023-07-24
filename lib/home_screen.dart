@@ -5,17 +5,12 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:certify_me_kiosk/pin_qrcode_screen.dart';
 import 'package:certify_me_kiosk/pin_screen.dart';
-import 'package:certify_me_kiosk/toast.dart';
-import 'package:certify_me_kiosk/volunteer_checkin.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
-import 'api/response/VoluntearResponse.dart';
-import 'api/response/response_data_voluntear.dart';
 import 'common/sharepref.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -31,21 +26,9 @@ class _MyHome extends State<HomeScreen> {
   var _imageToShow =
   const Image(image: AssetImage('images/assets/final_logo.png'));
   late Timer dataTime;
-  late Timer timer, delayQRPinUI;
-  String attendanceMode = "0",
-      _pinStr = "",
-      _mobileNumber = "",
-      _countryCode = "1";
-  bool checkInVisiable = false;
-  bool checkOutVisiable = false;
-  bool qrAndpinVisiable = false;
-  bool pinPageVisiable = false;
-  bool pinVisiable = false;
-  bool enableVisitorCheckout = true;
-  int itemId = 0;
-  String name = "";
+  late Timer timer;
+  String attendanceMode = "0";
   String checkInMode = "0";
-  List<VolunteerSchedulingDetailList> volunteerList = [];
   Map<String, dynamic> diveInfo = HashMap();
 
   @override
@@ -102,12 +85,13 @@ class _MyHome extends State<HomeScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 120, 20, 5),
+                            padding: const EdgeInsets.fromLTRB(10, 120, 0, 5),
                             child: Row(children: [
                               Expanded(
                                 flex: 1,
                                 child: SingleChildScrollView(
                                   child: Container(
+                                    margin: EdgeInsets.only(right:50),
                                     decoration: const BoxDecoration(
                                       gradient: LinearGradient(
                                         colors: [
@@ -182,7 +166,7 @@ class _MyHome extends State<HomeScreen> {
                                 ),
                               ),
                               Expanded(
-                                  flex: 2,
+                                  flex: 1,
                                   child: Container(
                                     // height:
                                     // MediaQuery.of(context).size.height,
@@ -200,7 +184,7 @@ class _MyHome extends State<HomeScreen> {
                                                   child: Column(
                                                     children: [
                                                       Container(
-                                                        margin: EdgeInsets.only(left: _width*0.18,right:  _width*0.18),
+                                                        margin: EdgeInsets.only(left: _width*0.10,right:  _width*0.10),
                                                           child: TextButton(
                                                               style:
                                                               TextButton
@@ -285,7 +269,7 @@ class _MyHome extends State<HomeScreen> {
                                                               )),
                                                       ),
                                                       Container(
-                                                        margin: EdgeInsets.only(left: _width*0.18,right:  _width*0.18,top: 30),
+                                                        margin: EdgeInsets.only(left: _width*0.10,right:  _width*0.10,top: 30),
 
                                                         child: TextButton(
                                                             style: TextButton
