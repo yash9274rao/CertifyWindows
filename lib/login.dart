@@ -281,17 +281,19 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 45,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
 
                       children: [
+
                         Container(
-                          padding: EdgeInsets.fromLTRB(60, 45, 0, 0),
+                          padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
                             child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
                         ),
                         const Padding(
-                          padding: EdgeInsets.fromLTRB(5, 45, 45, 10),
+                          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
                             child: AutoSizeText('User should have administrative rights on the account',
                                 style: TextStyle(fontSize: 24,color: Color(0xff66717B)),
                                 minFontSize: 12,
