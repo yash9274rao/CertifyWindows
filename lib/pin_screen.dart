@@ -196,7 +196,7 @@ class _MyPinScreen extends State<PinScreen> {
                           child: IntlPhoneField(
                             decoration: const InputDecoration(
                               counter: Offstage(),
-                              hintText: 'Enter Mobile Number',
+                              hintText: 'Enter Phone Number',
                               //   prefixIcon: Icon(Icons.wifi_calling_3_sharp,color: Colors.black,),
                             ),
                             initialCountryCode: 'US',
@@ -234,7 +234,7 @@ class _MyPinScreen extends State<PinScreen> {
                                     context.showToast("Please Enter pin");
                                   } else if (_mobileNumber.isEmpty) {
                                     context.showToast(
-                                        "Please Enter Mobile Number");
+                                        "Please Enter Phone Number");
                                   } else {
                                     VolunteerValidation();
                                   }
@@ -311,7 +311,7 @@ class _MyPinScreen extends State<PinScreen> {
       if (volunteerResponse?.responseMessage != null) {
         context.showToast(volunteerResponse!.responseMessage!);
       } else {
-        context.showToast("Invalid PIN or mobile number");
+        context.showToast("Invalid PIN or Phone Number");
       }
     }
   }

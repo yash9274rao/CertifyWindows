@@ -539,7 +539,7 @@ class _MyHomePageState extends State<MyHomePage> {
         _isWebDevice = true;
         textHolderInfo =
             'Device Model: ${pref.getString(Sharepref.deviceModel)}, Version:${pref.getString(Sharepref.osVersion)}';
-        textHolderInfo = '';
+        //textHolderInfo = '';
       } else {
         _isAddDevice = false;
         _isVisibility = true;
