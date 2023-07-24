@@ -12,6 +12,7 @@ import 'api/response/register_device/response_data.dart';
 import 'common/sharepref.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
+
 const List<String> listDeviceData = <String>['Select Device', '+ Add New'];
 const List<String> listSettings = <String>['Default'];
 const List<String> listFacility = <String>['Select Facility'];
@@ -73,8 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
   int settingId = 0;
   int facilityId = 0;
   var _isVisibility = false;
-  var dropdownVisiability = true;
-  var dropdownFacilityVisiability = true;
+  var dropdownVisiability = false;
+  var dropdownFacilityVisiability = false;
   var _isAddDevice = false;
   List<String> dropdownDataDeviceName = [];
   List<String> dropdownDataDeviceSetting = [];
@@ -94,7 +95,7 @@ class _MyHomePageState extends State<MyHomePage> {
     for (var data in widget.tabletSettingData) {
       dropdownDataDeviceSetting.add(data.settingName);
     }
-    dropdownDataFacility.add("Select Facility");
+    // dropdownDataFacility.add("Select Facility");
     for (var data in widget.facilityListData) {
       dropdownDataFacility.add(data.facilityName);
     }
@@ -213,18 +214,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                 suggestionsCallback: (pattern) async {
 
                                   print('Selected: $pattern');
-
-                                  // setState(() {
-                                  //   if (dropdownDataDeviceName.length == 0) {
-                                  //     //  _isVisibility = true;
-                                  //     dropdownVisiability = true;
-                                  //     dropdownFacilityVisiability = true;
-                                  //   } else {
-                                  //     // _isVisibility = false;
-                                  //     dropdownVisiability = false;
-                                  //     dropdownFacilityVisiability = false;
-                                  //   }
-                                  // });
                                   return  dropdownDataDeviceName
                                       .where((item) => item.startsWith(pattern))
                                       .toList();
@@ -243,69 +232,37 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   );
                                 },
+                                noItemsFoundBuilder:(context){
+                                  WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+                                    setState(() {
+                                      dropdownVisiability = true;
+                                      dropdownFacilityVisiability = true;
+                                    });
+                                  });
+                                  return Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child:Text(
+                                        'No Match Found',
+                                        style: TextStyle(fontSize: 17),
+                                        // semanticsLabel: _textEditingControllerFacility.text = ""
+
+                                      )
+                                  );
+                                },
                                 onSuggestionSelected: (suggestion) {
                                   _textEditingController.text = suggestion;
-                                  // setState(() {
-                                  //   dropdownDeviceName = suggestion!;
-                                  //   if (!dropdownDataDeviceName
-                                  //       .contains(suggestion)) {
-                                  //     //  _isVisibility = true;
-                                  //     dropdownVisiability = true;
-                                  //     dropdownFacilityVisiability = true;
-                                  //   } else {
-                                  //     // _isVisibility = false;
-                                  //     dropdownVisiability = false;
-                                  //     dropdownFacilityVisiability = false;
-                                  //   }
-                                  // });
-
+                                  _deviceName = _textEditingController.text;
+                                  setState(() {
+                                    dropdownVisiability = false;
+                                    dropdownFacilityVisiability = false;
+                                  });
                                   print('Selected: $suggestion');
                                 },
                               ),
                             ),
                           ]),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 19, right: 20, bottom: 20, top: 18),
-                          child: Visibility(
-                              visible: _isVisibility,
-                              child: Row(children: [
-                                ImageIcon(
-                                  AssetImage('images/assets/device.png'),
-                                ),
-                                const SizedBox(
-                                  width: 20, //<-- SEE HERE
-                                ),
-                                Expanded(
-                                  child: TextFormField(
-                                      onSaved: (val) => _deviceName = val!,
-                                      decoration: const InputDecoration(
-                                        border: UnderlineInputBorder(),
-                                        focusedBorder: UnderlineInputBorder(
-                                            borderSide:
-                                                BorderSide(color: Colors.grey),
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
-                                        enabledBorder: UnderlineInputBorder(
-                                            // borderSide: BorderSide.none,
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(5))),
 
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        labelText: "Enter Device Name",
-                                        // hintText: 'your-email@domain.com',
-                                        labelStyle: TextStyle(
-                                            color: Color.fromRGBO(
-                                                180, 193, 205, 1)),
-                                      ),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 28)),
-                                )
-                              ])),
-                        ),
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, bottom: 5, top: 20),
@@ -318,52 +275,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
-                                  // Expanded(
-                                  //     child: DropdownButtonFormField<String>(
-                                  //   hint: Text("Device Settings"),
-                                  //   isExpanded: true,
-                                  //   alignment: AlignmentDirectional.centerStart,
-                                  //   value: deviceSettings,
-                                  //   icon: const ImageIcon(
-                                  //     AssetImage(
-                                  //         'images/assets/aerrowdown.png'),
-                                  //     size: 24,
-                                  //   ),
-                                  //   elevation: 16,
-                                  //   style: const TextStyle(
-                                  //       color: Colors.black, fontSize: 24),
-                                  //   decoration: InputDecoration(
-                                  //     hintText: 'Device Settings',
-                                  //     border: OutlineInputBorder(
-                                  //       borderSide: const BorderSide(
-                                  //           color: Colors.grey, width: 1.0),
-                                  //     ),
-                                  //   ),
-                                  //   onChanged: (newValue) {
-                                  //     // This is called when the user selects an item.
-                                  //     setState(() {
-                                  //       deviceSettings = newValue!;
-                                  //     });
-                                  //   },
-                                  //   items: dropdownDataDeviceSetting
-                                  //       .map<DropdownMenuItem<String>>(
-                                  //           (String value) {
-                                  //     return DropdownMenuItem<String>(
-                                  //         value: value,
-                                  //         child: AutoSizeText(
-                                  //           (value),
-                                  //           style: TextStyle(
-                                  //               fontWeight: FontWeight.w300,
-                                  //               fontSize: 28,
-                                  //               color: Color.fromRGBO(
-                                  //                   21, 57, 92, 1)),
-                                  //           minFontSize: 18,
-                                  //           maxLines: 1,
-                                  //           overflow: TextOverflow.ellipsis,
-                                  //         ));
-                                  //   }).toList(),
-                                  // ))
-                                  //Device Settings
                                   Expanded(
                                   child: TypeAheadField(
                                     textFieldConfiguration: TextFieldConfiguration(
@@ -386,18 +297,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     suggestionsCallback: (pattern) async {
 
                                       print('Selected: $pattern');
-
-                                      // setState(() {
-                                      //   if (dropdownDataDeviceName.length == 0) {
-                                      //     //  _isVisibility = true;
-                                      //     dropdownVisiability = true;
-                                      //     dropdownFacilityVisiability = true;
-                                      //   } else {
-                                      //     // _isVisibility = false;
-                                      //     dropdownVisiability = false;
-                                      //     dropdownFacilityVisiability = false;
-                                      //   }
-                                      // });
                                       return  dropdownDataDeviceSetting
                                           .where((item) => item.startsWith(pattern))
                                           .toList();
@@ -416,22 +315,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       );
                                     },
+                                    noItemsFoundBuilder:(context){
+                                      return Padding(
+                                          padding: const EdgeInsets.all(16.0),
+                                          child:Text(
+                                            'No Settings Found Please Select atleast one',
+                                            style: TextStyle(fontSize: 17),
+                                            // semanticsLabel: _textEditingControllerFacility.text = ""
+
+                                          )
+                                      );
+                                    },
                                     onSuggestionSelected: (suggestion) {
                                       _textEditingControllerSettings.text = suggestion;
-                                      // setState(() {
-                                      //   dropdownDeviceName = suggestion!;
-                                      //   if (!dropdownDataDeviceName
-                                      //       .contains(suggestion)) {
-                                      //     //  _isVisibility = true;
-                                      //     dropdownVisiability = true;
-                                      //     dropdownFacilityVisiability = true;
-                                      //   } else {
-                                      //     // _isVisibility = false;
-                                      //     dropdownVisiability = false;
-                                      //     dropdownFacilityVisiability = false;
-                                      //   }
-                                      // });
-
+                                      deviceSettings = _textEditingControllerSettings.text;
                                       print('Selected: $suggestion');
                                     },
                                   ),
@@ -451,49 +348,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                     width: 20, //<-- SEE HERE
                                   ),
                                   Expanded(
-                                  //     child: DropdownButtonFormField<String>(
-                                  //   isExpanded: true,
-                                  //   alignment: AlignmentDirectional.centerStart,
-                                  //   value: deviceFacility,
-                                  //   icon: const ImageIcon(
-                                  //     AssetImage(
-                                  //         'images/assets/aerrowdown.png'),
-                                  //     size: 24,
-                                  //   ),
-                                  //   elevation: 16,
-                                  //   style: const TextStyle(
-                                  //       color: Colors.black, fontSize: 24),
-                                  //   onChanged: (newValue) {
-                                  //     // This is called when the user selects an item.
-                                  //     setState(() {
-                                  //       deviceFacility = newValue!;
-                                  //     });
-                                  //   },
-                                  //   decoration: InputDecoration(
-                                  //     hintText: 'Facility Name',
-                                  //     border: OutlineInputBorder(
-                                  //       borderSide: const BorderSide(
-                                  //           color: Colors.grey, width: 1.0),
-                                  //     ),
-                                  //   ),
-                                  //   items: dropdownDataFacility
-                                  //       .map<DropdownMenuItem<String>>(
-                                  //           (String value) {
-                                  //     return DropdownMenuItem<String>(
-                                  //         value: value,
-                                  //         child: AutoSizeText(
-                                  //           (value),
-                                  //           style: TextStyle(
-                                  //               fontWeight: FontWeight.w300,
-                                  //               fontSize: 28,
-                                  //               color: Color.fromRGBO(
-                                  //                   21, 57, 92, 1)),
-                                  //           minFontSize: 18,
-                                  //           maxLines: 1,
-                                  //           overflow: TextOverflow.ellipsis,
-                                  //         ));
-                                  //   }).toList(),
-                                  // ))
                                       child: TypeAheadField(
                                         textFieldConfiguration: TextFieldConfiguration(
                                           controller: _textEditingControllerFacility,
@@ -513,20 +367,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           ),
                                         ),
                                         suggestionsCallback: (pattern) async {
-
                                           print('Selected: $pattern');
-
-                                          // setState(() {
-                                          //   if (dropdownDataDeviceName.length == 0) {
-                                          //     //  _isVisibility = true;
-                                          //     dropdownVisiability = true;
-                                          //     dropdownFacilityVisiability = true;
-                                          //   } else {
-                                          //     // _isVisibility = false;
-                                          //     dropdownVisiability = false;
-                                          //     dropdownFacilityVisiability = false;
-                                          //   }
-                                          // });
                                           return  dropdownDataFacility
                                               .where((item) => item.startsWith(pattern))
                                               .toList();
@@ -545,24 +386,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                             ),
                                           );
                                         },
+                                        noItemsFoundBuilder:(context){
+                                          return Padding(
+                                            padding: const EdgeInsets.all(16.0),
+                                            child:Text(
+                                              'No Facility Found Please Select atleast one',
+                                              style: TextStyle(fontSize: 17),
+                                               // semanticsLabel: _textEditingControllerFacility.text = ""
+
+                                            )
+                                          );
+                                        },
                                         onSuggestionSelected: (suggestion) {
                                           _textEditingControllerFacility.text = suggestion;
-                                          // setState(() {
-                                          //   dropdownDeviceName = suggestion!;
-                                          //   if (!dropdownDataDeviceName
-                                          //       .contains(suggestion)) {
-                                          //     //  _isVisibility = true;
-                                          //     dropdownVisiability = true;
-                                          //     dropdownFacilityVisiability = true;
-                                          //   } else {
-                                          //     // _isVisibility = false;
-                                          //     dropdownVisiability = false;
-                                          //     dropdownFacilityVisiability = false;
-                                          //   }
-                                          // });
-
+                                          deviceFacility = _textEditingControllerFacility.text;
                                           print('Selected: $suggestion');
+
                                         },
+
                                       ),
                                   )]))),
                         Padding(
@@ -574,19 +415,15 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: TextButton(
                                 onPressed: () {
                                   _formAddDeviceKey.currentState!.save();
+
                                   print("fffffffffffff dropdownValue =" +
                                       dropdownDeviceName);
 
                                   if (_isAddDevice &&
-                                      dropdownDeviceName == "Select Device") {
+                                      _textEditingController.text == "") {
                                     context.showToast("Please Select Device");
-                                  } else if (dropdownDeviceName ==
-                                          "+ Add New" &&
-                                      _deviceName.isEmpty) {
-                                    context
-                                        .showToast("Please enter Device Name");
                                   } else if (dropdownFacilityVisiability &&
-                                      deviceFacility == "Select Facility") {
+                                      deviceFacility == "") {
                                     context.showToast("Please Select Facility");
                                   } else {
                                     addDevice();
@@ -645,6 +482,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ));
   }
 
+
   Future<void> initPlatformState() async {
     var pref = await SharedPreferences.getInstance();
     setState(() {
@@ -677,7 +515,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> addDevice() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     if (_isAddDevice) {
-      if (_deviceName.isEmpty) {
+      if (_textEditingController.text.isEmpty) {
         _deviceName = dropdownDeviceName;
         pref.setString(Sharepref.serialNo, _deviceName);
         for (var data in widget.offlineDeviceData) {
