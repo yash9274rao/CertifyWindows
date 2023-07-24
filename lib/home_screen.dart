@@ -57,6 +57,8 @@ class _MyHome extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
         title: 'Certify.me Kiosk',
         home: Scaffold(
@@ -180,7 +182,7 @@ class _MyHome extends State<HomeScreen> {
                                 ),
                               ),
                               Expanded(
-                                  flex: 1,
+                                  flex: 2,
                                   child: Container(
                                     // height:
                                     // MediaQuery.of(context).size.height,
@@ -197,11 +199,8 @@ class _MyHome extends State<HomeScreen> {
                                                 Container(
                                                   child: Column(
                                                     children: [
-                                                      Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .fromLTRB(
-                                                            120, 0, 120, 0),
+                                                      Container(
+                                                        margin: EdgeInsets.only(left: _width*0.18,right:  _width*0.18),
                                                           child: TextButton(
                                                               style:
                                                               TextButton
@@ -285,12 +284,10 @@ class _MyHome extends State<HomeScreen> {
                                                                         .ellipsis),
                                                               )),
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                        const EdgeInsets
-                                                            .fromLTRB(
-                                                            120, 30, 120, 0),
-                                                          child: TextButton(
+                                                      Container(
+                                                        margin: EdgeInsets.only(left: _width*0.18,right:  _width*0.18,top: 30),
+
+                                                        child: TextButton(
                                                             style: TextButton
                                                                 .styleFrom(
                                                               shape:
