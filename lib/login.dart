@@ -76,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Container(
         color: Colors.white,
         height: MediaQuery.of(context).size.height,
@@ -233,7 +232,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   context.showToast("Please enter email");
                                 } else if (!RegExp(
                                     r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
-                                    .hasMatch(_email)) {
+                                    .hasMatch(_email.trim())) {
                                   context.showToast("Please enter valid email");
                                 } else if (_password.isEmpty ||
                                     _password.length < 8) {
@@ -319,7 +318,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _isProgressLoading = true;
     });
     Map<String, dynamic> tokenBody = HashMap();
-    tokenBody['email'] = _email;
+    tokenBody['email'] = _email.trim();
     tokenBody['password'] = base64Url.encode(utf8.encode(_password));
     tokenBody['deviceSN'] = "";
     GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()

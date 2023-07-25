@@ -119,7 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // than having to individually change instances of widgets.
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         body: Container(
           color: Colors.white,
           height: MediaQuery.of(context).size.height,
@@ -128,9 +127,6 @@ class _MyHomePageState extends State<MyHomePage> {
           child: SingleChildScrollView(
               child: Form(
                   key: _formAddDeviceKey,
-                  child: SingleChildScrollView(
-                      reverse: true,
-                  child: Container(
     child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
@@ -183,15 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: EdgeInsets.fromLTRB(0, 0, 10, 45),
                             child: Divider(color: Colors.grey)),
 
-                        Padding(
-                          padding: EdgeInsets.only(
+                        Padding(padding: EdgeInsets.only(
                               left: 20, right: 20, bottom: 5, top: 15),
                             child: Visibility(
                               visible: _isWebDevice,
                           child: Row(children: [
-                            ImageIcon(
-                              AssetImage('images/assets/add.png'),
-                            ),
+                            const ImageIcon(AssetImage('images/assets/add.png'),),
                             const SizedBox(
                               width: 20, //<-- SEE HERE
                             ),
@@ -219,7 +212,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                   print('Selected: $pattern');
                                   return  dropdownDataDeviceName
-                                      .where((item) => item.startsWith(pattern))
+                                      .where((item) => item.toLowerCase().startsWith(pattern.toLowerCase()))
                                       .toList();
                                 },
                                 itemBuilder: (context, suggestion) {
@@ -267,18 +260,14 @@ class _MyHomePageState extends State<MyHomePage> {
                           ]),
                         ),
                         ),
-                            Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 20, right: 20, bottom: 5),
-                                child: Visibility(
+            Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, bottom: 5, top: 0),
+                child: Visibility(
                       visible: _isVisibility,
                       child: Row(children: [
-                        ImageIcon(
-                          AssetImage('images/assets/device.png'),
-                        ),
-                        const SizedBox(
-                          width: 20, //<-- SEE HERE
-                        ),
+                        const ImageIcon(AssetImage('images/assets/device.png'),),
+                        const SizedBox(width: 20, ),
                         Expanded(
                           child: TextFormField(
                               onSaved: (val) => _deviceName = val!,
@@ -300,13 +289,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 // hintText: 'your-email@domain.com',
                                 labelStyle: TextStyle(color: Color.fromRGBO(180, 193, 205, 1),fontSize: 18),
                               ),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 28)),
+                              style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 18,)),
 
                         )]
-                      )
-                                )
+                      ))
                       ),
                         Padding(
                             padding: const EdgeInsets.only(
@@ -314,9 +300,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownVisiability,
                                 child: Row(children: [
-                                  ImageIcon(
-                                    AssetImage('images/assets/settings.png'),
-                                  ),
+                                  const ImageIcon(AssetImage('images/assets/settings.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
@@ -332,9 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           borderSide: BorderSide(
                                               color: Colors.grey, width: 1.0),
                                         ),
-                                        suffixIcon: ImageIcon(
-                                          AssetImage(
-                                              'images/assets/aerrowdown.png'),
+                                        suffixIcon: ImageIcon(AssetImage('images/assets/aerrowdown.png'),
                                           size: 24,
                                         ),
                                       ),
@@ -343,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                       print('Selected: $pattern');
                                       return  dropdownDataDeviceSetting
-                                          .where((item) => item.startsWith(pattern))
+                                          .where((item) => item.toLowerCase().startsWith(pattern.toLowerCase()))
                                           .toList();
                                     },
 
@@ -379,7 +361,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     },
                                   ),
                                   )]))),
-                        //Facility
+                      // Facility
                         Padding(
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, bottom: 0, top: 20),
@@ -410,7 +392,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         suggestionsCallback: (pattern) async {
                                           print('Selected: $pattern');
                                           return  dropdownDataFacility
-                                              .where((item) => item.startsWith(pattern))
+                                              .where((item) => item.toLowerCase().startsWith(pattern.toLowerCase()))
                                               .toList();
                                         },
                                         itemBuilder: (context, suggestion) {
@@ -524,8 +506,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               overflow: TextOverflow.ellipsis),
                         ),
           ])
-                      ])))),
-        )
+                      ]))),
+
         ));
   }
 
