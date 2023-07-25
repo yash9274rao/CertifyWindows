@@ -3,13 +3,12 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/toast.dart';
-
 import 'add_device.dart';
 import 'api/api_service.dart';
 import 'api/response/getdevice_token_response.dart';
-import 'api/response/register_device/response_data.dart';
 import 'common/sharepref.dart';
 
 void main() {
@@ -64,8 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _email = "";
   String _password = "";
   bool _isVisible = false;
-  bool _isProgressLoading = false;
-
+   late ProgressDialog _isProgressLoading;
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -74,7 +72,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -227,6 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             padding: EdgeInsets.fromLTRB(55, 15, 45, 0),
                             child: TextButton(
                               onPressed: () {
+                                FocusScope.of(context).unfocus();
                                 _formGlobalKey.currentState!.save();
                                 if (_email == null || _email.isEmpty) {
                                   context.showToast("Please enter email");
@@ -288,24 +288,18 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(60, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(60, 0, 0, 10),
                             child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
                         ),
                         const Padding(
-                          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+                          padding: EdgeInsets.fromLTRB(5, 0, 0, 10),
                             child: AutoSizeText('User should have administrative rights on the account',
                                 style: TextStyle(fontSize: 24,color: Color(0xff66717B)),
                                 minFontSize: 12,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis),
-
                         ),
                       ],
-                    ),
-                    Center(
-                      child: !_isProgressLoading
-                          ? const Text("")
-                          : const CircularProgressIndicator(),
                     ),
                   ])),
         ),
@@ -314,9 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> loginUser() async {
-    setState(() {
-      _isProgressLoading = true;
-    });
+    await _isProgressLoading.show();
     Map<String, dynamic> tokenBody = HashMap();
     tokenBody['email'] = _email.trim();
     tokenBody['password'] = base64Url.encode(utf8.encode(_password));
@@ -324,9 +316,7 @@ class _MyHomePageState extends State<MyHomePage> {
     GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
         .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
     if (getDeviceTokenResponse.responseCode == 1) {
-      setState(() {
-        _isProgressLoading = false;
-      });
+      await _isProgressLoading.hide();
       var pref = await SharedPreferences.getInstance();
       pref.setString(Sharepref.accessToken,
           getDeviceTokenResponse.responseData.responseData.access_token);
@@ -342,9 +332,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         getDeviceTokenResponse.responseData.facilityListData!!,
                   )));
     } else {
-      setState(() {
-        _isProgressLoading = false;
-      });
+      await _isProgressLoading.hide();
       context.showToast(getDeviceTokenResponse.responseMessage);
     }
   }

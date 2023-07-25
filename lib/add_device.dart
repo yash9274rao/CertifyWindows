@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/response/register_device/register_device_response.dart';
 import 'package:certify_me_kiosk/main.dart';
@@ -85,6 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextEditingController _textEditingControllerDeviceName = TextEditingController();
   TextEditingController _textEditingControllerSettings = TextEditingController();
   TextEditingController _textEditingControllerFacility = TextEditingController();
+  late ProgressDialog _isProgressLoading;
   @override
   void initState() {
     super.initState();
@@ -117,7 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return Scaffold(
         body: Container(
           color: Colors.white,
@@ -438,6 +441,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 onPressed: () {
                                   _formAddDeviceKey.currentState!.save();
                                   print("fffffffffffff dropdownValue =" + dropdownDeviceName);
+                                  FocusScope.of(context).unfocus();
                                   addDevice();
 
                                 },
@@ -612,7 +616,7 @@ class _MyHomePageState extends State<MyHomePage> {
     //     facilityId = data.facilityId;
     //   }
     // }
-
+    await _isProgressLoading.show();
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
@@ -627,11 +631,13 @@ class _MyHomePageState extends State<MyHomePage> {
     RegisterDeviceResponse registerDeviceResponse = await ApiService()
         .registerDeviceForApp(pref, registerBody) as RegisterDeviceResponse;
     if (registerDeviceResponse.responseCode == 1) {
+      await _isProgressLoading.hide();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MyApp()),
       );
     } else {
+      await _isProgressLoading.hide();
       context.showToast(registerDeviceResponse.responseMessage!);
     }
   }

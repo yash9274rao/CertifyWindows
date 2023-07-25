@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
 import 'package:certify_me_kiosk/common/qr_data.dart';
@@ -13,33 +14,37 @@ import 'common/sharepref.dart';
 
 typedef StringValue = String Function(String);
 
-class ConfirmScreen extends StatelessWidget {
-  const ConfirmScreen(
-      {Key? key,
+// class ConfirmScreen extends StatelessWidget {
+//   const ConfirmScreen(
+//       {Key? key,
+//       required this.dataStr,
+//       required this.attendanceMode,
+//       required this.type, required this.name, required this.id,required this.scheduleId})
+//       : super(key: key);
+//   final String dataStr;
+//   final String attendanceMode;
+//   final String type;
+//   final String name;
+//   final int id;
+//   final int scheduleId;
+//
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Certify.me Kiosk',
+//       debugShowCheckedModeBanner: false,
+//       home: ConfirmLanch(dataStr, attendanceMode, type, name, id, scheduleId),
+//     );
+//   }
+// }
+
+class ConfirmScreen extends StatefulWidget {
+  ConfirmScreen({Key? key,
       required this.dataStr,
       required this.attendanceMode,
       required this.type, required this.name, required this.id,required this.scheduleId})
       : super(key: key);
-  final String dataStr;
-  final String attendanceMode;
-  final String type;
-  final String name;
-  final int id;
-  final int scheduleId;
-
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Certify.me Kiosk',
-      debugShowCheckedModeBanner: false,
-      home: ConfirmLanch(dataStr, attendanceMode, type, name, id, scheduleId),
-    );
-  }
-}
-
-class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.dataStr, this.attendanceMode, this.type, this.name, this.id, this.scheduleId);
 
   final String dataStr, attendanceMode, type, name;
   final int scheduleId, id;
@@ -48,9 +53,8 @@ class ConfirmLanch extends StatefulWidget {
   _Confirm createState() => _Confirm();
 }
 
-class _Confirm extends State<ConfirmLanch> {
+class _Confirm extends State<ConfirmScreen> {
   var textHolderModalController = "";
-  bool _isLoading = false;
   var confirmationText = "";
   var confirmationSubText = "";
   var screenDelayValue = "120";
@@ -59,7 +63,7 @@ class _Confirm extends State<ConfirmLanch> {
   const Image(image: AssetImage('images/assets/final_logo.png'));
   var containerVisibility = false;
   QrData qrData = QrData();
-
+  late ProgressDialog _isProgressLoading;
   @override
   void initState() {
     super.initState();
@@ -79,6 +83,8 @@ class _Confirm extends State<ConfirmLanch> {
 
   @override
   Widget build(BuildContext context) {
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return Scaffold(
       body:SingleChildScrollView(
           child: Column(
@@ -89,14 +95,6 @@ class _Confirm extends State<ConfirmLanch> {
             padding: const EdgeInsets.fromLTRB(40, 40, 15, 0),
             child: _imageToShow,
           ),
-            Center(
-            child: Padding(
-            padding: const EdgeInsets.only(top:40,left:0,right: 0,bottom: 0),
-            child: !_isLoading
-                ? const Text("")
-                : const CircularProgressIndicator(),
-            ),
-          ),
           const SizedBox(
             height: 60,
           ),
@@ -106,7 +104,20 @@ class _Confirm extends State<ConfirmLanch> {
                 visible: containerVisibility,
                 child: Container(
                     alignment: Alignment.center,
-            color:Color.fromRGBO(220, 220, 220, 1),
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xff175EA5),
+                          Color(0xff163B60)
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        tileMode: TileMode.repeated,
+                        stops: [0.0, 1.7],
+                      ),
+                      borderRadius:
+                      BorderRadius.all(Radius.circular(20)),
+                    ),
             height: MediaQuery
                 .of(context)
                 .size
@@ -122,26 +133,22 @@ class _Confirm extends State<ConfirmLanch> {
           children: [
             Padding(padding: EdgeInsets.all(10),
             child: Text(
-            textHolderModalController,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 32, color: Colors.black),
+            textHolderModalController,textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 32, color: Colors.white),
           ),
                 ),
                   Padding(padding: EdgeInsets.all(10),
            child: Text(
-            confirmationText,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
+            confirmationText,textAlign: TextAlign.center,
+            style: const TextStyle( fontSize: 20, color: Colors.white70),
           ),
                   ),
                   Padding(padding: EdgeInsets.all(10),
-           child: Text(
-            confirmationSubText,
-            style: const TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black),
-          )
+               child: Text(
+            confirmationSubText,textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 20, color: Colors.white70),
                   )
-
+                  )
     ]
           ),
           )
@@ -165,13 +172,11 @@ class _Confirm extends State<ConfirmLanch> {
         const Image(image: AssetImage('images/assets/final_logo.png'));
       }
     });
+    await _isProgressLoading.show();
 
   }
 
   Future<void> initPlatformState() async {
-    setState(() {
-      _isLoading = true;
-    });
     var pref = await SharedPreferences.getInstance();
     qrData.setIsValid = false;
     qrData.setFirstName = "Anonymous";
@@ -231,9 +236,10 @@ class _Confirm extends State<ConfirmLanch> {
 
   Future<void> updateUI(QrData qrData) async {
     // timeDateSet(qrData);
+    print("ffffffffffffffffffffffffffff");
     SharedPreferences pref = await SharedPreferences.getInstance();
+    await _isProgressLoading.hide();
     setState(() {
-      _isLoading = false;
       containerVisibility = true;
       if (pref.getString(Sharepref.enableConfirmationScreen) == "1" &&
           qrData.isValid) {
@@ -273,9 +279,7 @@ class _Confirm extends State<ConfirmLanch> {
   }
 
   Future<void> navigationHome() async {
-    setState(() {
-      _isLoading = false;
-    });
+    await _isProgressLoading.hide();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
