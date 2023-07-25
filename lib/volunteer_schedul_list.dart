@@ -148,7 +148,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                           ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: 20, left: _width * 0.20,right:  _width * 0.20),
+                          top: 20, left: _width * 0.20,right:  _width * 0.10),
                       child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: widget.volunteerList.length,

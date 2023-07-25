@@ -7,6 +7,7 @@ import 'package:certify_me_kiosk/confirm_screen.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
 import 'api/response/VoluntearResponse.dart';
@@ -34,7 +35,7 @@ class _MyPinScreen extends State<PinScreen> {
   String nameFull = "";
   late Timer timerDelay;
   List<VolunteerSchedulingDetailList> volunteerList = [];
-
+  late ProgressDialog _isProgressLoading;
   @override
   void initState() {
     super.initState();
@@ -45,6 +46,8 @@ class _MyPinScreen extends State<PinScreen> {
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return MaterialApp(
         title: 'Certify.me Kiosk',
         home: Scaffold(
@@ -269,7 +272,6 @@ class _MyPinScreen extends State<PinScreen> {
                                     ),
                                   ),
 
-
                             )))
                   ],
                 ),
@@ -279,8 +281,8 @@ class _MyPinScreen extends State<PinScreen> {
   }
 
   Future<void> VolunteerValidation() async {
+    await _isProgressLoading.show();
     SharedPreferences pref = await SharedPreferences.getInstance();
-
     Map<String, dynamic> volunteerInfo = HashMap();
     volunteerInfo['pin'] = base64Url.encode(utf8.encode(_pinStr));
     volunteerInfo['countrycode'] = _countryCode;
@@ -290,6 +292,7 @@ class _MyPinScreen extends State<PinScreen> {
     VolunteerResponse? volunteerResponse = await ApiService()
         .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
     if (volunteerResponse?.responseCode == 1) {
+      await _isProgressLoading.hide();
       if (volunteerResponse?.responseData!.volunteerList != null) {
         nameFull = volunteerResponse!.responseData!.firstName;
         if (volunteerResponse!.responseData!.middleName.isNotEmpty &&
@@ -308,6 +311,7 @@ class _MyPinScreen extends State<PinScreen> {
         }
       }
     } else {
+      await _isProgressLoading.hide();
       if (volunteerResponse?.responseMessage != null) {
         context.showToast(volunteerResponse!.responseMessage!);
       } else {

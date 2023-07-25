@@ -6,6 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/response/activate_application_response.dart';
 import 'package:certify_me_kiosk/api/response/getdevice_token_response.dart';
@@ -46,7 +47,7 @@ class _MyHome extends State<MyLanch> {
   Map<String, dynamic> diveInfo = HashMap();
   var _isVisibility = false;
   var _is_web = true;
-
+  late ProgressDialog _isProgressLoading;
   @override
   void initState() {
     super.initState();
@@ -56,6 +57,8 @@ class _MyHome extends State<MyLanch> {
 
   @override
   Widget build(BuildContext context) {
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return MaterialApp(
       title: 'Certify.me Kiosk',
       home: Scaffold(
@@ -193,7 +196,8 @@ class _MyHome extends State<MyLanch> {
                         //Defines shadowColor
                         backgroundColor: Colors.white,
                       ),
-                      onPressed: () {
+                      onPressed: () async {
+                        await _isProgressLoading.show();
                         activiAPI();
                       },
                       child: Container(
@@ -282,13 +286,13 @@ class _MyHome extends State<MyLanch> {
     createDoc['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
     createDoc['deviceData'] = diveInfo;
     // bool result = await InternetConnectionChecker().hasConnection;
-    if (true) {
       ActivateApplicationResponse activateApplicationResponse =
           await ApiService().activateApplication(diveInfo, sn)
               as ActivateApplicationResponse;
       print("activateApplicationResponse == $activateApplicationResponse");
 
       if (activateApplicationResponse.responseCode == 1) {
+        await _isProgressLoading.hide();
         print("activateApplicationResponse.responseCode ==1");
         Map<String, dynamic> tokenBody = HashMap();
         tokenBody['email'] = "";
@@ -297,6 +301,7 @@ class _MyHome extends State<MyLanch> {
         GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
             .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
         if (getDeviceTokenResponse.responseCode == 1) {
+
           pref.setString(Sharepref.accessToken,
               getDeviceTokenResponse.responseData.responseData.access_token);
           pref.setString(Sharepref.institutionID,
@@ -304,20 +309,19 @@ class _MyHome extends State<MyLanch> {
           Navigator.pushReplacement(context as BuildContext,
               MaterialPageRoute(builder: (context) => HomeScreen()));
         } else {
+          await _isProgressLoading.hide();
           setState(() {
             if (pref.getString(Sharepref.platform) == "web") _is_web = false;
             _isVisibility = true;
           });
         }
       } else {
+        await _isProgressLoading.hide();
         setState(() {
           if (pref.getString(Sharepref.platform) == "web") _is_web = false;
           _isVisibility = true;
         });
       }
-    } else {
-      Util.showToastError("No Internet");
-    }
   }
 }
 
