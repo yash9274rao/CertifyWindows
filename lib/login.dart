@@ -3,13 +3,12 @@ import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/toast.dart';
-
 import 'add_device.dart';
 import 'api/api_service.dart';
 import 'api/response/getdevice_token_response.dart';
-import 'api/response/register_device/response_data.dart';
 import 'common/sharepref.dart';
 
 void main() {
@@ -64,8 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String _email = "";
   String _password = "";
   bool _isVisible = false;
-  bool _isProgressLoading = false;
-
+   late ProgressDialog _isProgressLoading;
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -74,212 +72,267 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/assets/bg.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: Form(
-            key: _formGlobalKey,
-            child: Container(
-              margin: const EdgeInsets.fromLTRB(180, 80, 180, 80),
-              // padding: EdgeInsets.all(50),
-              color: Colors.white,
+        color: Colors.white,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
+        child: SingleChildScrollView(
+          child: Form(
+              key: _formGlobalKey,
               child: Column(
-                // crossAxisAlignment : CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-              IconButton(
-              icon: const ImageIcon(
-              AssetImage('images/assets/aerrow.png'),
-              size: 60,
-              // color: Colors.red,
-            ),
-            onPressed: () {
-              Navigator.of(context, rootNavigator: true).pop(context);
-            }),
-        const Expanded(
-          flex: 7,
-          child: AutoSizeText(
-              'Login to register the device',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-              minFontSize: 22,
-              maxLines: 1, overflow: TextOverflow.ellipsis
-          ),
-        ),
-      ],
-    ),
-    Padding(
-    padding: const EdgeInsets.only(
-    left: 20, right: 20, bottom: 20, top: 20),
-    child: TextFormField(
-    onSaved: (val) => _email = val!,
-    decoration: const InputDecoration(
-    border: UnderlineInputBorder(),
-    focusedBorder: UnderlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey),
-    borderRadius:
-    BorderRadius.all(Radius.circular(5))),
-    enabledBorder: UnderlineInputBorder(
-    // borderSide: BorderSide.none,
-    borderRadius:
-    BorderRadius.all(Radius.circular(5))),
-    prefixIcon: Icon(
-    Icons.mail,
-    color: Colors.black26,
-    ),
-    filled: true,
-    fillColor: Colors.white,
-    labelText: "Email",
-    // hintText: 'your-email@domain.com',
-    labelStyle: TextStyle(color: Colors.black26, fontSize: 18),
-
-    ),
-        style: TextStyle(fontSize: 24)),
-    ),
-
-    // Padding(
-    //     padding: EdgeInsets.fromLTRB(20 ,20, 20, 0),
-    //     child: Divider(color: Colors.grey)),
-    Padding(
-    padding: const EdgeInsets.only(
-    left: 20, right: 20, bottom: 20, top: 20),
-    child: TextFormField(
-    onSaved: (val) => _password = val!,
-    // validator: (value) {
-    //   if (value == null || value.length < 8) {
-    //     return 'Please enter valid Password';
-    //   }
-    //   return null;
-    // },
-    obscuringCharacter: '*',
-    obscureText: !_isVisible,
-    decoration: InputDecoration(
-    border: const UnderlineInputBorder(),
-    focusedBorder: const UnderlineInputBorder(
-    borderSide: BorderSide(color: Colors.grey),
-    borderRadius:
-    BorderRadius.all(Radius.circular(5))),
-    enabledBorder: const UnderlineInputBorder(
-    // borderSide: BorderSide.none,
-    borderRadius:
-    BorderRadius.all(Radius.circular(5))),
-    prefixIcon: const Icon(
-    Icons.lock,
-    color: Colors.black26,
-    ),
-    filled: true,
-    fillColor: Colors.white,
-    labelText: "Password",
-    // hintText: 'your-email@domain.com',
-    labelStyle: const TextStyle(color: Colors.black26, fontSize: 18),
-
-    suffixIcon: IconButton(
-    onPressed: () {
-    setState(() {
-    _isVisible = !_isVisible;
-    });
-    },
-    icon: _isVisible ? const Icon(Icons.visibility, color: Colors.black,):
-    const Icon(Icons.visibility_off, color: Colors.grey,),
-    ),
-    ),
-        style: TextStyle(fontSize: 24)),
-    ),
-    ElevatedButton(
-    style: ElevatedButton.styleFrom(
-    shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(5.0)),
-    backgroundColor: Colors.indigo,
-    // padding: EdgeInsets.symmetric(
-    //     horizontal: MediaQuery.of(context).size.width / 20,
-    //     vertical: 10)
-    // padding: const EdgeInsets.all(30)
-    padding: const EdgeInsets.symmetric(
-    horizontal: 170, vertical: 20)
-    //
-    // //      padding: const EdgeInsets.all(20)
-    // padding: EdgeInsets.symmetric(
-    //     horizontal: 170, vertical: 20)
-
-    // padding: const EdgeInsets.fromLTRB(20, 20, 20, 20)
-    ),
-    onPressed: () {
-    _formGlobalKey.currentState!.save();
-    if (_email == null || _email.isEmpty) {
-    context.showToast("Please enter email");
-    } else if (!RegExp(
-    r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
-        .hasMatch(_email)) {
-    context.showToast("Please enter valid email");
-    } else if (_password.isEmpty ||
-    _password.length < 8) {
-    context.showToast("Please enter Password");
-    } else {
-    loginUser();
-    }
-    },
-    child: const AutoSizeText(
-    'Login',  style: TextStyle(fontSize: 26),
-      minFontSize: 18,
-      maxLines: 1, overflow: TextOverflow.ellipsis,
-    // textAlign: TextAlign.justify,
-    )),
-
-    const Padding(
-    padding: EdgeInsets.fromLTRB(25, 10, 20, 15),
-    child: AutoSizeText(
-    'Note: User should have administrative rights on the account',
-    style: TextStyle(fontSize: 18,color: Colors.grey),
-    minFontSize: 15,
-    maxLines: 1,
-        overflow: TextOverflow.ellipsis
-    ),
-    ),
-                    Center(
-                      child: !_isProgressLoading
-                          ? const Text("")
-                          : const CircularProgressIndicator(),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 55, 0, 40),
+                      child: Image(
+                        image: AssetImage('images/assets/final_logo.png'),
+                      ),
                     ),
-    ])),
-    ),
-    ),
+                    // crossAxisAlignment : CrossAxisAlignment.stretch,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Center(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Color(0xffE0E9F2),
+                            shape: BoxShape.rectangle,
+                             borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.black,
+                            ),
+                            splashColor: Colors.lime,
+                            onPressed: () {
+                              Navigator.of(context, rootNavigator: true)
+                                  .pop(context);
+                            },
+                          ),
+                        ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                          child: const AutoSizeText('Log-In to Register',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 32,
+                                  color: Color(0xff273C51)),
+                              minFontSize: 22,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
+                    const Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 10, 45),
+                        child: Divider(color: Colors.grey)),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 60, right: 60, bottom: 20, top: 20),
+                      child: TextFormField(
+                          onSaved: (val) => _email = val!,
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            enabledBorder: UnderlineInputBorder(
+                                // borderSide: BorderSide.none,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            prefixIcon: Icon(
+                              Icons.mail,
+                              color: Colors.black,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: "Email",
+                            // hintText: 'your-email@domain.com',
+                            labelStyle:
+                                TextStyle(color: Colors.black26, fontSize: 18),
+                          ),
+                          style: TextStyle(fontSize: 24)),
+                    ),
+
+                    // Padding(
+                    //     padding: EdgeInsets.fromLTRB(20 ,20, 20, 0),
+                    //     child: Divider(color: Colors.grey)),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 60, right: 60, bottom: 20, top: 20),
+                      child: TextFormField(
+                          onSaved: (val) => _password = val!,
+                          // validator: (value) {
+                          //   if (value == null || value.length < 8) {
+                          //     return 'Please enter valid Password';
+                          //   }
+                          //   return null;
+                          // },
+                          obscuringCharacter: '*',
+                          obscureText: !_isVisible,
+                          decoration: InputDecoration(
+                            border: const UnderlineInputBorder(),
+                            focusedBorder: const UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            enabledBorder: const UnderlineInputBorder(
+                                // borderSide: BorderSide.none,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5))),
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                              color: Colors.black,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            labelText: "Password",
+                            // hintText: 'your-email@domain.com',
+                            labelStyle: const TextStyle(
+                                color: Colors.black26, fontSize: 18),
+
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  _isVisible = !_isVisible;
+                                });
+                              },
+                              icon: _isVisible
+                                  ? const Icon(
+                                      Icons.visibility,
+                                      color: Colors.black,
+                                    )
+                                  : const Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.black,
+                                    ),
+                            ),
+                          ),
+                          style: TextStyle(fontSize: 24)),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(55, 15, 45, 0),
+                            child: TextButton(
+                              onPressed: () {
+                                FocusScope.of(context).unfocus();
+                                _formGlobalKey.currentState!.save();
+                                if (_email == null || _email.isEmpty) {
+                                  context.showToast("Please enter email");
+                                } else if (!RegExp(
+                                    r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                                    .hasMatch(_email.trim())) {
+                                  context.showToast("Please enter valid email");
+                                } else if (_password.isEmpty ||
+                                    _password.length < 8) {
+                                  context.showToast("Please enter Password");
+                                } else {
+                                  loginUser();
+                                }
+                              },
+                              style: TextButton.styleFrom(
+                                elevation: 20,
+                                shadowColor: Colors.grey,
+                              ),
+                              child: Ink(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff175EA5),
+                                      Color(0xff163B60)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    tileMode: TileMode.repeated,
+                                    stops: [0.0, 1.7],
+                                  ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10)),
+                                ),
+                                child: Container(
+                                  constraints: const BoxConstraints(
+                                      maxWidth: 300.0, minHeight: 50.0),
+                                  padding: const EdgeInsets.all(16.0),
+                                  alignment: Alignment.center,
+                                  child: const AutoSizeText(
+                                    "Continue",
+                                    style: TextStyle(
+                                        fontSize: 28, color: Colors.white),
+                                    minFontSize: 18,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 45,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+
+                      children: [
+
+                        Container(
+                          padding: EdgeInsets.fromLTRB(60, 0, 0, 10),
+                            child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(5, 0, 0, 10),
+                            child: AutoSizeText('User should have administrative rights on the account',
+                                style: TextStyle(fontSize: 24,color: Color(0xff66717B)),
+                                minFontSize: 12,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis),
+                        ),
+                      ],
+                    ),
+                  ])),
+        ),
+      ),
     );
   }
 
   Future<void> loginUser() async {
-    setState(() {
-      _isProgressLoading = true;
-    });
+    await _isProgressLoading.show();
     Map<String, dynamic> tokenBody = HashMap();
-    tokenBody['email'] = _email;
+    tokenBody['email'] = _email.trim();
     tokenBody['password'] = base64Url.encode(utf8.encode(_password));
     tokenBody['deviceSN'] = "";
     GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
         .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
     if (getDeviceTokenResponse.responseCode == 1) {
-      setState(() {
-        _isProgressLoading = false;
-      });
+      await _isProgressLoading.hide();
       var pref = await SharedPreferences.getInstance();
       pref.setString(Sharepref.accessToken,
           getDeviceTokenResponse.responseData.responseData.access_token);
       Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => AddDevice(offlineDeviceData: getDeviceTokenResponse.responseData.offlineDeviceData!! , tabletSettingData: getDeviceTokenResponse.responseData.tabletSettingData!!, facilityListData: getDeviceTokenResponse.responseData.facilityListData!!,)
-    ));
+          context,
+          MaterialPageRoute(
+              builder: (context) => AddDevice(
+                    offlineDeviceData:
+                        getDeviceTokenResponse.responseData.offlineDeviceData!!,
+                    tabletSettingData:
+                        getDeviceTokenResponse.responseData.tabletSettingData!!,
+                    facilityListData:
+                        getDeviceTokenResponse.responseData.facilityListData!!,
+                  )));
     } else {
-      setState(() {
-        _isProgressLoading = false;
-      });
+      await _isProgressLoading.hide();
       context.showToast(getDeviceTokenResponse.responseMessage);
     }
   }

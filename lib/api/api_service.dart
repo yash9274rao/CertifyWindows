@@ -151,6 +151,7 @@ class ApiService {
           },
           body: jsonEncode(bodys));
       print('AccessLogs request = ${res.request}');
+      print('AccessLogs body = ${jsonEncode(bodys)}');
       print('AccessLogs = ${res.body}');
       if (res.statusCode == 200) {
         AccesslogsResponse accesslogsResponse =
@@ -182,9 +183,9 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
-//      print('validateQRCode = ${res.request}');
-  //    print('validateQRCode = ${jsonEncode(bodys)}');
-  //    print('validateQRCode = ${res.body}');
+      print('validateQRCode = ${res.request}');
+      print('validateQRCode = ${jsonEncode(bodys)}');
+      print('validateQRCode = ${res.body}');
 
       QrData qrData = new QrData();
       if (res.statusCode == 200) {

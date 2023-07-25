@@ -6,6 +6,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/response/activate_application_response.dart';
 import 'package:certify_me_kiosk/api/response/getdevice_token_response.dart';
@@ -46,7 +47,7 @@ class _MyHome extends State<MyLanch> {
   Map<String, dynamic> diveInfo = HashMap();
   var _isVisibility = false;
   var _is_web = true;
-
+  late ProgressDialog _isProgressLoading;
   @override
   void initState() {
     super.initState();
@@ -54,116 +55,169 @@ class _MyHome extends State<MyLanch> {
     getDeviceToken();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return MaterialApp(
       title: 'Certify.me Kiosk',
       home: Scaffold(
         body: Container(
           color: Colors.white,
-          child: Visibility(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: SingleChildScrollView(
+              child: Visibility(
             visible: _isVisibility,
-            child: Row(
-              children: [
-                const Expanded(
-                  flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(45, 55, 45, 0),
                   child: Image(
-                    image: AssetImage('images/assets/image.png'),
+                    image: AssetImage('images/assets/final_logo.png'),
                   ),
                 ),
-                Expanded(
-                  flex: 1,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                        child: AutoSizeText(
-                          'Register Device',
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(45, 40, 45, 0),
+                  child: AutoSizeText(
+                    'Register the device',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32,
+                        color: Color(0xff273C51)),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Padding(
+                    padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                    child: Divider(color: Colors.grey)),
+                const Row(
+                  children: <Widget>[
+                    SizedBox(
+                      width: 45,
+                    ),
+                    Icon(
+                      Icons.error_outline,color:Color(0xff66717B) ,
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Flexible(
+                      child: AutoSizeText(
+                          'This device is not configured to work online. If'
+                          ' you already have a cloud account, then',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 40),
+                            fontSize: 24,
+                            color: Color(0xff66717B),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 15,
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(45, 15, 45, 45),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => login()));
+                    },
+                    style: TextButton.styleFrom(
+                      elevation: 20,
+                      shadowColor: Colors.grey,
+                    ),
+                    child: Ink(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xff175EA5), Color(0xff163B60)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          tileMode: TileMode.repeated,
+                          stops: [0.0, 1.7],
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Container(
+                        constraints: const BoxConstraints(
+                            maxWidth: 300.0, minHeight: 50.0),
+                        padding: const EdgeInsets.all(16.0),
+                        alignment: Alignment.center,
+                        child: const AutoSizeText(
+                          "Log-In to Register",
+                          style: TextStyle(fontSize: 28, color: Colors.white),
+                          minFontSize: 18,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const Padding(
-                          padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
-                          child: Divider(color: Colors.grey)),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                    ),
+                  ),
+                ),
+                Row(
+                  children: <Widget>[
+                    const SizedBox(width: 45,),
+                    Visibility(
+                      visible: _is_web,
+                      child: const Icon(Icons.error_outline,color: Color(0xff66717B),),
+                    ),
+                    const SizedBox(width: 5,),
+                    Flexible(
+                      child: Visibility(
+                        visible: _is_web,
                         child: AutoSizeText(
-                            'This device is not configured to work online. If'
-                            ' you already have a cloud account',
-                            style: TextStyle(fontSize: 18),
+                            '${textHolderModalController}, then',
+                            style: const TextStyle(
+                                fontSize: 24, color: Color(0xff66717B)),
                             minFontSize: 12,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.all(16.0),
-                            textStyle: const TextStyle(fontSize: 20),
-                            backgroundColor: Colors.blue,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => login()));
-                          },
-                          child: const AutoSizeText(
-                              "Login to register the device",
-                              style: TextStyle(fontSize: 26),
-                              minFontSize: 18,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis),
+                    ),
+                    const SizedBox(width: 15,),
+                  ],
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(55, 20, 45, 0),
+                  child: Visibility(
+                    visible: _is_web,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        side: const BorderSide(
+                            color: Color(0xff163A5F), width: 2),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
+                        elevation: 9,
+                        //Defines Elevation
+                        shadowColor: Color(0xff175EA5),
+                        //Defines shadowColor
+                        backgroundColor: Colors.white,
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
-                        child: Visibility(
-                          visible: _is_web,
-                          child: AutoSizeText('${textHolderModalController}',
-                              style: const TextStyle(fontSize: 18),
-                              minFontSize: 12,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis),
-                        ),
+                      onPressed: () async {
+                        await _isProgressLoading.show();
+                        activiAPI();
+                      },
+                      child: Container(
+                        constraints: const BoxConstraints(
+                            maxWidth: 280.0, minHeight: 50.0),
+                        padding: const EdgeInsets.all(14.0),
+                        alignment: Alignment.center,
+                        child: const AutoSizeText("Try Re-activation",
+                            style: TextStyle(
+                                fontSize: 28, color: Color(0xff163A5F)),
+                            minFontSize: 18,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(25, 0, 20, 15),
-                        child: Visibility(
-                          visible: _is_web,
-                          child: TextButton(
-                            style: TextButton.styleFrom(
-                              foregroundColor: Colors.blue,
-                              padding: const EdgeInsets.all(16.0),
-                              textStyle: const TextStyle(fontSize: 20),
-                              side: BorderSide(color: Colors.blue, width: 1),
-                            ),
-                            onPressed: () {
-                              print("BBBBBBBBBBBBBBBBBBBB");
-                              activiAPI();
-                            },
-                            child: const AutoSizeText("Try Activation Again",
-                                style: TextStyle(fontSize: 26),
-                                minFontSize: 18,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                )
+                ),
               ],
             ),
-          ),
+          )),
         ),
       ),
     );
@@ -198,7 +252,8 @@ class _MyHome extends State<MyLanch> {
     if (_clientInfo.osName == 'Android') {
       pref.setString(Sharepref.platform, "Android Tablet");
       pref.setString(Sharepref.platformId, "4");
-    } else if ((_clientInfo.osName == 'Windows') || (_clientInfo.osName == 'Mac OS')){
+    } else if ((_clientInfo.osName == 'Windows') ||
+        (_clientInfo.osName == 'Mac OS')) {
       pref.setString(Sharepref.platform, "web");
       pref.setString(Sharepref.platformId, "5");
     } else {
@@ -231,13 +286,13 @@ class _MyHome extends State<MyLanch> {
     createDoc['pushAuthToken'] = pref.getString(Sharepref.firebaseToken);
     createDoc['deviceData'] = diveInfo;
     // bool result = await InternetConnectionChecker().hasConnection;
-    if (true) {
       ActivateApplicationResponse activateApplicationResponse =
           await ApiService().activateApplication(diveInfo, sn)
               as ActivateApplicationResponse;
       print("activateApplicationResponse == $activateApplicationResponse");
 
       if (activateApplicationResponse.responseCode == 1) {
+        await _isProgressLoading.hide();
         print("activateApplicationResponse.responseCode ==1");
         Map<String, dynamic> tokenBody = HashMap();
         tokenBody['email'] = "";
@@ -246,6 +301,7 @@ class _MyHome extends State<MyLanch> {
         GetDeviceTokenResponse getDeviceTokenResponse = await ApiService()
             .getGenerateToken(tokenBody) as GetDeviceTokenResponse;
         if (getDeviceTokenResponse.responseCode == 1) {
+
           pref.setString(Sharepref.accessToken,
               getDeviceTokenResponse.responseData.responseData.access_token);
           pref.setString(Sharepref.institutionID,
@@ -253,20 +309,19 @@ class _MyHome extends State<MyLanch> {
           Navigator.pushReplacement(context as BuildContext,
               MaterialPageRoute(builder: (context) => HomeScreen()));
         } else {
+          await _isProgressLoading.hide();
           setState(() {
             if (pref.getString(Sharepref.platform) == "web") _is_web = false;
             _isVisibility = true;
           });
         }
       } else {
+        await _isProgressLoading.hide();
         setState(() {
           if (pref.getString(Sharepref.platform) == "web") _is_web = false;
           _isVisibility = true;
         });
       }
-    } else {
-      Util.showToastError("No Internet");
-    }
   }
 }
 
