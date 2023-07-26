@@ -234,7 +234,7 @@ class _MyPinScreen extends State<PinScreen> {
                                 onPressed: () {
                                   FocusScope.of(context).unfocus();
                                   if (_pinStr.isEmpty) {
-                                    context.showToast("Please Enter pin");
+                                    context.showToast("Please Enter PIN");
                                   } else if (_mobileNumber.isEmpty) {
                                     context.showToast(
                                         "Please Enter Phone Number");
