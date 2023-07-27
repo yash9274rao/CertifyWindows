@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
 import 'common/sharepref.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -440,7 +441,16 @@ class _MyHome extends State<HomeScreen> {
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-
+    // try {
+    //   String _timezone = await FlutterTimezone.getLocalTimezone();
+    //   print("fffffffffff ${_timezone}");
+    // } catch (e) {
+    //   print('Could not get available timezones');
+    //   List<String>  _availableTimezones = await FlutterTimezone.getAvailableTimezones();
+    //   _availableTimezones.sort();
+    //   print('Could not get available timezones${_availableTimezones.length}');
+    //
+    // }
     setState(() {
       checkInMode = pref.getString(Sharepref.checkInMode)!;
       versionId = pref.getString(Sharepref.appVersion)!;

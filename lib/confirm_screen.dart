@@ -206,19 +206,14 @@ class _Confirm extends State<ConfirmScreen> {
       else if (widget.dataStr.startsWith("tr") ||
           widget.dataStr.startsWith("vm") ||
           (widget.dataStr.startsWith("vi"))) {
-        Map<String, dynamic> qrValidation = new HashMap();
-        qrValidation['qrCodeID'] = widget.dataStr;
-        qrValidation['institutionId'] = pref.getString(Sharepref.institutionID);
-        qrValidation['deviceSN'] = pref.getString(Sharepref.serialNo);
-        qrData = await ApiService().validateQRCode(
-            pref.get(Sharepref.accessToken), qrValidation) as QrData;
-        // await Future.delayed(const Duration(seconds: 5));
-        qrData.setQrCodeID = widget.dataStr;
+        ValidateQRCodeAccessLog();
+
       } else if (pref.getString(Sharepref.enableAnonymousQRCode) == "1") {
         qrData = QrData();
         qrData.setIsValid = true;
         qrData.setFirstName = "Anonymous";
         qrData.setQrCodeID = widget.dataStr;
+        timeDateSet(qrData);
       }
 
     } else if (widget.type == "pin") {
@@ -228,10 +223,12 @@ class _Confirm extends State<ConfirmScreen> {
       qrData.setQrCodeID = "";
       qrData.scheduleId = widget.scheduleId;
       qrData.id = '${widget.id}';
+      qrData.eventName = widget.name;
       //updateUI(qrData);
+      timeDateSet(qrData);
     }
     //pin
-    timeDateSet(qrData);
+
   }
 
   Future<void> updateUI(QrData qrData) async {
@@ -336,6 +333,7 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['attendanceMode'] = widget.attendanceMode;
     accessLogs['allowAccess'] = qrData.getIsValid;
     accessLogs['scheduleId'] = qrData.scheduleId;
+    accessLogs['eventName'] = qrData.eventName;
     AccesslogsResponse accesslogsResponse = await ApiService()
         .accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
     // updateUI(qrData);
@@ -368,9 +366,88 @@ class _Confirm extends State<ConfirmScreen> {
     } else {
       updateUI(qrData);
     }
-    // Future.delayed(Duration(milliseconds: 500), () {
-    //   Navigator.pushReplacement(
-    //       context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    // });
+  }
+
+  Future<void> ValidateQRCodeAccessLog() async {
+    // await Future.delayed(const Duration(seconds: 5));
+    qrData.setQrCodeID = widget.dataStr;
+    var ipv4 = "";
+    Map<String, dynamic> diveInfo = new HashMap();
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    diveInfo['osVersion'] = pref.getString(Sharepref.osVersion);
+    diveInfo['uniqueDeviceId'] = pref.getString(Sharepref.serialNo);
+    diveInfo['deviceModel'] = pref.getString(Sharepref.deviceModel);
+    diveInfo['deviceSN'] = pref.getString(Sharepref.serialNo);
+    diveInfo['appVersion'] = pref.getString(Sharepref.appVersion);
+    diveInfo['mobileNumber'] = "+1";
+    diveInfo['IMEINumber'] = "";
+    diveInfo['batteryStatus'] = "100";
+    diveInfo['networkStatus'] = "true";
+    diveInfo['appState'] = "Foreground";
+    try {
+      ipv4 = await Ipify.ipv4();
+    } catch (e) {
+      ipv4 = "";
+    }
+    Map<String, dynamic> accessLogs = HashMap();
+    accessLogs['deviceSN'] = pref.getString(Sharepref.serialNo);
+    accessLogs['temperature'] = 0;
+    accessLogs['qrCodeId'] = qrData.getQrCodeID;
+    accessLogs['deviceId'] = pref.getString(Sharepref.serialNo);
+    accessLogs['deviceName'] = pref.getString(Sharepref.deviceName);
+    accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    accessLogs['facilityId'] = 0;
+    accessLogs['locationId'] = 0;
+    accessLogs['facilityName'] = "";
+    accessLogs['locationName'] = '';
+    accessLogs['deviceTime'] =
+        DateFormat("MM/dd/yyyy HH:mm:ss").format(DateTime.now()).toString();
+    accessLogs['timezone'] = '05:30';
+    accessLogs['sourceIP'] = ipv4;
+    accessLogs['deviceData'] = diveInfo;
+    accessLogs['guid'] = '';
+    accessLogs['faceParameters'] = "";
+    accessLogs['eventType'] = '';
+    accessLogs['evenStatus'] = '';
+    accessLogs['utcRecordDate'] = DateFormat("yyyy-MM-dd HH:mm:ss")
+        .format(DateTime.now().toUtc())
+        .toString();
+    accessLogs['loggingMode'] = '2';
+    accessLogs['accessOption'] = 1;
+    accessLogs['attendanceMode'] = widget.attendanceMode;
+
+    qrData = await ApiService().validateQRCodeAccessLog(
+        pref.get(Sharepref.accessToken), accessLogs) as QrData;
+   // updateUI(qrData);
+    if (qrData.responseSubCode == 0 &&
+        int.parse(widget.attendanceMode) == 1 &&
+        qrData.isValid == true) {
+      updateUI(qrData);
+      context.showToast("You have been Checked-in");
+    } else if (qrData.responseSubCode == 0 &&
+        int.parse(widget.attendanceMode) == 2 &&
+        qrData.isValid == true) {
+      updateUI(qrData);
+      context.showToast("Checked-out");
+    } else if (qrData.responseSubCode == 103 &&
+        int.parse(widget.attendanceMode) == 1 &&
+        qrData.isValid == true) {
+      navigationHome();
+      context.showToast("Already Checked-in");
+    } else if (qrData.responseSubCode == 103 &&
+        int.parse(widget.attendanceMode) == 2 &&
+        qrData.isValid == true) {
+      navigationHome();
+      context.showToast("Already Checked-out");
+     }
+    else if (qrData.isValid == false) {
+      navigationHome();
+      if (widget.type == "pin")
+        context.showToast("Invalid PIN");
+      else
+        context.showToast('Invalid QR Code');
+    } else {
+      updateUI(qrData);
+    }
   }
 }
