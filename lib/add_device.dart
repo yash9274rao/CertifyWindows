@@ -102,9 +102,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     // dropdownDataDeviceName.add("+ Add New");
+    if( widget.offlineDeviceData.isNotEmpty)
     dropdownDeviceName = dropdownDataDeviceName.first;
-    deviceSettings = dropdownDataDeviceSetting!.first;
-    deviceFacility = dropdownDataFacility.first;
+    if( widget.tabletSettingData.isNotEmpty)
+      deviceSettings = dropdownDataDeviceSetting!.first;
+    if( widget.facilityListData.isNotEmpty)
+      deviceFacility = dropdownDataFacility.first;
     dropdownDataDeviceName = dropdownDataDeviceName.toSet().toList();
     dropdownDataDeviceSetting = dropdownDataDeviceSetting.toSet().toList();
     dropdownDataFacility = dropdownDataFacility.toSet().toList();
