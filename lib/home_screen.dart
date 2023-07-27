@@ -24,12 +24,13 @@ class _MyHome extends State<HomeScreen> {
       lineOneText = "",
       lineTwoText = "";
   var _imageToShow =
-  const Image(image: AssetImage('images/assets/final_logo.png'));
+      const Image(image: AssetImage('images/assets/final_logo.png'));
   late Timer dataTime;
   late Timer timer;
   String attendanceMode = "0";
   String checkInMode = "0";
   Map<String, dynamic> diveInfo = HashMap();
+  var isVisiabilityImag = false;
 
   @override
   void initState() {
@@ -47,332 +48,323 @@ class _MyHome extends State<HomeScreen> {
         home: Scaffold(
             body: Container(
                 color: Colors.white,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height,
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
                 child: SingleChildScrollView(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 40, 15, 0),
-                            child: _imageToShow,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
-                            child: Text(
-                              lineOneText,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                  color: Color(0xff273C51)),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(10, 20, 25, 0),
-                            child: Text(
-                              lineTwoText,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 18,
-                                  color: Color(0xff245F99)),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 120, 0, 5),
-                            child: Row(children: [
-                              Expanded(
-                                flex: 1,
-                                child: SingleChildScrollView(
-                                  child: Container(
-                                    margin: EdgeInsets.only(right:50),
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          Color(0xff175EA5),
-                                          Color(0xff163B60)
-                                        ],
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        tileMode: TileMode.repeated,
-                                        stops: [0.0, 1.7],
-                                      ),
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      children: <Widget>[
-                                        const Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0, 0, 0, 0),
-                                          child: Image(
-                                            image: AssetImage(
-                                                'images/assets/quote.png'),
-                                          ),
-                                        ),
-                                        Center(
-                                            child: Padding(
-                                              padding: const EdgeInsets
-                                                  .fromLTRB(
-                                                  0, 45, 0, 0),
-                                              child: TextButton.icon(
-                                                icon: const Icon(
-                                                  color: Colors.white,
-                                                  Icons.access_time,
-                                                  size: 24.0,
-                                                ),
-                                                label: Text(
-                                                  timeTextHolderModalController,
-                                                  style: const TextStyle(
-                                                      fontWeight: FontWeight
-                                                          .normal,
-                                                      fontSize: 32,
-                                                      color: Colors.white),
-                                                ),
-                                                onPressed: () {},
-                                              ),
-                                            )),
-                                        Center(
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                8, 0, 0, 20),
-                                            child: Text(
-                                              dateTextHolderModalController,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.normal,
-                                                  fontSize: 24,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                        const Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: Image(
-                                            image: AssetImage(
-                                                'images/assets/quote_down.png'),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 40, 15, 0),
+                        child: Visibility(
+                          visible: isVisiabilityImag,
+                          child: _imageToShow,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
+                        child: Text(
+                          lineOneText,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                              color: Color(0xff273C51)),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 20, 25, 0),
+                        child: Text(
+                          lineTwoText,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 18,
+                              color: Color(0xff245F99)),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 120, 0, 5),
+                        child: Row(children: [
+                          Expanded(
+                            flex: 1,
+                            child: SingleChildScrollView(
+                              child: Container(
+                                margin: EdgeInsets.only(right: 50),
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Color(0xff175EA5),
+                                      Color(0xff163B60)
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    tileMode: TileMode.repeated,
+                                    stops: [0.0, 1.7],
                                   ),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20)),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: Image(
+                                        image: AssetImage(
+                                            'images/assets/quote.png'),
+                                      ),
+                                    ),
+                                    Center(
+                                        child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 45, 0, 0),
+                                      child: TextButton.icon(
+                                        icon: const Icon(
+                                          color: Colors.white,
+                                          Icons.access_time,
+                                          size: 24.0,
+                                        ),
+                                        label: Text(
+                                          timeTextHolderModalController,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 32,
+                                              color: Colors.white),
+                                        ),
+                                        onPressed: () {},
+                                      ),
+                                    )),
+                                    Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            8, 0, 0, 20),
+                                        child: Text(
+                                          dateTextHolderModalController,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: 24,
+                                              color: Colors.white),
+                                        ),
+                                      ),
+                                    ),
+                                    const Align(
+                                      alignment: Alignment.bottomRight,
+                                      child: Image(
+                                        image: AssetImage(
+                                            'images/assets/quote_down.png'),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    // height:
-                                    // MediaQuery.of(context).size.height,
-                                    // width: MediaQuery.of(context).size.width,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .center,
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        children: [
-                                          Stack(
-                                              alignment: Alignment.center,
-                                              children: <Widget>[
-                                                Container(
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                        margin: EdgeInsets.only(left: _width*0.10,right:  _width*0.10),
-                                                          child: TextButton(
-                                                              style:
-                                                              TextButton
-                                                                  .styleFrom(
-                                                                shape:
-                                                                RoundedRectangleBorder(
-                                                                  borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                      15.0),
-                                                                ),
-                                                                elevation: 9,
-                                                                //Defines Elevation
-                                                                shadowColor:
-                                                                Color(
-                                                                    0xff46973F),
-                                                                foregroundColor:
-                                                                Colors.white,
-                                                                padding:
-                                                                const EdgeInsets
-                                                                    .all(25.0),
-                                                                backgroundColor:
-                                                                const Color(
-                                                                    0xff46973F),
-                                                                minimumSize: const Size
-                                                                    .fromHeight(
-                                                                    40),
-                                                              ),
-                                                              onPressed: () async {
-                                                                SharedPreferences pref =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-                                                                attendanceMode =
-                                                                "1";
-                                                                if (pref.getString(Sharepref.checkInMode) ==
-                                                                    "0") {
-                                                                  pref.setBool(
-                                                                      Sharepref
-                                                                          .isQrCodeScan,
-                                                                      true);
-                                                                  // ignore: use_build_context_synchronously
-                                                                  Navigator
-                                                                      .pushReplacement(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (
-                                                                              context) =>
-                                                                              QRViewExample(
-                                                                                  attendanceMode: attendanceMode)));
-                                                                } else
-                                                                if (pref.getString(Sharepref.checkInMode) ==
-                                                                    "1") {
-                                                                  Navigator.pushReplacement(context,
-                                                                      MaterialPageRoute(builder: (context) => PinScreen(attendanceMode: attendanceMode)));
-
-                                                                } else
-                                                                if (pref.getString(Sharepref.checkInMode) ==
-                                                                    "2") {
-                                                                  // ignore: use_build_context_synchronously
-                                                                  Navigator
-                                                                      .pushReplacement(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                          builder: (
-                                                                              context) =>
-                                                                              PinQrCodeScreen(
-                                                                                  attendanceMode: attendanceMode)));
-                                                                }
-                                                              },
-                                                              child: const FittedBox(
-                                                                fit: BoxFit
-                                                                    .scaleDown,
-                                                                child: AutoSizeText(
-                                                                    "Check - In",
-                                                                    style: TextStyle(
-                                                                        fontSize: 32),
-                                                                    minFontSize: 14,
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis),
-                                                              )),
-                                                      ),
-                                                      Container(
-                                                        margin: EdgeInsets.only(left: _width*0.10,right:  _width*0.10,top: 30),
-
-                                                        child: TextButton(
-                                                            style: TextButton
-                                                                .styleFrom(
-                                                              shape:
-                                                              RoundedRectangleBorder(
-                                                                borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                    15.0),
-                                                              ),
-                                                              elevation: 9,
-                                                              //Defines Elevation
-                                                              shadowColor:
-                                                              Color(0xffDF473D),
-                                                              padding:
-                                                              const EdgeInsets
-                                                                  .all(
-                                                                  25.0),
-                                                              backgroundColor:
-                                                              const Color(
-                                                                  0xffDF473D),
-                                                              minimumSize:
-                                                              const Size
-                                                                  .fromHeight(
-                                                                  40),
-                                                            ),
-                                                            onPressed: () async {
-                                                              SharedPreferences pref =
-                                                              await SharedPreferences
-                                                                  .getInstance();
-                                                              attendanceMode =
-                                                              "2";
-                                                              if (pref.getString(Sharepref.checkInMode) ==
-                                                                  "0") {
-                                                                pref.setBool(
-                                                                    Sharepref
-                                                                        .isQrCodeScan,
-                                                                    true);
-                                                                // ignore: use_build_context_synchronously
-                                                                Navigator
-                                                                    .pushReplacement(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (
-                                                                            context) =>
-                                                                            QRViewExample(
-                                                                                attendanceMode: attendanceMode)));
-                                                              } else
-                                                              if (pref.getString(Sharepref.checkInMode) ==
-                                                                  "1") {
-                                                                Navigator.pushReplacement(context,
-                                                                    MaterialPageRoute(builder: (context) => PinScreen(attendanceMode: attendanceMode)));
-                                                              } else
-                                                              if (pref.getString(Sharepref.checkInMode) ==
-                                                                  "2") {
-                                                                // ignore: use_build_context_synchronously
-                                                                Navigator
-                                                                    .pushReplacement(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (
-                                                                            context) =>
-                                                                            PinQrCodeScreen(
-                                                                                attendanceMode: attendanceMode)));
-                                                              }
-                                                            },
-                                                            child: const FittedBox(
-                                                              fit: BoxFit
-                                                                  .scaleDown,
-                                                              child: AutoSizeText(
-                                                                  "Check - Out",
-                                                                  style: TextStyle(
-                                                                      fontSize: 32,
-                                                                      color:
-                                                                      Colors
-                                                                          .white),
-                                                                  minFontSize: 14,
-                                                                  maxLines: 1,
-                                                                  overflow: TextOverflow
-                                                                      .ellipsis),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ]),
-                                        ],
-                                      ))),
-                            ]),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 20, 0, 5),
-                            child: Text(
-                              versionId,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 14,
-                                  color: Color(0xff15395C)),
                             ),
                           ),
-                        ])))));
+                          Expanded(
+                              flex: 1,
+                              child: Container(
+                                  // height:
+                                  // MediaQuery.of(context).size.height,
+                                  // width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Stack(
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        Container(
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: _width * 0.10,
+                                                    right: _width * 0.10),
+                                                child: TextButton(
+                                                    style: TextButton.styleFrom(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15.0),
+                                                      ),
+                                                      elevation: 9,
+                                                      //Defines Elevation
+                                                      shadowColor:
+                                                          Color(0xff46973F),
+                                                      foregroundColor:
+                                                          Colors.white,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              25.0),
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xff46973F),
+                                                      minimumSize:
+                                                          const Size.fromHeight(
+                                                              40),
+                                                    ),
+                                                    onPressed: () async {
+                                                      SharedPreferences pref =
+                                                          await SharedPreferences
+                                                              .getInstance();
+                                                      attendanceMode = "1";
+                                                      if (pref.getString(Sharepref
+                                                              .checkInMode) ==
+                                                          "0") {
+                                                        pref.setBool(
+                                                            Sharepref
+                                                                .isQrCodeScan,
+                                                            true);
+                                                        // ignore: use_build_context_synchronously
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    QRViewExample(
+                                                                        attendanceMode:
+                                                                            attendanceMode)));
+                                                      } else if (pref.getString(
+                                                              Sharepref
+                                                                  .checkInMode) ==
+                                                          "1") {
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    PinScreen(
+                                                                        attendanceMode:
+                                                                            attendanceMode)));
+                                                      } else if (pref.getString(
+                                                              Sharepref
+                                                                  .checkInMode) ==
+                                                          "2") {
+                                                        // ignore: use_build_context_synchronously
+                                                        Navigator.pushReplacement(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    PinQrCodeScreen(
+                                                                        attendanceMode:
+                                                                            attendanceMode)));
+                                                      }
+                                                    },
+                                                    child: const FittedBox(
+                                                      fit: BoxFit.scaleDown,
+                                                      child: AutoSizeText(
+                                                          "Check - In",
+                                                          style: TextStyle(
+                                                              fontSize: 32),
+                                                          minFontSize: 14,
+                                                          maxLines: 1,
+                                                          overflow: TextOverflow
+                                                              .ellipsis),
+                                                    )),
+                                              ),
+                                              Container(
+                                                margin: EdgeInsets.only(
+                                                    left: _width * 0.10,
+                                                    right: _width * 0.10,
+                                                    top: 30),
+                                                child: TextButton(
+                                                  style: TextButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15.0),
+                                                    ),
+                                                    elevation: 9,
+                                                    //Defines Elevation
+                                                    shadowColor:
+                                                        Color(0xffDF473D),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            25.0),
+                                                    backgroundColor:
+                                                        const Color(0xffDF473D),
+                                                    minimumSize:
+                                                        const Size.fromHeight(
+                                                            40),
+                                                  ),
+                                                  onPressed: () async {
+                                                    SharedPreferences pref =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    attendanceMode = "2";
+                                                    if (pref.getString(Sharepref
+                                                            .checkInMode) ==
+                                                        "0") {
+                                                      pref.setBool(
+                                                          Sharepref
+                                                              .isQrCodeScan,
+                                                          true);
+                                                      // ignore: use_build_context_synchronously
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  QRViewExample(
+                                                                      attendanceMode:
+                                                                          attendanceMode)));
+                                                    } else if (pref.getString(
+                                                            Sharepref
+                                                                .checkInMode) ==
+                                                        "1") {
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PinScreen(
+                                                                      attendanceMode:
+                                                                          attendanceMode)));
+                                                    } else if (pref.getString(
+                                                            Sharepref
+                                                                .checkInMode) ==
+                                                        "2") {
+                                                      // ignore: use_build_context_synchronously
+                                                      Navigator.pushReplacement(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  PinQrCodeScreen(
+                                                                      attendanceMode:
+                                                                          attendanceMode)));
+                                                    }
+                                                  },
+                                                  child: const FittedBox(
+                                                    fit: BoxFit.scaleDown,
+                                                    child: AutoSizeText(
+                                                        "Check - Out",
+                                                        style: TextStyle(
+                                                            fontSize: 32,
+                                                            color:
+                                                                Colors.white),
+                                                        minFontSize: 14,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ]),
+                                ],
+                              ))),
+                        ]),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 20, 0, 5),
+                        child: Text(
+                          versionId,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 14,
+                              color: Color(0xff15395C)),
+                        ),
+                      ),
+                    ])))));
   }
 
   Future<void> timeDateSet() async {
@@ -388,10 +380,7 @@ class _MyHome extends State<HomeScreen> {
       });
     });
     pref.setString(Sharepref.APP_LAUNCH_TIME,
-        DateTime
-            .now()
-            .millisecondsSinceEpoch
-            .toString());
+        DateTime.now().millisecondsSinceEpoch.toString());
     healthCheck();
     deviceSetting();
   }
@@ -417,7 +406,7 @@ class _MyHome extends State<HomeScreen> {
     healthCheckRequest['pushAuthToken'] =
         pref.getString(Sharepref.firebaseToken);
     healthCheckRequest['institutionId'] =
-    '${pref.getString(Sharepref.institutionID)}';
+        '${pref.getString(Sharepref.institutionID)}';
     //healthCheckRequest['appState'] = 'Foreground';
     //healthCheckRequest['appUpTime'] = '00:22:00';
     // healthCheckRequest['deviceUpTime'] = '01:20:10';
@@ -431,12 +420,11 @@ class _MyHome extends State<HomeScreen> {
     Map<String, dynamic> deviceSetting = HashMap();
     deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     deviceSetting['institutionId'] =
-    '${pref.getString(Sharepref.institutionID)}';
+        '${pref.getString(Sharepref.institutionID)}';
     deviceSetting['settingType'] = 10;
     String req = await ApiService().deviceSetting(pref) as String;
     if (req == "1") updateUI();
   }
-
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
@@ -451,8 +439,9 @@ class _MyHome extends State<HomeScreen> {
         _imageToShow = Image.memory(const Base64Decoder().convert(base64));
       } else {
         _imageToShow =
-        const Image(image: AssetImage('images/assets/final_logo.png'));
+            const Image(image: AssetImage('images/assets/final_logo.png'));
       }
+      isVisiabilityImag = true;
     });
   }
 
