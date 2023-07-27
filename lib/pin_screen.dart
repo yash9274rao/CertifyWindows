@@ -55,16 +55,16 @@ class _MyPinScreen extends State<PinScreen> {
               color: Colors.white,
               height: _height,
               width: _width,
-              padding: EdgeInsets.all(_height * 0.05),
+              padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                        padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                         child: _imageToShow),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Text(
                         lineOneText,
                         style: const TextStyle(
@@ -74,7 +74,7 @@ class _MyPinScreen extends State<PinScreen> {
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
+                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Text(
                         lineTwoText,
                         style: const TextStyle(
@@ -85,7 +85,7 @@ class _MyPinScreen extends State<PinScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: _height * 0.10, left: _width * 0.20),
+                          top:40, left: _width * 0.20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -131,7 +131,7 @@ class _MyPinScreen extends State<PinScreen> {
 
                     Container(
                       margin: EdgeInsets.only(
-                          top: _height * 0.05,
+                          top: 40,
                           left: _width * 0.23,
                           right: _width * 0.23),
                       child: Row(children: [
@@ -321,7 +321,15 @@ class _MyPinScreen extends State<PinScreen> {
   }
 
   Future<void> updateUI() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
+      String? base64 = pref.getString(Sharepref.logoHomePageView) ?? "";
+      if (base64.isNotEmpty) {
+        _imageToShow = Image.memory(const Base64Decoder().convert(base64));
+      } else {
+        _imageToShow =
+        const Image(image: AssetImage('images/assets/final_logo.png'));
+      }
       if (widget.attendanceMode == "1") {
         lineTwoText =
             "Enter the 5 digit secure PIN along with the registered phone number and click on continue to Check-In.";
@@ -369,7 +377,7 @@ class _MyPinScreen extends State<PinScreen> {
                       scheduleId: volunteerList[0].scheduleId!)));
         } else {
           cancelTimer();
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => VolunteerSchedulingList(
@@ -398,7 +406,7 @@ class _MyPinScreen extends State<PinScreen> {
                       scheduleId: volunteerListCheckOut[0].scheduleId!)));
         } else {
           cancelTimer();
-          Navigator.push(
+          Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) => VolunteerSchedulingList(

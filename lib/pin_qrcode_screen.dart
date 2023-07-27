@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
@@ -199,7 +200,15 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
   }
 
   Future<void> updateUI() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
     setState(() {
+      String? base64 = pref.getString(Sharepref.logoHomePageView) ?? "";
+      if (base64.isNotEmpty) {
+        _imageToShow = Image.memory(const Base64Decoder().convert(base64));
+      } else {
+        _imageToShow =
+        const Image(image: AssetImage('images/assets/final_logo.png'));
+      }
       if (widget.attendanceMode == "1") {
         lineOneText = "Check-In";
         lineTwoText = "Choose your mode of check-in through this device.";
