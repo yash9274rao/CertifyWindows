@@ -171,7 +171,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                   type: "pin",
                                                   name: widget.name,
                                                   id: widget.itemId,
-                                                  scheduleId: widget.volunteerList[index].scheduleId!)));
+                                                  scheduleId: widget.volunteerList[index].scheduleId!, scheduleEventName: widget.volunteerList[index].scheduleTitle!)));
                                   cancelTimer();
                                 },
                                 child:Container(

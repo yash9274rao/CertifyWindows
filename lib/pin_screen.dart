@@ -374,7 +374,7 @@ class _MyPinScreen extends State<PinScreen> {
                       type: "pin",
                       name: nameFull,
                       id: id,
-                      scheduleId: volunteerList[0].scheduleId!)));
+                      scheduleId: volunteerList[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!)));
         } else {
           cancelTimer();
           Navigator.pushReplacement(
@@ -403,7 +403,7 @@ class _MyPinScreen extends State<PinScreen> {
                       type: "pin",
                       name: nameFull,
                       id: id,
-                      scheduleId: volunteerListCheckOut[0].scheduleId!)));
+                      scheduleId: volunteerListCheckOut[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!)));
         } else {
           cancelTimer();
           Navigator.pushReplacement(

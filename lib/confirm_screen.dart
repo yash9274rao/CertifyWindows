@@ -13,40 +13,14 @@ import 'api/response/accesslogs_Response.dart';
 import 'common/sharepref.dart';
 
 typedef StringValue = String Function(String);
-
-// class ConfirmScreen extends StatelessWidget {
-//   const ConfirmScreen(
-//       {Key? key,
-//       required this.dataStr,
-//       required this.attendanceMode,
-//       required this.type, required this.name, required this.id,required this.scheduleId})
-//       : super(key: key);
-//   final String dataStr;
-//   final String attendanceMode;
-//   final String type;
-//   final String name;
-//   final int id;
-//   final int scheduleId;
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Certify.me Kiosk',
-//       debugShowCheckedModeBanner: false,
-//       home: ConfirmLanch(dataStr, attendanceMode, type, name, id, scheduleId),
-//     );
-//   }
-// }
-
 class ConfirmScreen extends StatefulWidget {
   ConfirmScreen({Key? key,
       required this.dataStr,
       required this.attendanceMode,
-      required this.type, required this.name, required this.id,required this.scheduleId})
+      required this.type, required this.name, required this.id,required this.scheduleId,required this.scheduleEventName})
       : super(key: key);
 
-  final String dataStr, attendanceMode, type, name;
+  final String dataStr, attendanceMode, type, name,scheduleEventName;
   final int scheduleId, id;
 
   @override
@@ -185,12 +159,15 @@ class _Confirm extends State<ConfirmScreen> {
       if (widget.dataStr.startsWith("vm") &&
           (pref.getString(Sharepref.enableVolunteerQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
+        timeDateSet(qrData);
       } else if (widget.dataStr.startsWith("vi") &&
           (pref.getString(Sharepref.enableVisitorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
+        timeDateSet(qrData);
       }else if (widget.dataStr.contains("vn") &&
           (pref.getString(Sharepref.enableVendorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
+        timeDateSet(qrData);
       }
       else if (widget.dataStr.contains("vn")) { // Vendor QR code will come url base so we need use contains
        Map<String, dynamic> validateVendor = new HashMap();
@@ -213,6 +190,8 @@ class _Confirm extends State<ConfirmScreen> {
         qrData.setIsValid = true;
         qrData.setFirstName = "Anonymous";
         qrData.setQrCodeID = widget.dataStr;
+        timeDateSet(qrData);
+      }else {
         timeDateSet(qrData);
       }
 
@@ -242,7 +221,7 @@ class _Confirm extends State<ConfirmScreen> {
           qrData.isValid) {
         if (pref.getString(Sharepref.enableAnonymousQRCode) == "1" &&
             qrData.getFirstName == "Anonymous") {
-          textHolderModalController = "";
+          textHolderModalController = "Anonymous";
         } else {
           if (qrData.middleName!.isNotEmpty && qrData.lastName.isNotEmpty) {
             textHolderModalController =
@@ -333,7 +312,7 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['attendanceMode'] = widget.attendanceMode;
     accessLogs['allowAccess'] = qrData.getIsValid;
     accessLogs['scheduleId'] = qrData.scheduleId;
-    accessLogs['eventName'] = qrData.eventName;
+    accessLogs['eventName'] = widget.scheduleEventName;
     AccesslogsResponse accesslogsResponse = await ApiService()
         .accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
     // updateUI(qrData);
