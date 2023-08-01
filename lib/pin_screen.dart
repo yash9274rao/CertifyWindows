@@ -7,6 +7,7 @@ import 'package:certify_me_kiosk/confirm_screen.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
@@ -143,6 +144,13 @@ class _MyPinScreen extends State<PinScreen> {
                           child: TextFormField(
                             onSaved: (val) => _pinStr = val!,
                             keyboardType: TextInputType.number,
+                            inputFormatters: <TextInputFormatter>[
+                              // for below version 2 use this
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                             // for version 2 and greater youcan also use this
+                              FilteringTextInputFormatter.digitsOnly
+
+                            ],
                             maxLength: 5,
                             obscureText: true,
                             autofocus: true,
@@ -161,8 +169,7 @@ class _MyPinScreen extends State<PinScreen> {
                               border: UnderlineInputBorder(),
                               focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5))),
+                                  borderRadius:BorderRadius.all(Radius.circular(5))),
                               enabledBorder: UnderlineInputBorder(
                                   // borderSide: BorderSide.none,
                                   borderRadius:
@@ -197,6 +204,14 @@ class _MyPinScreen extends State<PinScreen> {
                         ),
                         Expanded(
                           child: IntlPhoneField(
+                            keyboardType: TextInputType.phone,
+                            inputFormatters: <TextInputFormatter>[
+                              // for below version 2 use this
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              // for version 2 and greater youcan also use this
+                              FilteringTextInputFormatter.digitsOnly
+
+                            ],
                             decoration: const InputDecoration(
                               counter: Offstage(),
                               hintText: 'Enter Phone Number',
@@ -374,7 +389,7 @@ class _MyPinScreen extends State<PinScreen> {
                       type: "pin",
                       name: nameFull,
                       id: id,
-                      scheduleId: volunteerList[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!)));
+                      scheduleId: volunteerList[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}'!)));
         } else {
           cancelTimer();
           Navigator.pushReplacement(
@@ -403,7 +418,7 @@ class _MyPinScreen extends State<PinScreen> {
                       type: "pin",
                       name: nameFull,
                       id: id,
-                      scheduleId: volunteerListCheckOut[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!)));
+                      scheduleId: volunteerListCheckOut[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}',)));
         } else {
           cancelTimer();
           Navigator.pushReplacement(

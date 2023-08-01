@@ -76,8 +76,8 @@ class _ToastWidgetState extends State<ToastWidget>
 extension ToastExtension on BuildContext {
   void showToast(
       String text, {
-        Duration duration = const Duration(seconds: 3),
-        Duration transitionDuration = const Duration(milliseconds: 350),
+        Duration duration = const Duration(seconds: 5),
+        Duration transitionDuration = const Duration(milliseconds: 550),
       }) {
     // Get the OverlayState
     final overlayState = Overlay.of(this);

@@ -95,7 +95,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                         type: "qr",
                         name: "",
                         id: 0,
-                        scheduleId: 0, scheduleEventName: "")));
+                        scheduleId: 0, scheduleEventName: "",scheduleEventTime: "", )));
           try {
             if (defaultTargetPlatform == TargetPlatform.android) {
               controller!.pauseCamera();

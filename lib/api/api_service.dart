@@ -274,6 +274,9 @@ class ApiService {
               validateQrCodeResponse.responseData?.scheduleId ?? 0;
           qrData.eventName =
               validateQrCodeResponse.responseData?.eventName ?? "";
+          if(validateQrCodeResponse.responseData!.fromDate.isNotEmpty) {
+            qrData.eventTime = '${validateQrCodeResponse.responseData?.fromDate} - ${validateQrCodeResponse.responseData?.toDate}';
+          }
           return qrData;
         } else {
           qrData.id = validateQrCodeResponse.responseSubCode.toString();

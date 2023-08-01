@@ -5,6 +5,8 @@ class Sharepref {
   static  String deviceModel = "deviceModel";
   static  String osVersion = "os_version";
   static  String appVersion = "appVersion";
+  static  String timeZone = "timeZone";
+
 
 
 

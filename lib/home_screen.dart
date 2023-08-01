@@ -371,10 +371,15 @@ class _MyHome extends State<HomeScreen> {
   Future<void> timeDateSet() async {
     //updateUI();
     SharedPreferences pref = await SharedPreferences.getInstance();
+    try {
+      var timeZone = DateTime.now().timeZoneOffset.toString().split(':');
+      pref.setString(Sharepref.timeZone, '${timeZone[0]}:${timeZone[1]}');
+    } catch (e) {
+      print(e.toString());
+    }
     dataTime = Timer.periodic(const Duration(seconds: 1), (dataTime) {
       String time = DateFormat('hh:mm a').format(DateTime.now());
       String date = DateFormat('EEEEE, dd MMM yyyy').format(DateTime.now());
-
       setState(() {
         timeTextHolderModalController = time;
         dateTextHolderModalController = date;

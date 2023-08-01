@@ -14,6 +14,8 @@ class QrData {
   late int scheduleId = 0;
   String? middleName = "";
   String? eventName = "";
+  String? eventTime = "";
+
   late int responseCode = 0;
   late int responseSubCode = 0;
   String? responseMessage = "";
