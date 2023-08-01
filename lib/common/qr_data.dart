@@ -13,6 +13,12 @@ class QrData {
   late int isVisitor = 0;
   late int scheduleId = 0;
   String? middleName = "";
+  String? eventName = "";
+  String? eventTime = "";
+
+  late int responseCode = 0;
+  late int responseSubCode = 0;
+  String? responseMessage = "";
 
 
 
@@ -98,4 +104,20 @@ class QrData {
     this.scheduleId = scheduleId;
   }
   int get getscheduleId => scheduleId;
+
+  set setResponseCode(int responseCode) {
+    this.responseCode = responseCode;
+  }
+  int get getResponseCode => responseCode;
+
+  set setResponseSubCode(int responseSubCode) {
+    this.responseSubCode = responseSubCode;
+  }
+  int get getResponseSubCode => responseSubCode;
+
+  set setResponseMessage(String responseMessage) {
+    this.responseMessage = responseMessage;
+  }
+
+  String? get getResponseMessage => responseMessage;
 }

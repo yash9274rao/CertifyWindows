@@ -33,13 +33,15 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
       title: 'Certify.me Kiosk',
       home: Scaffold(
         body: Container(
           color: Colors.white,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: _height,
+          width:_width,
           padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
           child: SingleChildScrollView(
               child: Column(
@@ -101,15 +103,22 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                         ),
                       ]),
                 ),
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 90, 0, 0),
-                ),
-                Center(
+                    Container(alignment: Alignment.center,
+                      margin: EdgeInsets.only(
+                          left: _width * 0.10,
+                          right: _width * 0.10,
+                          top: 30),
                   // false qrbox hidden
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      elevation: 20,
                       shadowColor: Colors.grey,
+                        shape:
+                        RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius
+                              .circular(15.0),
+                        ),
+                        elevation: 9,
                     ),
                     onPressed: () async {
                       SharedPreferences pref =
@@ -134,7 +143,7 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                       ),
                       child: Container(
                         constraints: const BoxConstraints(
-                            maxWidth: 300.0, minHeight: 50.0),
+                            maxWidth: 300.0, minHeight: 60.0),
                         padding: const EdgeInsets.all(16.0),
                         alignment: Alignment.center,
                         child: const AutoSizeText("QR-Code",
@@ -147,14 +156,19 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                   ),
                 ),
                     Container(alignment: Alignment.center,
-                      margin:EdgeInsets.only(top: 15), child: Text("Click here if you have the QR code",style: TextStyle(color: Colors.grey),),),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(0, 30, 0, 0),
-                ),
-                Center(
+                      margin: EdgeInsets.only(
+                          left: _width * 0.10,
+                          right: _width * 0.10,
+                          top: 10),
+                      child: Text("Click here if you have the QR code",style: TextStyle(color: Colors.grey),),),
+                    Container(alignment: Alignment.center,
+                  margin: EdgeInsets.only(
+                      left: _width * 0.10,
+                      right: _width * 0.10,
+                      top: 30),
                   child: TextButton(
                     style: TextButton.styleFrom(
-                      elevation: 20,
+                      elevation: 9,
                       shadowColor: Colors.grey,
                     ),
                     onPressed: () async {
