@@ -402,7 +402,7 @@ class _Confirm extends State<ConfirmScreen> {
         context.showToast("Already Checked-out");
       } else
         context.showToast(
-            "Already Checked-out for the event ${qrData.eventName}}");
+            "Already Checked-out for the event ${qrData.eventName}");
       // } else
       //   context.showToast(
       //       "Already Checked-out for the event ${qrData.eventName} (${qrData.eventTime})");
