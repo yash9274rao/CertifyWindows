@@ -227,7 +227,6 @@ class _MyPinScreen extends State<PinScreen> {
                             onChanged: (phone) {
                               _mobileNumber = phone.number;
                               _countryCode = phone.countryCode;
-                              print(_countryCode);
                             },
                             onCountryChanged: (country) {
                               _countryCode = '+${country.fullCountryCode}';
@@ -305,7 +304,7 @@ class _MyPinScreen extends State<PinScreen> {
     volunteerInfo['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
 
     VolunteerResponse? volunteerResponse = await ApiService()
-        .volunteerApiCall(pref.getString(Sharepref.accessToken), volunteerInfo);
+        .validatePin(pref.getString(Sharepref.accessToken), volunteerInfo);
     if (volunteerResponse?.responseCode == 1) {
       await _isProgressLoading.hide();
       if (volunteerResponse?.responseData!.volunteerList != null) {

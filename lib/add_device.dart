@@ -77,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var dropdownVisiability = false;
   var dropdownFacilityVisiability = false;
   var _isAddDevice = false;
+  bool _validateDeviceName = true;
   List<String> dropdownDataDeviceName = [];
   List<String> dropdownDataDeviceSetting = [];
   List<String> dropdownDataFacility = [];
@@ -199,23 +200,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                 textFieldConfiguration: TextFieldConfiguration(
                                   controller: _textEditingControllerDeviceName,
                                   autofocus: false,
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                    // hintText: 'Device Name',
                                       labelText: 'Device Name',
                                     labelStyle: TextStyle(fontSize: 18),
                                     border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.grey, width: 1.0),
+                                      borderSide: BorderSide(color: _validateDeviceName? Colors.grey :Colors.redAccent, width: 1.0),
                                     ),
-                                    suffixIcon: ImageIcon(
-                                      AssetImage(
-                                          'images/assets/aerrowdown.png'),
-                                      size: 24,
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: _validateDeviceName? Colors.blue :Colors.redAccent, width: 1.0),
                                     ),
-                                  ),
+                                      errorBorder:OutlineInputBorder(
+                                        borderSide: BorderSide(color: _validateDeviceName? Colors.grey :Colors.redAccent, width: 1.0),
+                                      ) ,
+                                    suffixIcon: const ImageIcon(AssetImage('images/assets/aerrowdown.png'), size: 24,),
+                                   ),
                                 ),
                                 suggestionsCallback: (pattern) async {
-
                                   print('Selected: $pattern');
                                   return  dropdownDataDeviceName
                                       .where((item) => item.toLowerCase().startsWith(pattern.toLowerCase()))
@@ -236,8 +237,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                   );
                                 },
                                 noItemsFoundBuilder:(context){
-                                  WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-                                    setState(() {
+                                  WidgetsBinding.instance?.addPostFrameCallback((timeStamp)  {
+                                    print('noItemsFoundBuilder:${_textEditingControllerDeviceName.text}');
+
+                                    setState(()  {
+                                      if(_textEditingControllerDeviceName.text.startsWith('-')||_textEditingControllerDeviceName.text.startsWith('_')||!RegExp(r'^[a-zA-Z0-9_\-!]+$').hasMatch(_textEditingControllerDeviceName.text)) {
+                                        _validateDeviceName = false;
+                                      }else {
+                                        _validateDeviceName = true;}
                                       dropdownVisiability = true;
                                       dropdownFacilityVisiability = true;
                                     });
@@ -249,17 +256,20 @@ class _MyHomePageState extends State<MyHomePage> {
                                         style: TextStyle(fontSize: 17),
                                         // semanticsLabel: _textEditingControllerFacility.text = ""
 
+
                                       )
                                   );
                                 },
+
                                 onSuggestionSelected: (suggestion) {
                                   _textEditingControllerDeviceName.text = suggestion;
                                   _deviceName = _textEditingControllerDeviceName.text;
                                   setState(() {
                                     dropdownVisiability = false;
                                     dropdownFacilityVisiability = false;
+                                    _validateDeviceName = true;
                                   });
-                                  print('Selected: $suggestion');
+                                  print('onSuggestionSelected: $suggestion');
                                 },
                               ),
                             ),
@@ -443,7 +453,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               child: TextButton(
                                 onPressed: () {
                                   _formAddDeviceKey.currentState!.save();
-                                  print("fffffffffffff dropdownValue =" + dropdownDeviceName);
                                   FocusScope.of(context).unfocus();
                                   addDevice();
 
@@ -543,10 +552,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> addDevice() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
+
     if (_isAddDevice) {
       if (_textEditingControllerDeviceName.text.isEmpty) {
         context.showToast("Please enter device name");
-      } else {
+      } else if(!_validateDeviceName){
+        setState(() {
+          _validateDeviceName = false;
+        });
+        context.showToast("Special characters are not allowed");}else {
         _deviceName = _textEditingControllerDeviceName.text.trim();
         pref.setString(Sharepref.serialNo, _deviceName);
         bool isDeviceName = false;
@@ -609,16 +623,6 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
   Future<void> addDeviceAPI() async {
-    // for (var data in widget.tabletSettingData) {
-    //   if (deviceSettings == data.settingName) {
-    //     settingId = data.id;
-    //   }
-    // }
-    // for (var data in widget.facilityListData) {
-    //   if (deviceFacility == data.facilityName) {
-    //     facilityId = data.facilityId;
-    //   }
-    // }
     await _isProgressLoading.show();
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
@@ -644,4 +648,4 @@ class _MyHomePageState extends State<MyHomePage> {
       context.showToast(registerDeviceResponse.responseMessage!);
     }
   }
-}
+  }

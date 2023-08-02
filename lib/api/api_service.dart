@@ -225,12 +225,12 @@ class ApiService {
       return qrData;
     }
   }
-  Future<QrData?> validateQRCodeAccessLog(accessToken, bodys) async {
+  Future<QrData?> validateQRCodeForKiosk(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;
     qrData.setFirstName = "Anonymous";
     try {
-      var url = Uri.parse("${_apiBaseUrl}ValidateQRCodeAccessLog");
+      var url = Uri.parse("${_apiBaseUrl}ValidateQRCodeForKiosk");
       var res = await http.post(url,
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -435,9 +435,9 @@ class ApiService {
     }
   }
 
-  Future<VolunteerResponse?> volunteerApiCall(accessToken, bodys) async {
+  Future<VolunteerResponse?> validatePin(accessToken, bodys) async {
     try {
-      var url = Uri.parse("${_apiBaseUrl}VolunteerValidation");
+      var url = Uri.parse("${_apiBaseUrl}ValidatePin");
       var res = await http.post(url,
           headers: {
             "Access-Control-Allow-Origin": "*",

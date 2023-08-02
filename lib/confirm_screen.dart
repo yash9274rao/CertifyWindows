@@ -297,11 +297,8 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['qrCodeId'] = qrData.getQrCodeID;
     accessLogs['deviceId'] = pref.getString(Sharepref.serialNo);
     accessLogs['deviceName'] = pref.getString(Sharepref.deviceName);
-    accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
-    accessLogs['facilityId'] = 0;
-    accessLogs['locationId'] = 0;
-    accessLogs['facilityName'] = "";
-    accessLogs['locationName'] = '';
+  //  accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+
     accessLogs['deviceTime'] =
         DateFormat("MM/dd/yyyy HH:mm:ss").format(DateTime.now()).toString();
     accessLogs['timezone'] = pref.getString(Sharepref.timeZone)!.isEmpty ? "05:30":pref.getString(Sharepref.timeZone);
@@ -348,15 +345,10 @@ class _Confirm extends State<ConfirmScreen> {
     }
     Map<String, dynamic> accessLogs = HashMap();
     accessLogs['deviceSN'] = pref.getString(Sharepref.serialNo);
-    accessLogs['temperature'] = 0;
     accessLogs['qrCodeId'] = qrData.getQrCodeID;
     accessLogs['deviceId'] = pref.getString(Sharepref.serialNo);
     accessLogs['deviceName'] = pref.getString(Sharepref.deviceName);
     //accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
-    accessLogs['facilityId'] = 0;
-    accessLogs['locationId'] = 0;
-    accessLogs['facilityName'] = "";
-    accessLogs['locationName'] = '';
     accessLogs['deviceTime'] =
         DateFormat("MM/dd/yyyy HH:mm:ss").format(DateTime.now()).toString();
 
@@ -374,7 +366,7 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['accessOption'] = 1;
     accessLogs['attendanceMode'] = widget.attendanceMode;
 
-    qrData = await ApiService().validateQRCodeAccessLog(
+    qrData = await ApiService().validateQRCodeForKiosk(
         pref.get(Sharepref.accessToken), accessLogs) as QrData;
     validateResponse(qrData, qrData.responseSubCode);
   }
