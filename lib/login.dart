@@ -230,8 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 _formGlobalKey.currentState!.save();
                                 if (_email == null || _email.isEmpty) {
                                   context.showToast("Please enter email");
-                                } else if (!RegExp(
-                                    r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
+                                } else if (!RegExp(r'^.+@[a-zA-Z]+\.{1}[a-zA-Z]+(\.{0,1}[a-zA-Z]+)$')
                                     .hasMatch(_email.trim())) {
                                   context.showToast("Please enter valid email");
                                 } else if (_password.isEmpty ||
