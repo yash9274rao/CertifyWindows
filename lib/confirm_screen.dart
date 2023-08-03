@@ -169,15 +169,15 @@ class _Confirm extends State<ConfirmScreen> {
       if (widget.dataStr.startsWith("vm") &&
           (pref.getString(Sharepref.enableVolunteerQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-        timeDateSet(qrData);
+        accessLogs(qrData);
       } else if (widget.dataStr.startsWith("vi") &&
           (pref.getString(Sharepref.enableVisitorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-        timeDateSet(qrData);
+        accessLogs(qrData);
       } else if (widget.dataStr.contains("vn") &&
           (pref.getString(Sharepref.enableVendorQR) != "1") &&
           (pref.getString(Sharepref.enableAnonymousQRCode) != "1")) {
-        timeDateSet(qrData);
+        accessLogs(qrData);
       } else if (widget.dataStr.contains("vn")) {
         // Vendor QR code will come url base so we need use contains
         Map<String, dynamic> validateVendor = new HashMap();
@@ -185,9 +185,9 @@ class _Confirm extends State<ConfirmScreen> {
         validateVendor['deviceSNo'] = pref.getString(Sharepref.serialNo);
         qrData = await ApiService().validateVendor(
             pref.get(Sharepref.accessToken), validateVendor) as QrData;
-
         // await Future.delayed(const Duration(seconds: 5));
         qrData.setQrCodeID = widget.dataStr;
+        accessLogs(qrData);
       }
       // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
       else if (widget.dataStr.startsWith("tr") ||
@@ -199,9 +199,9 @@ class _Confirm extends State<ConfirmScreen> {
         qrData.setIsValid = true;
         qrData.setFirstName = "Anonymous";
         qrData.setQrCodeID = widget.dataStr;
-        timeDateSet(qrData);
+        accessLogs(qrData);
       } else {
-        timeDateSet(qrData);
+        accessLogs(qrData);
       }
     } else if (widget.type == "pin") {
       qrData = QrData();
@@ -213,7 +213,7 @@ class _Confirm extends State<ConfirmScreen> {
       qrData.eventName = widget.scheduleEventName;
       qrData.eventTime = widget.scheduleEventTime;
       //updateUI(qrData);
-      timeDateSet(qrData);
+      accessLogs(qrData);
     }
     //pin
   }
@@ -267,7 +267,7 @@ class _Confirm extends State<ConfirmScreen> {
         context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }
 
-  Future<void> timeDateSet(QrData qrData) async {
+  Future<void> accessLogs(QrData qrData) async {
     var ipv4 = "";
     Map<String, dynamic> diveInfo = new HashMap();
     SharedPreferences pref = await SharedPreferences.getInstance();
