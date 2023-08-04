@@ -297,7 +297,7 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['qrCodeId'] = qrData.getQrCodeID;
     accessLogs['deviceId'] = pref.getString(Sharepref.serialNo);
     accessLogs['deviceName'] = pref.getString(Sharepref.deviceName);
-  //  accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
 
     accessLogs['deviceTime'] =
         DateFormat("MM/dd/yyyy HH:mm:ss").format(DateTime.now()).toString();

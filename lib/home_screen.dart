@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
+import 'common/color_code.dart';
 import 'common/sharepref.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 
@@ -65,22 +66,28 @@ class _MyHome extends State<HomeScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
-                        child: Text(
+                        child: AutoSizeText(
                           lineOneText,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
                               color: Color(0xff273C51)),
+                            minFontSize: 14,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 20, 25, 0),
-                        child: Text(
+                        child: AutoSizeText(
                           lineTwoText,
                           style: const TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 18,
                               color: Color(0xff245F99)),
+                              minFontSize: 14,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Padding(
@@ -91,20 +98,10 @@ class _MyHome extends State<HomeScreen> {
                             child: SingleChildScrollView(
                               child: Container(
                                 margin: EdgeInsets.only(right: 50),
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color(0xff175EA5),
-                                      Color(0xff163B60)
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    tileMode: TileMode.repeated,
-                                    stops: [0.0, 1.7],
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                ),
+                                decoration: BoxDecoration(
+                                  color: Color(ColorCode.colorBg),
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -116,37 +113,35 @@ class _MyHome extends State<HomeScreen> {
                                       ),
                                     ),
                                     Center(
-                                        child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 45, 0, 0),
                                       child: TextButton.icon(
                                         icon: const Icon(
                                           color: Colors.white,
                                           Icons.access_time,
-                                          size: 24.0,
+                                          size: 44.0,
                                         ),
-                                        label: Text(
+                                        label: AutoSizeText(
                                           timeTextHolderModalController,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 32,
-                                              color: Colors.white),
+                                             fontSize: 44,
+                                              color: Color(ColorCode.colorText)),
+                                            minFontSize: 32,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis
                                         ),
                                         onPressed: () {},
-                                      ),
                                     )),
                                     Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8, 0, 0, 20),
-                                        child: Text(
+
+                                        child: AutoSizeText(
                                           dateTextHolderModalController,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 24,
-                                              color: Colors.white),
+                                              fontSize: 28,
+                                              color: Color(ColorCode.colorText)),
+                                          minFontSize: 22,
+                                          maxLines: 1,
                                         ),
-                                      ),
                                     ),
                                     const Align(
                                       alignment: Alignment.bottomRight,
@@ -257,8 +252,7 @@ class _MyHome extends State<HomeScreen> {
                                                               fontSize: 32),
                                                           minFontSize: 14,
                                                           maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis),
+                                                          overflow: TextOverflow.ellipsis),
                                                     )),
                                               ),
                                               Container(

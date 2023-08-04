@@ -93,6 +93,8 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
+      print('validateVendor uel = ${res.request}');
+      print('validateVendor body = ${jsonEncode(bodys)}');
       print('validateVendor = ${res.body}');
       QrData qrData = QrData();
       if (res.statusCode == 200) {

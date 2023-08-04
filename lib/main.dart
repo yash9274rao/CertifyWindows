@@ -15,13 +15,13 @@ import 'package:certify_me_kiosk/common/util.dart';
 import 'package:certify_me_kiosk/home_screen.dart';
 
 import 'api/api_service.dart';
+import 'common/color_code.dart';
 import 'login.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-  HttpOverrides.global = myHttpOverrides();
   runApp(MyApp());
 }
 
@@ -59,13 +59,15 @@ class _MyHome extends State<MyLanch> {
   Widget build(BuildContext context) {
     _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
     _isProgressLoading.style(padding: EdgeInsets.all(25),);
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
       title: 'Certify.me Kiosk',
       home: Scaffold(
         body: Container(
           color: Colors.white,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: _height,
+          width: _width,
           child: SingleChildScrollView(
               child: Visibility(
             visible: _isVisibility,
@@ -78,48 +80,42 @@ class _MyHome extends State<MyLanch> {
                     image: AssetImage('images/assets/final_logo.png'),
                   ),
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.fromLTRB(45, 40, 45, 0),
                   child: AutoSizeText(
                     'Register the device',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32,
-                        color: Color(0xff273C51)),
+                        fontSize: ColorCode.titleFont,
+                        color: Color(ColorCode.addColorTitle)),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const Padding(
-                    padding: EdgeInsets.fromLTRB(25, 0, 10, 15),
+                    padding: EdgeInsets.fromLTRB(45, 5, 45, 35),
                     child: Divider(color: Colors.grey)),
-                const Row(
+                Row(
                   children: <Widget>[
-                    SizedBox(
-                      width: 45,
-                    ),
-                    Icon(
-                      Icons.error_outline,color:Color(0xff66717B) ,
-                    ),
-                    SizedBox(
-                      width: 5,
-                    ),
+                    const SizedBox(width: 45,),
+                    Icon(Icons.error_outline,color:Color(ColorCode.addColorTitle) ,),
+                    SizedBox(width: 10,),
                     Flexible(
                       child: AutoSizeText(
                           'This device is not configured to work online. If'
                           ' you already have a cloud account, then',
                           style: TextStyle(
-                            fontSize: 24,
-                            color: Color(0xff66717B),
-                          )),
+                            fontSize: ColorCode.subTextFont,
+                            color: Color(ColorCode.addColorSub),
+                          ),
+                        overflow: TextOverflow.ellipsis,
+                        minFontSize: 18,),
                     ),
-                    SizedBox(
-                      width: 15,
-                    ),
+                    SizedBox(width: 15,),
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(45, 15, 45, 45),
+                  padding: EdgeInsets.fromLTRB(85, 20, 45, 45),
                   child: TextButton(
                     onPressed: () {
                       Navigator.push(context,
@@ -128,32 +124,24 @@ class _MyHome extends State<MyLanch> {
                     style: TextButton.styleFrom(
                       elevation: 20,
                       shadowColor: Colors.grey,
+                      backgroundColor: Color(0xff3A95EF),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),),
                     ),
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xff175EA5), Color(0xff163B60)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          tileMode: TileMode.repeated,
-                          stops: [0.0, 1.7],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
+
                       child: Container(
-                        constraints: const BoxConstraints(
-                            maxWidth: 300.0, minHeight: 50.0),
+                        constraints: BoxConstraints(
+                            maxWidth: _width * ColorCode.buttonsValues, minHeight: 90.0),
                         padding: const EdgeInsets.all(16.0),
                         alignment: Alignment.center,
-                        child: const AutoSizeText(
+                        child: AutoSizeText(
                           "Log-In to Register",
-                          style: TextStyle(fontSize: 28, color: Colors.white),
-                          minFontSize: 18,
+                          style: TextStyle(fontSize: ColorCode.subTextFont, color: Colors.white),
+                          minFontSize: 22,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
                   ),
                 ),
                 Row(
@@ -161,17 +149,17 @@ class _MyHome extends State<MyLanch> {
                     const SizedBox(width: 45,),
                     Visibility(
                       visible: _is_web,
-                      child: const Icon(Icons.error_outline,color: Color(0xff66717B),),
+                      child: Icon(Icons.error_outline,color: Color(ColorCode.addColorTitle),),
                     ),
-                    const SizedBox(width: 5,),
+                    const SizedBox(width: 10,),
                     Flexible(
                       child: Visibility(
                         visible: _is_web,
                         child: AutoSizeText(
                             '${textHolderModalController}, then',
-                            style: const TextStyle(
-                                fontSize: 24, color: Color(0xff66717B)),
-                            minFontSize: 12,
+                            style: TextStyle(
+                                fontSize: ColorCode.subTextFont, color: Color(ColorCode.addColorSub)),
+                            minFontSize: 18,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis),
                       ),
@@ -180,19 +168,19 @@ class _MyHome extends State<MyLanch> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(55, 20, 45, 0),
+                  padding: EdgeInsets.fromLTRB(85, 25, 45, 0),
                   child: Visibility(
                     visible: _is_web,
                     child: TextButton(
                       style: TextButton.styleFrom(
-                        side: const BorderSide(
-                            color: Color(0xff163A5F), width: 2),
+                        side: BorderSide(
+                            color: Color(ColorCode.colorRegister), width: 1),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         elevation: 9,
                         //Defines Elevation
-                        shadowColor: Color(0xff175EA5),
+                        shadowColor:Colors.grey,
                         //Defines shadowColor
                         backgroundColor: Colors.white,
                       ),
@@ -201,14 +189,14 @@ class _MyHome extends State<MyLanch> {
                         activiAPI();
                       },
                       child: Container(
-                        constraints: const BoxConstraints(
-                            maxWidth: 280.0, minHeight: 50.0),
+                        constraints: BoxConstraints(
+                            maxWidth: _width * ColorCode.buttonsValues, minHeight: 90.0),
                         padding: const EdgeInsets.all(14.0),
                         alignment: Alignment.center,
-                        child: const AutoSizeText("Try Re-activation",
+                        child: AutoSizeText("Try Re-activation",
                             style: TextStyle(
-                                fontSize: 28, color: Color(0xff163A5F)),
-                            minFontSize: 18,
+                                fontSize: ColorCode.buttonFont, color: Color(ColorCode.colorRegister)),
+                            minFontSize: 22,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis),
                       ),
@@ -261,7 +249,7 @@ class _MyHome extends State<MyLanch> {
       pref.setString(Sharepref.platformId, "3");
     }
     pref.setString(Sharepref.deviceModel, _clientInfo.deviceName);
-    pref.setString(Sharepref.appVersion, 'V${_clientInfo.applicationVersion}');
+    pref.setString(Sharepref.appVersion, 'v${_clientInfo.applicationVersion}');
     pref.setString(Sharepref.osVersion,
         '${_clientInfo.osName} - ${_clientInfo.osVersion}');
     print(
@@ -311,31 +299,16 @@ class _MyHome extends State<MyLanch> {
         } else {
           await _isProgressLoading.hide();
           setState(() {
-            if (pref.getString(Sharepref.platform) == "web") _is_web = false;
+            if (pref.getString(Sharepref.platform) == "web") _is_web = true;
             _isVisibility = true;
           });
         }
       } else {
         await _isProgressLoading.hide();
         setState(() {
-          if (pref.getString(Sharepref.platform) == "web") _is_web = false;
+          if (pref.getString(Sharepref.platform) == "web") _is_web = true;
           _isVisibility = true;
         });
       }
   }
-}
-
-class myHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient create(SecurityContext context) {
-    final HttpClient client = super.createHttpClient(context);
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
-    return client;
-  }
-}
-
-@override
-String findProxyFromEnvironment(_, __) {
-  return 'PROXY 10.3.10.178;'; // IP address of your proxy
 }

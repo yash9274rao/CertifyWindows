@@ -9,6 +9,7 @@ import 'package:certify_me_kiosk/toast.dart';
 import 'add_device.dart';
 import 'api/api_service.dart';
 import 'api/response/getdevice_token_response.dart';
+import 'common/color_code.dart';
 import 'common/sharepref.dart';
 
 void main() {
@@ -66,14 +67,11 @@ class _MyHomePageState extends State<MyHomePage> {
    late ProgressDialog _isProgressLoading;
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+
     _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
     _isProgressLoading.style(padding: EdgeInsets.all(25),);
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -119,11 +117,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         Container(
                           padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                          child: const AutoSizeText('Log-In to Register',
+                          child: AutoSizeText('Log-In to Register',
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 32,
-                                  color: Color(0xff273C51)),
+                                  fontSize: ColorCode.titleFont,
+                                  color: Color(ColorCode.addColorTitle)),
                               minFontSize: 22,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis),
@@ -131,14 +129,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       ],
                     ),
                     const Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 10, 45),
+                        padding: EdgeInsets.fromLTRB(0, 10, 10, 45),
                         child: Divider(color: Colors.grey)),
                     Padding(
                       padding: const EdgeInsets.only(
                           left: 60, right: 60, bottom: 20, top: 20),
                       child: TextFormField(
                           onSaved: (val) => _email = val!,
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                             border: UnderlineInputBorder(),
                             focusedBorder: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -150,16 +148,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     BorderRadius.all(Radius.circular(5))),
                             prefixIcon: Icon(
                               Icons.mail,
-                              color: Colors.black,
+                              color: Color(ColorCode.addColorTitle),
                             ),
                             filled: true,
                             fillColor: Colors.white,
-                            labelText: "Email",
+                            labelText: "E-mail address",
                             // hintText: 'your-email@domain.com',
                             labelStyle:
                                 TextStyle(color: Colors.black26, fontSize: 18),
                           ),
-                          style: TextStyle(fontSize: 24)),
+                          style: TextStyle(fontSize: ColorCode.editTextFont)),
                     ),
 
                     // Padding(
@@ -170,12 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           left: 60, right: 60, bottom: 20, top: 20),
                       child: TextFormField(
                           onSaved: (val) => _password = val!,
-                          // validator: (value) {
-                          //   if (value == null || value.length < 8) {
-                          //     return 'Please enter valid Password';
-                          //   }
-                          //   return null;
-                          // },
                           obscuringCharacter: '*',
                           obscureText: !_isVisible,
                           decoration: InputDecoration(
@@ -206,24 +198,24 @@ class _MyHomePageState extends State<MyHomePage> {
                                 });
                               },
                               icon: _isVisible
-                                  ? const Icon(
+                                  ? Icon(
                                       Icons.visibility,
-                                      color: Colors.black,
+                                      color: Color(ColorCode.addColorTitle),
                                     )
-                                  : const Icon(
+                                  : Icon(
                                       Icons.visibility_off,
-                                      color: Colors.black,
+                                      color: Color(ColorCode.addColorTitle),
                                     ),
                             ),
                           ),
-                          style: TextStyle(fontSize: 24)),
+                          style: TextStyle(fontSize: ColorCode.editTextFont)),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(55, 15, 45, 0),
+                            padding: EdgeInsets.fromLTRB(65, 15, 45, 0),
                             child: TextButton(
                               onPressed: () {
                                 FocusScope.of(context).unfocus();
@@ -243,38 +235,26 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: TextButton.styleFrom(
                                 elevation: 20,
                                 shadowColor: Colors.grey,
+                                backgroundColor: Color(0xff3A95EF),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),),
                               ),
-                              child: Ink(
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color(0xff175EA5),
-                                      Color(0xff163B60)
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    tileMode: TileMode.repeated,
-                                    stops: [0.0, 1.7],
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                ),
+
                                 child: Container(
-                                  constraints: const BoxConstraints(
-                                      maxWidth: 300.0, minHeight: 50.0),
+                                  constraints: BoxConstraints(
+                                      maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
                                   padding: const EdgeInsets.all(16.0),
                                   alignment: Alignment.center,
-                                  child: const AutoSizeText(
+                                  child: AutoSizeText(
                                     "Continue",
                                     style: TextStyle(
-                                        fontSize: 28, color: Colors.white),
+                                        fontSize: ColorCode.buttonFont, color: Colors.white),
                                     minFontSize: 18,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
-                            ),
                           ),
                         ),
                       ],
@@ -287,13 +267,13 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(60, 0, 0, 10),
-                            child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
+                          padding: EdgeInsets.fromLTRB(20, 0, 0, 10),
+                            child: Icon(Icons.error_outline,color:Color(ColorCode.addColorTitle) , ) ,
                         ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(5, 0, 0, 10),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
                             child: AutoSizeText('User should have administrative rights on the account',
-                                style: TextStyle(fontSize: 24,color: Color(0xff66717B)),
+                                style: TextStyle(fontSize: ColorCode.subTextFont,color: Color(ColorCode.addColorSub)),
                                 minFontSize: 12,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis),

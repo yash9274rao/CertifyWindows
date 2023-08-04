@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:certify_me_kiosk/common/color_code.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -117,19 +118,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
     _isProgressLoading.style(padding: EdgeInsets.all(25),);
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     return Scaffold(
         body: Container(
           color: Colors.white,
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+          height: _height,
+          width: _width,
           padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
           child: SingleChildScrollView(
               child: Form(
@@ -171,11 +168,11 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                             Container(
                               padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                              child: const AutoSizeText('Add this device',
+                              child: AutoSizeText('Add this device',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 32,
-                                      color: Color(0xff273C51)),
+                                      fontSize: ColorCode.titleFont,
+                                      color: Color(ColorCode.addColorTitle)),
                                   minFontSize: 22,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis),
@@ -191,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                               visible: _isWebDevice,
                           child: Row(children: [
-                            const ImageIcon(AssetImage('images/assets/add.png'),),
+                            Icon(Icons.add_to_queue,color:Color(ColorCode.addColorTitle),),
                             const SizedBox(
                               width: 20, //<-- SEE HERE
                             ),
@@ -200,10 +197,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 textFieldConfiguration: TextFieldConfiguration(
                                   controller: _textEditingControllerDeviceName,
                                   autofocus: false,
+                                  style: TextStyle(fontSize: ColorCode.editTextFont),
                                   decoration: InputDecoration(
                                    // hintText: 'Device Name',
                                       labelText: 'Device Name',
-                                    labelStyle: TextStyle(fontSize: 18),
+                                    labelStyle: TextStyle(fontSize: ColorCode.editTextHintFont,color: Colors.grey),
                                     border: OutlineInputBorder(
                                       borderSide: BorderSide(color: _validateDeviceName? Colors.grey :Colors.redAccent, width: 1.0),
                                     ),
@@ -226,9 +224,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return ListTile(
                                     title: AutoSizeText(
                                       suggestion,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontWeight: FontWeight.w300,
-                                          fontSize: 28,
+                                          fontSize: ColorCode.subTextFont,
                                           color: Color.fromRGBO(21, 57, 92, 1)),
                                       minFontSize: 18,
                                       maxLines: 1,
@@ -282,12 +280,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Visibility(
                       visible: _isVisibility,
                       child: Row(children: [
-                        const ImageIcon(AssetImage('images/assets/device.png'),),
+                        Icon(Icons.add_to_queue,color:Color(ColorCode.addColorTitle),size: 32,),
+
+                        // const ImageIcon(AssetImage('images/assets/device.png'),),
                         const SizedBox(width: 20, ),
                         Expanded(
                           child: TextFormField(
                               onSaved: (val) => _deviceName = val!,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
                                 focusedBorder: UnderlineInputBorder(
                                     borderSide:
@@ -303,9 +303,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                 fillColor: Colors.white,
                                 labelText: "Enter Device Name",
                                 // hintText: 'your-email@domain.com',
-                                labelStyle: TextStyle(color: Color.fromRGBO(180, 193, 205, 1),fontSize: 18),
+                                labelStyle: TextStyle(color: Colors.grey, fontSize: ColorCode.editTextHintFont),
                               ),
-                              style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 18,)),
+                              style: TextStyle(fontSize: ColorCode.editTextFont,)),
 
                         )]
                       ))
@@ -316,18 +316,21 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownVisiability,
                                 child: Row(children: [
-                                  const ImageIcon(AssetImage('images/assets/settings.png'),),
+                                  Icon(Icons.settings,color:Color(ColorCode.addColorTitle),size: 32,),
+
+                                  //const ImageIcon(AssetImage('images/assets/settings.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
                                   Expanded(
                                   child: TypeAheadField(
+
                                     textFieldConfiguration: TextFieldConfiguration(
                                       controller: _textEditingControllerSettings,
                                       autofocus: false,
-                                      decoration: const InputDecoration(
+                                      decoration: InputDecoration(
                                         labelText: 'Device Settings',
-                                        labelStyle: TextStyle(fontSize: 18),
+                                        labelStyle: TextStyle(fontSize: ColorCode.editTextHintFont,color: Colors.grey),
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Colors.grey, width: 1.0),
@@ -336,7 +339,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                           size: 24,
                                         ),
                                       ),
-                                    ),
+                                      style: TextStyle(fontSize: ColorCode.editTextFont,),
+
+                                  ),
+
                                     suggestionsCallback: (pattern) async {
 
                                       print('Selected: $pattern');
@@ -349,9 +355,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                       return ListTile(
                                         title: AutoSizeText(
                                           suggestion,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontWeight: FontWeight.w300,
-                                              fontSize: 28,
+                                              fontSize: ColorCode.subTextFont,
                                               color: Color.fromRGBO(21, 57, 92, 1)),
                                           minFontSize: 18,
                                           maxLines: 1,
@@ -384,7 +390,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownFacilityVisiability,
                                 child: Row(children: [
-                                  const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
+                                  Icon(Icons.account_balance,color:Color(ColorCode.addColorTitle),size: 32,),
+                                  // const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
@@ -393,9 +400,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         textFieldConfiguration: TextFieldConfiguration(
                                           controller: _textEditingControllerFacility,
                                           autofocus: false,
-                                          decoration: const InputDecoration(
+                                          decoration: InputDecoration(
                                             labelText: 'Facility Name',
-                                            labelStyle: TextStyle(fontSize: 18),
+                                            labelStyle: TextStyle(fontSize: ColorCode.editTextHintFont,color: Colors.grey),
                                             border: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Colors.grey, width: 1.0),
@@ -404,6 +411,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               size: 24,
                                             ),
                                           ),
+                                            style: TextStyle(fontSize: ColorCode.editTextFont,),
                                         ),
                                         suggestionsCallback: (pattern) async {
                                           print('Selected: $pattern');
@@ -415,9 +423,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                           return ListTile(
                                             title: AutoSizeText(
                                               suggestion,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   fontWeight: FontWeight.w300,
-                                                  fontSize: 28,
+                                                  fontSize: ColorCode.subTextFont,
                                                   color: Color.fromRGBO(21, 57, 92, 1)),
                                               minFontSize: 18,
                                               maxLines: 1,
@@ -426,10 +434,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                           );
                                         },
                                         noItemsFoundBuilder:(context){
-                                          return const Padding(
+                                          return Padding(
                                             padding: EdgeInsets.all(16.0),
                                             child:Text('No records found',
-                                              style: TextStyle(fontSize: 17),
+                                              style: TextStyle(fontSize: ColorCode.subTextFont),
                                                // semanticsLabel: _textEditingControllerFacility.text = ""
 
                                             )
@@ -446,7 +454,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   )]))),
                         Padding(
                             padding: const EdgeInsets.only(
-                                left: 50, right: 60, bottom: 20, top: 30),
+                                left: 65, right: 60, bottom: 20, top: 30),
                             child: Container(
                               // child: Padding(
                               //   padding: EdgeInsets.fromLTRB(55, 15, 45, 0),
@@ -460,37 +468,25 @@ class _MyHomePageState extends State<MyHomePage> {
                                 style: TextButton.styleFrom(
                                   elevation: 20,
                                   shadowColor: Colors.grey,
+                                  backgroundColor: Color(ColorCode.colorBg),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.0),),
                                 ),
-                                child: Ink(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff175EA5),
-                                        Color(0xff163B60)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      tileMode: TileMode.repeated,
-                                      stops: [0.0, 1.7],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
+
                                   child: Container(
-                                    constraints: const BoxConstraints(
-                                        maxWidth: 300.0, minHeight: 50.0),
+                                    constraints: BoxConstraints(
+                                        maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
                                     padding: const EdgeInsets.all(16.0),
                                     alignment: Alignment.center,
-                                    child: const AutoSizeText(
+                                    child: AutoSizeText(
                                       "Continue",
                                       style: TextStyle(
-                                          fontSize: 28, color: Colors.white),
+                                          fontSize: ColorCode.buttonFont, color: Colors.white),
                                       minFontSize: 18,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                ),
                               ),
                             )),
                             const SizedBox(
@@ -502,8 +498,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
 
                         Container(
-                          padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                          child: Icon(Icons.error_outline,color:Color(0xff66717B) , ) ,
+                          padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                          child: Icon(Icons.error_outline,color:Color(ColorCode.addColorTitle) , ) ,
                         ),
                         const SizedBox(
                           width: 20, //<-- SEE HERE
