@@ -99,7 +99,7 @@ class _MyHome extends State<HomeScreen> {
                               child: Container(
                                 margin: EdgeInsets.only(right: 50),
                                 decoration: BoxDecoration(
-                                  color: Color(ColorCode.colorBg),
+                                  color: ColorCode.dynamicBackgroundColorBtn,
                                   borderRadius: BorderRadius.all(Radius.circular(20)),
                                  ),
                                 child: Column(
@@ -114,8 +114,8 @@ class _MyHome extends State<HomeScreen> {
                                     ),
                                     Center(
                                       child: TextButton.icon(
-                                        icon: const Icon(
-                                          color: Colors.white,
+                                        icon:  Icon(
+                                          color: ColorCode.dynamicTextColorBtn,
                                           Icons.access_time,
                                           size: 44.0,
                                         ),
@@ -124,12 +124,11 @@ class _MyHome extends State<HomeScreen> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal,
                                              fontSize: 44,
-                                              color: Color(ColorCode.colorText)),
+                                              color: ColorCode.dynamicTextColorBtn),
                                             minFontSize: 32,
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis
-                                        ),
-                                        onPressed: () {},
+                                        ), onPressed: null
                                     )),
                                     Center(
 
@@ -138,7 +137,7 @@ class _MyHome extends State<HomeScreen> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.normal,
                                               fontSize: 28,
-                                              color: Color(ColorCode.colorText)),
+                                              color: ColorCode.dynamicTextColorBtn),
                                           minFontSize: 22,
                                           maxLines: 1,
                                         ),
@@ -439,7 +438,9 @@ class _MyHome extends State<HomeScreen> {
     //
     // }
     setState(() {
-      checkInMode = pref.getString(Sharepref.checkInMode)!;
+      ColorCode.dynamicBackgroundColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForButton)?? "0xff3A95EF"));
+     ColorCode.dynamicTextColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForTextButton)?? "0xffEBF1F8"));
+     checkInMode = pref.getString(Sharepref.checkInMode)!;
       versionId = pref.getString(Sharepref.appVersion)!;
       lineOneText = pref.getString(Sharepref.line1HomePageView) ?? "";
       lineTwoText = pref.getString(Sharepref.line2HomePageView) ?? "";

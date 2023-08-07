@@ -7,6 +7,7 @@ import 'package:certify_me_kiosk/pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'common/color_code.dart';
 import 'common/sharepref.dart';
 import 'home_screen.dart';
 
@@ -112,6 +113,7 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                   child: TextButton(
                     style: TextButton.styleFrom(
                       shadowColor: Colors.grey,
+                        backgroundColor: ColorCode.dynamicBackgroundColorBtn,
                         shape:
                         RoundedRectangleBorder(
                           borderRadius:
@@ -130,17 +132,6 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                               builder: (context) => QRViewExample(
                                   attendanceMode: widget.attendanceMode)));
                     },
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xff175EA5), Color(0xff163B60)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          tileMode: TileMode.repeated,
-                          stops: [0.0, 1.7],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
                       child: Container(
                         constraints: const BoxConstraints(
                             maxWidth: 300.0, minHeight: 60.0),
@@ -154,7 +145,6 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                       ),
                     ),
                   ),
-                ),
                     Container(alignment: Alignment.center,
                       margin: EdgeInsets.only(
                           left: _width * 0.10,
