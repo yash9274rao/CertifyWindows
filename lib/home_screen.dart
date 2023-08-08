@@ -49,12 +49,16 @@ class _MyHome extends State<HomeScreen> {
         title: 'Certify.me Kiosk',
         home: Scaffold(
             body: Container(
+                child: Visibility(
+                    visible: isVisiabilityImag,
+        child:  Container(
                 color: Colors.white,
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
                 child: SingleChildScrollView(
                     child: Column(
+
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                       Padding(
@@ -359,7 +363,7 @@ class _MyHome extends State<HomeScreen> {
                               color: Color(0xff15395C)),
                         ),
                       ),
-                    ])))));
+                    ])))))));
   }
 
   Future<void> timeDateSet() async {
