@@ -103,7 +103,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                           const SizedBox(height: 50, ),
                           Container(
                             margin: EdgeInsets.only(
-                                top: 20, left: _width * 0.15),
+                                top: 20, left: _width * 0.14),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -147,7 +147,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                           ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: 20, left: _width * 0.20,right:  _width * 0.10),
+                          top: 20, left: _width * 0.18,right:  _width * 0.10),
                       child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: widget.volunteerList.length,

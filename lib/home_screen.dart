@@ -7,6 +7,7 @@ import 'package:certify_me_kiosk/pin_qrcode_screen.dart';
 import 'package:certify_me_kiosk/pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
@@ -33,6 +34,7 @@ class _MyHome extends State<HomeScreen> {
   String checkInMode = "0";
   Map<String, dynamic> diveInfo = HashMap();
   var isVisiabilityImag = false;
+  late ProgressDialog _isProgressLoading;
 
   @override
   void initState() {
@@ -43,6 +45,8 @@ class _MyHome extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
@@ -53,8 +57,8 @@ class _MyHome extends State<HomeScreen> {
                     visible: isVisiabilityImag,
         child:  Container(
                 color: Colors.white,
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+                height: _height,
+                width: _width,
                 padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
                 child: SingleChildScrollView(
                     child: Column(
@@ -394,28 +398,21 @@ class _MyHome extends State<HomeScreen> {
 
   Future<void> deviceSetting() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-
+    await _isProgressLoading.show();
     Map<String, dynamic> deviceSetting = HashMap();
     deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     deviceSetting['institutionId'] =
         '${pref.getString(Sharepref.institutionID)}';
     deviceSetting['settingType'] = 10;
     String req = await ApiService().deviceSetting(pref) as String;
-    if (req == "1") updateUI();
+    if (req == "1") {
+      await _isProgressLoading.hide();
+      updateUI();
+    }
   }
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    // try {
-    //   String _timezone = await FlutterTimezone.getLocalTimezone();
-    //   print("fffffffffff ${_timezone}");
-    // } catch (e) {
-    //   print('Could not get available timezones');
-    //   List<String>  _availableTimezones = await FlutterTimezone.getAvailableTimezones();
-    //   _availableTimezones.sort();
-    //   print('Could not get available timezones${_availableTimezones.length}');
-    //
-    // }
     setState(() {
       ColorCode.dynamicBackgroundColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForButton)?? "0xff3A95EF"));
      ColorCode.dynamicTextColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForTextButton)?? "0xffEBF1F8"));

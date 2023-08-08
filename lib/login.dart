@@ -133,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Divider(color: Colors.grey)),
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 60, right: 60, bottom: 20, top: 20),
+                          left: 60, right: 60, bottom: 20, top: 0),
                       child: TextFormField(
                           onSaved: (val) => _email = val!,
                           decoration:  InputDecoration(

@@ -184,7 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Divider(color: Colors.grey)),
 
                         Padding(padding: EdgeInsets.only(
-                              left: 20, right: 20, bottom: 5, top: 15),
+                              left: 20, right: 20, bottom: 5, top: 0),
                             child: Visibility(
                               visible: _isWebDevice,
                           child: Row(children: [
