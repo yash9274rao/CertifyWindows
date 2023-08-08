@@ -10,6 +10,8 @@ class ColorCode {
   static int addColorBg = 0xff3A95EF;
   static int addColorTitle = 0xff273C51;
   static int addColorSub = 0xff66717B;
+  static int line1color =  0xff15395C;
+  static int line2color =  0xff5D5C5C;
   static Color dynamicBackgroundColorBtn = Color(int.parse('0xff3A95EF'));
   static Color dynamicTextColorBtn = Color(int.parse('0xffEBF1F8'));
 
@@ -21,4 +23,5 @@ class ColorCode {
   static double buttonFont = 28;
   static double editTextFont = 24;
   static double editTextHintFont = 20;
+
 }

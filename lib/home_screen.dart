@@ -70,27 +70,27 @@ class _MyHome extends State<HomeScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
-                        child: AutoSizeText(
+                        child: Text(
                           lineOneText,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22,
                               color: Color(0xff273C51)),
-                            minFontSize: 14,
-                            maxLines: 1,
+                            // minFontSize: 14,
+                            // maxLines: 2,
                             overflow: TextOverflow.ellipsis
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 20, 25, 0),
-                        child: AutoSizeText(
+                        child: Text(
                           lineTwoText,
                           style: const TextStyle(
                               fontWeight: FontWeight.normal,
                               fontSize: 18,
                               color: Color(0xff245F99)),
-                              minFontSize: 14,
-                              maxLines: 1,
+                              // minFontSize: 14,
+                              // maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -175,33 +175,20 @@ class _MyHome extends State<HomeScreen> {
                                           child: Column(
                                             children: [
                                               Container(
-                                                margin: EdgeInsets.only(
-                                                    left: _width * 0.10,
-                                                    right: _width * 0.10),
+                                                alignment: Alignment.center,
                                                 child: TextButton(
-                                                    style: TextButton.styleFrom(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.0),
-                                                      ),
-                                                      elevation: 9,
-                                                      //Defines Elevation
-                                                      shadowColor:
-                                                          Color(0xff46973F),
-                                                      foregroundColor:
-                                                          Colors.white,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              25.0),
-                                                      backgroundColor:
-                                                          const Color(
-                                                              0xff46973F),
-                                                      minimumSize:
-                                                          const Size.fromHeight(
-                                                              40),
-                                                    ),
+                                                  style: TextButton.styleFrom(
+                                                    elevation: 9,
+                                                  shadowColor:  Colors.grey,
+                                                  backgroundColor: const Color(
+                                                      0xff46973F),
+                                                  shape:
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(15.0),
+                                                  ),
+                                                  ),
                                                     onPressed: () async {
                                                       SharedPreferences pref =
                                                           await SharedPreferences
@@ -247,43 +234,37 @@ class _MyHome extends State<HomeScreen> {
                                                                             attendanceMode)));
                                                       }
                                                     },
-                                                    child: const FittedBox(
-                                                      fit: BoxFit.scaleDown,
+                                                    child: Container(
+                                                      constraints: BoxConstraints(
+                                                          maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
+                                                      padding: const EdgeInsets.all(16.0),
+                                                      alignment: Alignment.center,
                                                       child: AutoSizeText(
+                                                          textAlign: TextAlign.center,
                                                           "Check - In",
                                                           style: TextStyle(
-                                                              fontSize: 32),
+                                                              fontSize: ColorCode.buttonFont,color: Colors.white),
                                                           minFontSize: 14,
                                                           maxLines: 1,
                                                           overflow: TextOverflow.ellipsis),
                                                     )),
                                               ),
-                                              Container(
+
+                                              Container(alignment: Alignment.center,
                                                 margin: EdgeInsets.only(
-                                                    left: _width * 0.10,
-                                                    right: _width * 0.10,
                                                     top: 30),
                                                 child: TextButton(
-                                                  style: TextButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                    ),
-                                                    elevation: 9,
-                                                    //Defines Elevation
-                                                    shadowColor:
-                                                        Color(0xffDF473D),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            25.0),
-                                                    backgroundColor:
-                                                        const Color(0xffDF473D),
-                                                    minimumSize:
-                                                        const Size.fromHeight(
-                                                            40),
-                                                  ),
+                                               style: TextButton.styleFrom(
+                                              elevation: 9,
+                                              shadowColor: Colors.grey,
+                                              backgroundColor: const Color(0xffDF473D),
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius
+                                                    .circular(15.0),
+                                              ),
+                                            ),
                                                   onPressed: () async {
                                                     SharedPreferences pref =
                                                         await SharedPreferences
@@ -329,18 +310,16 @@ class _MyHome extends State<HomeScreen> {
                                                                           attendanceMode)));
                                                     }
                                                   },
-                                                  child: const FittedBox(
-                                                    fit: BoxFit.scaleDown,
-                                                    child: AutoSizeText(
-                                                        "Check - Out",
-                                                        style: TextStyle(
-                                                            fontSize: 32,
-                                                            color:
-                                                                Colors.white),
+                                                  child: Container(
+                                                    constraints: BoxConstraints(
+                                                        maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
+                                                    padding: const EdgeInsets.all(16.0),
+                                                    alignment: Alignment.center,
+                                                    child: AutoSizeText("Check-Out",
+                                                        style: TextStyle(fontSize: ColorCode.buttonFont, color: Colors.white),
                                                         minFontSize: 14,
                                                         maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
+                                                        overflow: TextOverflow.ellipsis),
                                                   ),
                                                 ),
                                               ),

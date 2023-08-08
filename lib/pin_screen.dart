@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:certify_me_kiosk/common/color_code.dart';
 import 'package:certify_me_kiosk/confirm_screen.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
@@ -179,21 +180,16 @@ class _MyPinScreen extends State<PinScreen> {
                               fillColor: Colors.white,
                               labelText: "Enter PIN",
                               // hintText: 'your-email@domain.com',
-                              labelStyle: TextStyle(
-                                  color: Colors.black26, fontSize: 18),
+                              labelStyle:
+                              TextStyle(color: Colors.black26, fontSize: 18),
                             ),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                            ),
+                              style: TextStyle(fontSize: ColorCode.editTextFont)),
                           ),
-                        ),
                       ]),
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: _height * 0.01,
+                          top: 20,
                           left: _width * 0.23,
                           right: _width * 0.23),
                       child: Row(children: [
@@ -214,9 +210,12 @@ class _MyPinScreen extends State<PinScreen> {
                             ],
                             decoration: const InputDecoration(
                               counter: Offstage(),
-                              hintText: 'Enter Phone Number',
+                              labelText: 'Enter Phone Number',
                               //   prefixIcon: Icon(Icons.wifi_calling_3_sharp,color: Colors.black,),
+                              labelStyle:
+                              TextStyle(color: Colors.black26, fontSize: 18),
                             ),
+                              style: TextStyle(fontSize: ColorCode.editTextFont),
                             initialCountryCode: 'US',
                             showDropdownIcon: true,
                             dropdownTextStyle: const TextStyle(
@@ -231,20 +230,22 @@ class _MyPinScreen extends State<PinScreen> {
                             onCountryChanged: (country) {
                               _countryCode = '+${country.fullCountryCode}';
                             },
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                            ),
                           ),
-                        ),
+                        )
                       ]),
                     ),
-                    Container(
+                 Container(
                         margin: EdgeInsets.only(
                             top: _height * 0.03,
                             left: _width * 0.23,),
                        child: TextButton(
+                           style: TextButton.styleFrom(
+                             elevation: 9,
+                             shadowColor: Colors.grey,
+                             backgroundColor: ColorCode.dynamicBackgroundColorBtn,
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(10),),
+                           ),
                                 onPressed: () {
                                   FocusScope.of(context).unfocus();
                                   if (_pinStr.isEmpty) {
@@ -256,37 +257,23 @@ class _MyPinScreen extends State<PinScreen> {
                                     VolunteerValidation();
                                   }
                                 },
-                                child: Ink(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff175EA5),
-                                        Color(0xff163B60)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      tileMode: TileMode.repeated,
-                                      stops: [0.0, 1.7],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
                                   child: Container(
-                                    constraints: const BoxConstraints(
-                                        maxWidth: 300.0, minHeight: 50.0),
+                                    constraints: BoxConstraints(
+                                        maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
                                     padding: const EdgeInsets.all(16.0),
+
                                     alignment: Alignment.center,
-                                    child: const AutoSizeText(
+                                    child:  AutoSizeText(
                                       "Continue",
                                       style: TextStyle(
-                                          fontSize: 32, color: Colors.white),
+                                          fontSize: ColorCode.buttonFont, color: ColorCode.dynamicTextColorBtn),
                                       minFontSize: 14,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
 
-                            )))
+                            ))
                   ],
                 ),
               )),
