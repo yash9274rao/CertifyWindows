@@ -109,6 +109,7 @@ class _MyHome extends State<MyLanch> {
                             color: Color(ColorCode.addColorSub),
                           ),
                         overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
                         minFontSize: 18,),
                     ),
                     SizedBox(width: 15,),

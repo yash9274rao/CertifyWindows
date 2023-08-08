@@ -280,9 +280,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Visibility(
                       visible: _isVisibility,
                       child: Row(children: [
-                        Icon(Icons.add_to_queue,color:Color(ColorCode.addColorTitle),size: 32,),
+                        // Icon(Icons.add_to_queue,color:Color(ColorCode.addColorTitle),size: 32,),
 
-                        // const ImageIcon(AssetImage('images/assets/device.png'),),
+                        const ImageIcon(AssetImage('images/assets/device.png'),),
                         const SizedBox(width: 20, ),
                         Expanded(
                           child: TextFormField(
@@ -316,9 +316,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownVisiability,
                                 child: Row(children: [
-                                  Icon(Icons.settings,color:Color(ColorCode.addColorTitle),size: 32,),
+                                  // Icon(Icons.settings,color:Color(ColorCode.addColorTitle),size: 32,),
 
-                                  //const ImageIcon(AssetImage('images/assets/settings.png'),),
+                                  const ImageIcon(AssetImage('images/assets/settings.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
@@ -390,8 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownFacilityVisiability,
                                 child: Row(children: [
-                                  Icon(Icons.account_balance,color:Color(ColorCode.addColorTitle),size: 32,),
-                                  // const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
+                                  const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
@@ -504,17 +503,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         const SizedBox(
                           width: 20, //<-- SEE HERE
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: AutoSizeText('$textHolderInfo',
+                          Flexible(
+                          child:  AutoSizeText('$textHolderInfo',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
                                   fontSize: 18,
-                                  wordSpacing: 1,
                                   // height: 2, //line height 200%, 1= 100%, were 0.9 = 90% of actual line height
                                   color: Colors.grey),
-                              minFontSize: 12,
-                              maxLines: 1,
+                              minFontSize: 18,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
           ])
