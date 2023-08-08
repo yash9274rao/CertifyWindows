@@ -10,8 +10,8 @@ class ColorCode {
   static int addColorBg = 0xff3A95EF;
   static int addColorTitle = 0xff273C51;
   static int addColorSub = 0xff66717B;
-  static Color dynamicBackgroundColorBtn = Color(int.parse('0xff000000'));
-  static Color dynamicTextColorBtn = Color(int.parse('0xffffffff'));
+  static Color dynamicBackgroundColorBtn = Color(int.parse('0xff3A95EF'));
+  static Color dynamicTextColorBtn = Color(int.parse('0xffEBF1F8'));
 
   static double buttonsValues = 0.25;
   static double buttonsHeight = 90.0;

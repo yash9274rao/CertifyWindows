@@ -444,6 +444,7 @@ class _MyHome extends State<HomeScreen> {
     setState(() {
       ColorCode.dynamicBackgroundColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForButton)?? "0xff3A95EF"));
      ColorCode.dynamicTextColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForTextButton)?? "0xffEBF1F8"));
+    print('${pref.getString(Sharepref.colourCodeForButton)},${pref.getString(Sharepref.colourCodeForTextButton)}');
      checkInMode = pref.getString(Sharepref.checkInMode)!;
       versionId = pref.getString(Sharepref.appVersion)!;
       lineOneText = pref.getString(Sharepref.line1HomePageView) ?? "";
