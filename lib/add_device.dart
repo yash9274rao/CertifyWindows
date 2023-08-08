@@ -503,17 +503,14 @@ class _MyHomePageState extends State<MyHomePage> {
                         const SizedBox(
                           width: 20, //<-- SEE HERE
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: AutoSizeText('$textHolderInfo',
+                          Flexible(
+                          child:  AutoSizeText('$textHolderInfo',
                               style: const TextStyle(
-                                  fontWeight: FontWeight.normal,
                                   fontSize: 18,
-                                  wordSpacing: 1,
                                   // height: 2, //line height 200%, 1= 100%, were 0.9 = 90% of actual line height
                                   color: Colors.grey),
-                              minFontSize: 12,
-                              maxLines: 1,
+                              minFontSize: 18,
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
           ])

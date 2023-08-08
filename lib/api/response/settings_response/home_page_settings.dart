@@ -29,7 +29,7 @@ class HomePageSettings {
         viewIntervalDelay: json['viewIntervalDelay'] ?? "2",
         enableTextOnly: json['enableTextOnly'] ?? "",
         homeText: json['homeText'],
-        colourCodeForButton: json['colourCodeForButton'],
-        colourCodeForTextButton: json['colourCodeForTextButton']);
+        colourCodeForButton: json['colourCodeForButton'] ?? "0xff3A95EF",
+        colourCodeForTextButton: json['colourCodeForTextButton'] ?? "0xffEBF1F8");
   }
 }
