@@ -327,6 +327,14 @@ class ApiService {
               Sharepref.line2HomePageView,
               settingsResponse
                   .responseData?.jsonValue?.homePageSettings?.line2);
+          pref.setString(
+              Sharepref.colourCodeForButton,
+              settingsResponse.responseData?.jsonValue?.homePageSettings?.colourCodeForButton.replaceAll("#", "0xff3A95EF"));
+
+          pref.setString(
+              Sharepref.colourCodeForTextButton,
+              settingsResponse.responseData?.jsonValue?.homePageSettings?.colourCodeForTextButton.replaceAll("#", "0xffEBF1F8"));
+
           pref.setString(Sharepref.logoHomePageView,
               settingsResponse.responseData?.jsonValue?.homePageSettings?.logo);
           pref.setString(

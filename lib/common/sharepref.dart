@@ -24,6 +24,8 @@ class Sharepref {
   static String logoHomePageView = "logo";
   static String line1HomePageView = "line1";
   static String line2HomePageView = "line2";
+  static String colourCodeForButton = "colourCodeForButton";
+  static String colourCodeForTextButton = "colourCodeForTextButton";
   static String line1ConfirmationView = "normalViewLine1";
   static String line2ConfirmationView = "normalViewLine2";
   static String showVaccinationIndicator = "showVaccinationIndicator";
