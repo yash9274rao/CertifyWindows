@@ -280,9 +280,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Visibility(
                       visible: _isVisibility,
                       child: Row(children: [
-                        Icon(Icons.add_to_queue,color:Color(ColorCode.addColorTitle),size: 32,),
+                        // Icon(Icons.add_to_queue,color:Color(ColorCode.addColorTitle),size: 32,),
 
-                        // const ImageIcon(AssetImage('images/assets/device.png'),),
+                        const ImageIcon(AssetImage('images/assets/device.png'),),
                         const SizedBox(width: 20, ),
                         Expanded(
                           child: TextFormField(
@@ -316,9 +316,9 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownVisiability,
                                 child: Row(children: [
-                                  Icon(Icons.settings,color:Color(ColorCode.addColorTitle),size: 32,),
+                                  // Icon(Icons.settings,color:Color(ColorCode.addColorTitle),size: 32,),
 
-                                  //const ImageIcon(AssetImage('images/assets/settings.png'),),
+                                  const ImageIcon(AssetImage('images/assets/settings.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),
@@ -390,8 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             child: Visibility(
                                 visible: dropdownFacilityVisiability,
                                 child: Row(children: [
-                                  Icon(Icons.account_balance,color:Color(ColorCode.addColorTitle),size: 32,),
-                                  // const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
+                                  const ImageIcon(AssetImage('images/assets/hospitalline.png'),),
                                   const SizedBox(
                                     width: 20, //<-- SEE HERE
                                   ),

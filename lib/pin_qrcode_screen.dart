@@ -56,7 +56,7 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
                   child: Text(
                     lineOneText,
-                    style: const TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22,
                         color: Color(0xff273C51)),
@@ -94,9 +94,9 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                         ),
                         Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(
+                          child: AutoSizeText(
                             lineTwoText,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 fontSize: 18,
                                 color: Color(0xff245F99)),
@@ -133,12 +133,12 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                                   attendanceMode: widget.attendanceMode)));
                     },
                       child: Container(
-                        constraints: const BoxConstraints(
-                            maxWidth: 300.0, minHeight: 60.0),
+                        constraints: BoxConstraints(
+                            maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
                         padding: const EdgeInsets.all(16.0),
                         alignment: Alignment.center,
-                        child: const AutoSizeText("QR-Code",
-                            style: TextStyle(fontSize: 32, color: Colors.white),
+                        child: AutoSizeText("QR-Code",
+                            style: TextStyle(fontSize: 32, color: ColorCode.dynamicTextColorBtn),
                             minFontSize: 14,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis),
@@ -150,16 +150,28 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                           left: _width * 0.10,
                           right: _width * 0.10,
                           top: 10),
-                      child: Text("Click here if you have the QR code",style: TextStyle(color: Colors.grey),),),
+                      child: AutoSizeText("Click here if you have the QR code",
+                        style: TextStyle(fontSize:ColorCode.subTextFont,color: Colors.grey),
+                          minFontSize: 20,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis),),
                     Container(alignment: Alignment.center,
-                  margin: EdgeInsets.only(
-                      left: _width * 0.10,
-                      right: _width * 0.10,
-                      top: 30),
+                      margin: EdgeInsets.only(
+                          left: _width * 0.10,
+                          right: _width * 0.10,
+                          top: 30),
+
                   child: TextButton(
                     style: TextButton.styleFrom(
                       elevation: 9,
                       shadowColor: Colors.grey,
+                      backgroundColor: ColorCode.dynamicBackgroundColorBtn,
+                      shape:
+                      RoundedRectangleBorder(
+                        borderRadius:
+                        BorderRadius
+                            .circular(15.0),
+                      ),
                     ),
                     onPressed: () async {
                       Navigator.pushReplacement(
@@ -168,34 +180,28 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                               builder: (context) => PinScreen(
                                   attendanceMode: widget.attendanceMode)));
                     },
-                    child: Ink(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [Color(0xff175EA5), Color(0xff163B60)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          tileMode: TileMode.repeated,
-                          stops: [0.0, 1.7],
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                      ),
+
                       child: Container(
-                        constraints: const BoxConstraints(
-                            maxWidth: 300.0, minHeight: 50.0),
+                        constraints: BoxConstraints(
+                            maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
                         padding: const EdgeInsets.all(16.0),
                         alignment: Alignment.center,
-                        child: const AutoSizeText("Enter PIN",
-                            style: TextStyle(fontSize: 32, color: Colors.white),
+                        child: AutoSizeText("Enter PIN",
+                            style: TextStyle(fontSize: 32, color: ColorCode.dynamicTextColorBtn),
                             minFontSize: 14,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
                   ),
-                ),
+
              Container(alignment: Alignment.center,
                margin:EdgeInsets.only(top: 15),
-               child: Text("Click here if you have the PIN and phone number",style: TextStyle(color: Colors.grey),),),
+               child: AutoSizeText("Click here if you have the PIN and phone number",
+                   style: TextStyle(fontSize:ColorCode.subTextFont,color: Colors.grey),
+                 minFontSize: 20,
+                 maxLines: 1,
+                 overflow: TextOverflow.ellipsis),),
 
                   ])),
         ),
