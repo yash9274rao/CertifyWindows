@@ -69,20 +69,20 @@ class _MyPinScreen extends State<PinScreen> {
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Text(
                         lineOneText,
-                        style: const TextStyle(
+                        style:  TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                            color: Color(0xff273C51)),
+                            fontSize: ColorCode.titleFont,
+                            color: Color(ColorCode.line1color)),
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Text(
                         lineTwoText,
-                        style: const TextStyle(
+                        style:  TextStyle(
                             fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                            color: Color(0xff245F99)),
+                            fontSize: ColorCode.subTextFont,
+                            color: Color(ColorCode.line2color)),
                       ),
                     ),
                     Container(
@@ -118,11 +118,11 @@ class _MyPinScreen extends State<PinScreen> {
                           ),
                           Container(
                             padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                            child: const AutoSizeText('Enter Details',
+                            child: AutoSizeText('Enter Details',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 32,
-                                    color: Color(0xff273C51)),
+                                    fontSize: ColorCode.subTitleFont,
+                                    color: Color(ColorCode.line1color)),
                                 minFontSize: 22,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis),

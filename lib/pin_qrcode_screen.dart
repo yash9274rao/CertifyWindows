@@ -58,8 +58,8 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                     lineOneText,
                     style:  TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                        color: Color(0xff273C51)),
+                        fontSize: ColorCode.titleFont,
+                        color: Color(ColorCode.line1color)),
                   ),
                 ),
                 Padding(
@@ -98,8 +98,8 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                             lineTwoText,
                             style: TextStyle(
                                 fontWeight: FontWeight.normal,
-                                fontSize: 18,
-                                color: Color(0xff245F99)),
+                                fontSize: ColorCode.subTextFont,
+                                color: Color(ColorCode.line2color)),
                           ),
                         ),
                       ]),
