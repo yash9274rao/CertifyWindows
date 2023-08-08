@@ -49,12 +49,16 @@ class _MyHome extends State<HomeScreen> {
         title: 'Certify.me Kiosk',
         home: Scaffold(
             body: Container(
+                child: Visibility(
+                    visible: isVisiabilityImag,
+        child:  Container(
                 color: Colors.white,
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
                 child: SingleChildScrollView(
                     child: Column(
+
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                       Padding(
@@ -358,7 +362,7 @@ class _MyHome extends State<HomeScreen> {
                               color: Color(0xff15395C)),
                         ),
                       ),
-                    ])))));
+                    ])))))));
   }
 
   Future<void> timeDateSet() async {
@@ -440,6 +444,7 @@ class _MyHome extends State<HomeScreen> {
     setState(() {
       ColorCode.dynamicBackgroundColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForButton)?? "0xff3A95EF"));
      ColorCode.dynamicTextColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForTextButton)?? "0xffEBF1F8"));
+    print('${pref.getString(Sharepref.colourCodeForButton)},${pref.getString(Sharepref.colourCodeForTextButton)}');
      checkInMode = pref.getString(Sharepref.checkInMode)!;
       versionId = pref.getString(Sharepref.appVersion)!;
       lineOneText = pref.getString(Sharepref.line1HomePageView) ?? "";

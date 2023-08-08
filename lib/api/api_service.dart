@@ -308,9 +308,9 @@ class ApiService {
             'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
           body: jsonEncode(deviceSetting));
-   //   print('Volunteer request url  =${res.request}');
-   //   print('Volunteer request =${jsonEncode(deviceSetting)}');
-   //   print('Volunteer =${res.body}');
+     print('deviceSetting request url  =${res.request}');
+     print('deviceSetting request =${jsonEncode(deviceSetting)}');
+     print('deviceSetting =${res.body}');
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
             SettingsResponse.fromJson(json.decode(res.body));
@@ -329,11 +329,11 @@ class ApiService {
                   .responseData?.jsonValue?.homePageSettings?.line2);
           pref.setString(
               Sharepref.colourCodeForButton,
-              settingsResponse.responseData?.jsonValue?.homePageSettings?.colourCodeForButton.replaceAll("#", "0xff3A95EF"));
+              settingsResponse.responseData?.jsonValue?.homePageSettings?.colourCodeForButton.replaceAll("#", "0xff"));
 
           pref.setString(
               Sharepref.colourCodeForTextButton,
-              settingsResponse.responseData?.jsonValue?.homePageSettings?.colourCodeForTextButton.replaceAll("#", "0xffEBF1F8"));
+              settingsResponse.responseData?.jsonValue?.homePageSettings?.colourCodeForTextButton.replaceAll("#", "0xff"));
 
           pref.setString(Sharepref.logoHomePageView,
               settingsResponse.responseData?.jsonValue?.homePageSettings?.logo);
