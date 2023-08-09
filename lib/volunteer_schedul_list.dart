@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:certify_me_kiosk/common/color_code.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,24 +86,24 @@ class CheckInSlots extends State<ConfirmLanch> {
                           const SizedBox(height: 20, ),
                           Text(
                               'Hi ${widget.name} !',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                  color: Color(0xff273C51)),
+                                  fontSize: ColorCode.titleFont,
+                                  color: Color(ColorCode.line1color)),
                             ),
                           const SizedBox(height: 20, ),
-                          const Text(
+                         Text(
                               'Thank you for showing interest in volunteering for us.',
                               style: TextStyle(
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 18,
-                                  color: Color(0xff245F99)),
+                                  fontSize: ColorCode.subTextFont,
+                                  color: Color(ColorCode.line2color)),
                             ),
 
                           const SizedBox(height: 50, ),
                           Container(
                             margin: EdgeInsets.only(
-                                top: 20, left: _width * 0.15),
+                                top: 20, left: _width * 0.14),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,21 +135,19 @@ class CheckInSlots extends State<ConfirmLanch> {
                                 ),
                                 Container(
                                   padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                                  child: const AutoSizeText('Select the event',
+                                  child:  Text('Select the event',
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: 32,
-                                          color: Color(0xff273C51)),
-                                      minFontSize: 22,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis),
+                                          fontSize: ColorCode.subTitleFont,
+                                          color: Color(ColorCode.line1color)),
+                                     ),
                                 ),
                               ],
                             ),
                           ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: 20, left: _width * 0.20,right:  _width * 0.10),
+                          top: 20, left: _width * 0.18,right:  _width * 0.10),
                       child: ListView.builder(
                           shrinkWrap: true,
                           itemCount: widget.volunteerList.length,

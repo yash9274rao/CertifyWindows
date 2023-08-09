@@ -7,9 +7,11 @@ import 'package:certify_me_kiosk/pin_qrcode_screen.dart';
 import 'package:certify_me_kiosk/pin_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:certify_me_kiosk/QRViewExmple.dart';
 import 'package:certify_me_kiosk/api/api_service.dart';
+import 'common/color_code.dart';
 import 'common/sharepref.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 
@@ -32,6 +34,7 @@ class _MyHome extends State<HomeScreen> {
   String checkInMode = "0";
   Map<String, dynamic> diveInfo = HashMap();
   var isVisiabilityImag = false;
+  late ProgressDialog _isProgressLoading;
 
   @override
   void initState() {
@@ -42,18 +45,24 @@ class _MyHome extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
+    _isProgressLoading.style(padding: EdgeInsets.all(25),);
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
         title: 'Certify.me Kiosk',
         home: Scaffold(
             body: Container(
+                child: Visibility(
+                    visible: isVisiabilityImag,
+        child:  Container(
                 color: Colors.white,
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
+                height: _height,
+                width: _width,
                 padding: EdgeInsets.fromLTRB(45, 0, 45, 0),
                 child: SingleChildScrollView(
                     child: Column(
+
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                       Padding(
@@ -67,20 +76,22 @@ class _MyHome extends State<HomeScreen> {
                         padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
                         child: Text(
                           lineOneText,
-                          style: const TextStyle(
+                          style:  TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: Color(0xff273C51)),
+                              fontSize: ColorCode.titleFont,
+                              color: Color(ColorCode.line1color),
+                          )
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 20, 25, 0),
                         child: Text(
                           lineTwoText,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              fontSize: 18,
-                              color: Color(0xff245F99)),
+                            fontSize: ColorCode.subTextFont,
+                            color: Color(ColorCode.line2color),
+                          )
                         ),
                       ),
                       Padding(
@@ -91,20 +102,10 @@ class _MyHome extends State<HomeScreen> {
                             child: SingleChildScrollView(
                               child: Container(
                                 margin: EdgeInsets.only(right: 50),
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color(0xff175EA5),
-                                      Color(0xff163B60)
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    tileMode: TileMode.repeated,
-                                    stops: [0.0, 1.7],
-                                  ),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20)),
-                                ),
+                                decoration: BoxDecoration(
+                                  color: ColorCode.dynamicBackgroundColorBtn,
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -116,37 +117,34 @@ class _MyHome extends State<HomeScreen> {
                                       ),
                                     ),
                                     Center(
-                                        child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          0, 45, 0, 0),
                                       child: TextButton.icon(
-                                        icon: const Icon(
-                                          color: Colors.white,
+                                        icon:  Icon(
+                                          color: ColorCode.dynamicTextColorBtn,
                                           Icons.access_time,
-                                          size: 24.0,
+                                          size: 44.0,
                                         ),
-                                        label: Text(
+                                        label: AutoSizeText(
                                           timeTextHolderModalController,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 32,
-                                              color: Colors.white),
-                                        ),
-                                        onPressed: () {},
-                                      ),
+                                             fontSize: 44,
+                                              color: ColorCode.dynamicTextColorBtn),
+                                            minFontSize: 32,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis
+                                        ), onPressed: null
                                     )),
                                     Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            8, 0, 0, 20),
-                                        child: Text(
+
+                                        child: AutoSizeText(
                                           dateTextHolderModalController,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                               fontWeight: FontWeight.normal,
-                                              fontSize: 24,
-                                              color: Colors.white),
+                                              fontSize: 28,
+                                              color: ColorCode.dynamicTextColorBtn),
+                                          minFontSize: 22,
+                                          maxLines: 1,
                                         ),
-                                      ),
                                     ),
                                     const Align(
                                       alignment: Alignment.bottomRight,
@@ -177,33 +175,20 @@ class _MyHome extends State<HomeScreen> {
                                           child: Column(
                                             children: [
                                               Container(
-                                                margin: EdgeInsets.only(
-                                                    left: _width * 0.10,
-                                                    right: _width * 0.10),
+                                                alignment: Alignment.center,
                                                 child: TextButton(
-                                                    style: TextButton.styleFrom(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15.0),
-                                                      ),
-                                                      elevation: 9,
-                                                      //Defines Elevation
-                                                      shadowColor:
-                                                          Color(0xff46973F),
-                                                      foregroundColor:
-                                                          Colors.white,
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              25.0),
-                                                      backgroundColor:
-                                                          const Color(
-                                                              0xff46973F),
-                                                      minimumSize:
-                                                          const Size.fromHeight(
-                                                              40),
-                                                    ),
+                                                  style: TextButton.styleFrom(
+                                                    elevation: 9,
+                                                  shadowColor:  Colors.grey,
+                                                  backgroundColor: const Color(
+                                                      0xff46973F),
+                                                  shape:
+                                                  RoundedRectangleBorder(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(15.0),
+                                                  ),
+                                                  ),
                                                     onPressed: () async {
                                                       SharedPreferences pref =
                                                           await SharedPreferences
@@ -249,44 +234,37 @@ class _MyHome extends State<HomeScreen> {
                                                                             attendanceMode)));
                                                       }
                                                     },
-                                                    child: const FittedBox(
-                                                      fit: BoxFit.scaleDown,
+                                                    child: Container(
+                                                      constraints: BoxConstraints(
+                                                          maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
+                                                      padding: const EdgeInsets.all(16.0),
+                                                      alignment: Alignment.center,
                                                       child: AutoSizeText(
+                                                          textAlign: TextAlign.center,
                                                           "Check - In",
                                                           style: TextStyle(
-                                                              fontSize: 32),
+                                                              fontSize: ColorCode.buttonFont,color: Colors.white),
                                                           minFontSize: 14,
                                                           maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis),
+                                                          overflow: TextOverflow.ellipsis),
                                                     )),
                                               ),
-                                              Container(
+
+                                              Container(alignment: Alignment.center,
                                                 margin: EdgeInsets.only(
-                                                    left: _width * 0.10,
-                                                    right: _width * 0.10,
                                                     top: 30),
                                                 child: TextButton(
-                                                  style: TextButton.styleFrom(
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.0),
-                                                    ),
-                                                    elevation: 9,
-                                                    //Defines Elevation
-                                                    shadowColor:
-                                                        Color(0xffDF473D),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            25.0),
-                                                    backgroundColor:
-                                                        const Color(0xffDF473D),
-                                                    minimumSize:
-                                                        const Size.fromHeight(
-                                                            40),
-                                                  ),
+                                               style: TextButton.styleFrom(
+                                              elevation: 9,
+                                              shadowColor: Colors.grey,
+                                              backgroundColor: const Color(0xffDF473D),
+                                              shape:
+                                              RoundedRectangleBorder(
+                                                borderRadius:
+                                                BorderRadius
+                                                    .circular(15.0),
+                                              ),
+                                            ),
                                                   onPressed: () async {
                                                     SharedPreferences pref =
                                                         await SharedPreferences
@@ -332,18 +310,16 @@ class _MyHome extends State<HomeScreen> {
                                                                           attendanceMode)));
                                                     }
                                                   },
-                                                  child: const FittedBox(
-                                                    fit: BoxFit.scaleDown,
-                                                    child: AutoSizeText(
-                                                        "Check - Out",
-                                                        style: TextStyle(
-                                                            fontSize: 32,
-                                                            color:
-                                                                Colors.white),
+                                                  child: Container(
+                                                    constraints: BoxConstraints(
+                                                        maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
+                                                    padding: const EdgeInsets.all(16.0),
+                                                    alignment: Alignment.center,
+                                                    child: AutoSizeText("Check-Out",
+                                                        style: TextStyle(fontSize: ColorCode.buttonFont, color: Colors.white),
                                                         minFontSize: 14,
                                                         maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis),
+                                                        overflow: TextOverflow.ellipsis),
                                                   ),
                                                 ),
                                               ),
@@ -365,7 +341,7 @@ class _MyHome extends State<HomeScreen> {
                               color: Color(0xff15395C)),
                         ),
                       ),
-                    ])))));
+                    ])))))));
   }
 
   Future<void> timeDateSet() async {
@@ -422,30 +398,26 @@ class _MyHome extends State<HomeScreen> {
 
   Future<void> deviceSetting() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-
+    await _isProgressLoading.show();
     Map<String, dynamic> deviceSetting = HashMap();
     deviceSetting['deviceSN'] = '${pref.getString(Sharepref.serialNo)}';
     deviceSetting['institutionId'] =
         '${pref.getString(Sharepref.institutionID)}';
     deviceSetting['settingType'] = 10;
     String req = await ApiService().deviceSetting(pref) as String;
-    if (req == "1") updateUI();
+    if (req == "1") {
+      await _isProgressLoading.hide();
+      updateUI();
+    }
   }
 
   Future<void> updateUI() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    // try {
-    //   String _timezone = await FlutterTimezone.getLocalTimezone();
-    //   print("fffffffffff ${_timezone}");
-    // } catch (e) {
-    //   print('Could not get available timezones');
-    //   List<String>  _availableTimezones = await FlutterTimezone.getAvailableTimezones();
-    //   _availableTimezones.sort();
-    //   print('Could not get available timezones${_availableTimezones.length}');
-    //
-    // }
     setState(() {
-      checkInMode = pref.getString(Sharepref.checkInMode)!;
+      ColorCode.dynamicBackgroundColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForButton)?? "0xff3A95EF"));
+     ColorCode.dynamicTextColorBtn = Color(int.parse(pref.getString(Sharepref.colourCodeForTextButton)?? "0xffEBF1F8"));
+    print('${pref.getString(Sharepref.colourCodeForButton)},${pref.getString(Sharepref.colourCodeForTextButton)}');
+     checkInMode = pref.getString(Sharepref.checkInMode)!;
       versionId = pref.getString(Sharepref.appVersion)!;
       lineOneText = pref.getString(Sharepref.line1HomePageView) ?? "";
       lineTwoText = pref.getString(Sharepref.line2HomePageView) ?? "";

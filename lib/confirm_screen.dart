@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'package:certify_me_kiosk/common/color_code.dart';
 import 'package:dart_ipify/dart_ipify.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog_null_safe/progress_dialog_null_safe.dart';
@@ -95,14 +96,8 @@ class _Confirm extends State<ConfirmScreen> {
                       visible: containerVisibility,
                       child: Container(
                           alignment: Alignment.center,
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Color(0xff175EA5), Color(0xff163B60)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              tileMode: TileMode.repeated,
-                              stops: [0.0, 1.7],
-                            ),
+                          decoration: BoxDecoration(
+                            color: ColorCode.dynamicBackgroundColorBtn,
                             borderRadius: BorderRadius.all(Radius.circular(20)),
                           ),
                           height: MediaQuery.of(context).size.height * 0.5,
@@ -117,8 +112,8 @@ class _Confirm extends State<ConfirmScreen> {
                                     child: Text(
                                       textHolderModalController,
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 32, color: Colors.white),
+                                      style: TextStyle(
+                                          fontSize: ColorCode.titleFont, color: ColorCode.dynamicTextColorBtn),
                                     ),
                                   ),
                                   Padding(
@@ -126,8 +121,8 @@ class _Confirm extends State<ConfirmScreen> {
                                     child: Text(
                                       confirmationText,
                                       textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 20, color: Colors.white70),
+                                      style: TextStyle(
+                                          fontSize: ColorCode.subTitleFont, color: ColorCode.dynamicTextColorBtn),
                                     ),
                                   ),
                                   Padding(
@@ -135,9 +130,9 @@ class _Confirm extends State<ConfirmScreen> {
                                       child: Text(
                                         confirmationSubText,
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.white70),
+                                        style:  TextStyle(
+                                            fontSize: ColorCode.subTextFont,
+                                            color: ColorCode.dynamicTextColorBtn),
                                       ))
                                 ]),
                           )))))
@@ -297,7 +292,7 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['qrCodeId'] = qrData.getQrCodeID;
     accessLogs['deviceId'] = pref.getString(Sharepref.serialNo);
     accessLogs['deviceName'] = pref.getString(Sharepref.deviceName);
-  //  accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
+    accessLogs['institutionId'] = '${pref.getString(Sharepref.institutionID)}';
 
     accessLogs['deviceTime'] =
         DateFormat("MM/dd/yyyy HH:mm:ss").format(DateTime.now()).toString();

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:certify_me_kiosk/common/color_code.dart';
 import 'package:certify_me_kiosk/confirm_screen.dart';
 import 'package:certify_me_kiosk/toast.dart';
 import 'package:certify_me_kiosk/volunteer_schedul_list.dart';
@@ -68,25 +69,25 @@ class _MyPinScreen extends State<PinScreen> {
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Text(
                         lineOneText,
-                        style: const TextStyle(
+                        style:  TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                            color: Color(0xff273C51)),
+                            fontSize: ColorCode.titleFont,
+                            color: Color(ColorCode.line1color)),
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: Text(
                         lineTwoText,
-                        style: const TextStyle(
+                        style:  TextStyle(
                             fontWeight: FontWeight.normal,
-                            fontSize: 18,
-                            color: Color(0xff245F99)),
+                            fontSize: ColorCode.subTextFont,
+                            color: Color(ColorCode.line2color)),
                       ),
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          top:40, left: _width * 0.20),
+                          top:40, left: _width * 0.14),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -117,11 +118,11 @@ class _MyPinScreen extends State<PinScreen> {
                           ),
                           Container(
                             padding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-                            child: const AutoSizeText('Enter Details',
+                            child: AutoSizeText('Enter Details',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 32,
-                                    color: Color(0xff273C51)),
+                                    fontSize: ColorCode.subTitleFont,
+                                    color: Color(ColorCode.line1color)),
                                 minFontSize: 22,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis),
@@ -133,8 +134,8 @@ class _MyPinScreen extends State<PinScreen> {
                     Container(
                       margin: EdgeInsets.only(
                           top: 40,
-                          left: _width * 0.23,
-                          right: _width * 0.23),
+                          left: _width * 0.18,
+                          right: _width * 0.18),
                       child: Row(children: [
                         const ImageIcon(
                             AssetImage('images/assets/password_pin.png')),
@@ -179,23 +180,18 @@ class _MyPinScreen extends State<PinScreen> {
                               fillColor: Colors.white,
                               labelText: "Enter PIN",
                               // hintText: 'your-email@domain.com',
-                              labelStyle: TextStyle(
-                                  color: Colors.black26, fontSize: 18),
+                              labelStyle:
+                              TextStyle(color: Colors.black26, fontSize: 18),
                             ),
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                            ),
+                              style: TextStyle(fontSize: ColorCode.editTextFont)),
                           ),
-                        ),
                       ]),
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          top: _height * 0.01,
-                          left: _width * 0.23,
-                          right: _width * 0.23),
+                          top: 20,
+                          left: _width * 0.18,
+                          right: _width * 0.18),
                       child: Row(children: [
                         const ImageIcon(
                             AssetImage('images/assets/phone_pin.png')),
@@ -214,9 +210,12 @@ class _MyPinScreen extends State<PinScreen> {
                             ],
                             decoration: const InputDecoration(
                               counter: Offstage(),
-                              hintText: 'Enter Phone Number',
+                              labelText: 'Enter Phone Number',
                               //   prefixIcon: Icon(Icons.wifi_calling_3_sharp,color: Colors.black,),
+                              labelStyle:
+                              TextStyle(color: Colors.black26, fontSize: 18),
                             ),
+                              style: TextStyle(fontSize: ColorCode.editTextFont),
                             initialCountryCode: 'US',
                             showDropdownIcon: true,
                             dropdownTextStyle: const TextStyle(
@@ -231,20 +230,22 @@ class _MyPinScreen extends State<PinScreen> {
                             onCountryChanged: (country) {
                               _countryCode = '+${country.fullCountryCode}';
                             },
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.normal,
-                            ),
                           ),
-                        ),
+                        )
                       ]),
                     ),
-                    Container(
+                 Container(
                         margin: EdgeInsets.only(
                             top: _height * 0.03,
-                            left: _width * 0.23,),
+                            left: _width * 0.18,),
                        child: TextButton(
+                           style: TextButton.styleFrom(
+                             elevation: 9,
+                             shadowColor: Colors.grey,
+                             backgroundColor: ColorCode.dynamicBackgroundColorBtn,
+                             shape: RoundedRectangleBorder(
+                               borderRadius: BorderRadius.circular(10),),
+                           ),
                                 onPressed: () {
                                   FocusScope.of(context).unfocus();
                                   if (_pinStr.isEmpty) {
@@ -256,37 +257,23 @@ class _MyPinScreen extends State<PinScreen> {
                                     VolunteerValidation();
                                   }
                                 },
-                                child: Ink(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color(0xff175EA5),
-                                        Color(0xff163B60)
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                      tileMode: TileMode.repeated,
-                                      stops: [0.0, 1.7],
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                  ),
                                   child: Container(
-                                    constraints: const BoxConstraints(
-                                        maxWidth: 300.0, minHeight: 50.0),
+                                    constraints: BoxConstraints(
+                                        maxWidth: _width * ColorCode.buttonsValues, minHeight: ColorCode.buttonsHeight),
                                     padding: const EdgeInsets.all(16.0),
+
                                     alignment: Alignment.center,
-                                    child: const AutoSizeText(
+                                    child:  AutoSizeText(
                                       "Continue",
                                       style: TextStyle(
-                                          fontSize: 32, color: Colors.white),
+                                          fontSize: ColorCode.buttonFont, color: ColorCode.dynamicTextColorBtn),
                                       minFontSize: 14,
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
 
-                            )))
+                            ))
                   ],
                 ),
               )),
