@@ -122,7 +122,7 @@ class _Confirm extends State<ConfirmScreen> {
                                       confirmationText,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          fontSize: ColorCode.editTextHintFont, color: ColorCode.dynamicTextColorBtn),
+                                          fontSize: ColorCode.subTitleFont, color: ColorCode.dynamicTextColorBtn),
                                     ),
                                   ),
                                   Padding(
@@ -131,7 +131,7 @@ class _Confirm extends State<ConfirmScreen> {
                                         confirmationSubText,
                                         textAlign: TextAlign.center,
                                         style:  TextStyle(
-                                            fontSize: ColorCode.editTextHintFont,
+                                            fontSize: ColorCode.subTextFont,
                                             color: ColorCode.dynamicTextColorBtn),
                                       ))
                                 ]),
