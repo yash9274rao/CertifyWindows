@@ -287,18 +287,33 @@ class _MyHomePageState extends State<MyHomePage> {
                         Expanded(
                           child: TextFormField(
                               onSaved: (val) => _deviceName = val!,
+                              onChanged: (text){
+                                setState(() {
+                                  if (text.startsWith('-') || text.startsWith('_') ||
+                                      !RegExp(r'^[a-zA-Z0-9_\-!]+$').hasMatch(text)) {
+                                    _validateDeviceName = false;
+                                  } else {
+                                    _validateDeviceName = true;
+                                  }
+                                });
+                              },
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(5))),
+                                // focusedBorder: UnderlineInputBorder(
+                                //     borderSide:
+                                //     BorderSide(color: Colors.grey),
+                                //     borderRadius: BorderRadius.all(
+                                //         Radius.circular(5))),
                                 enabledBorder: UnderlineInputBorder(
                                   // borderSide: BorderSide.none,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(5))),
-
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: _validateDeviceName? Colors.blue :Colors.redAccent, width: 1.0),
+                                ),
+                                errorBorder:OutlineInputBorder(
+                                  borderSide: BorderSide(color: _validateDeviceName? Colors.grey :Colors.redAccent, width: 1.0),
+                                ) ,
                                 filled: true,
                                 fillColor: Colors.white,
                                 labelText: "Enter Device Name",
@@ -513,7 +528,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
-          ])
+          ]),
+                            const SizedBox(width: 45,height: 16,),
                       ]))),
 
         ));
@@ -584,8 +600,12 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       if (_deviceName.isEmpty) {
         context.showToast("Please enter device name");
-      }else
-      newDeviceAdding();
+      } else if(!_validateDeviceName){
+        setState(() {
+          _validateDeviceName = false;
+        });
+        context.showToast("Special characters are not allowed");
+      }else newDeviceAdding();
   }
   }
   Future<void> newDeviceAdding() async {

@@ -202,6 +202,7 @@ class _MyPinQrCodeScreen extends State<PinQrCodeScreen> {
                  minFontSize: 20,
                  maxLines: 1,
                  overflow: TextOverflow.ellipsis),),
+                    const SizedBox(width: 45,height: 16,),
 
                   ])),
         ),
