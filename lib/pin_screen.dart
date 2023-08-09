@@ -87,7 +87,7 @@ class _MyPinScreen extends State<PinScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.only(
-                          top:40, left: _width * 0.20),
+                          top:40, left: _width * 0.14),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,8 +134,8 @@ class _MyPinScreen extends State<PinScreen> {
                     Container(
                       margin: EdgeInsets.only(
                           top: 40,
-                          left: _width * 0.23,
-                          right: _width * 0.23),
+                          left: _width * 0.18,
+                          right: _width * 0.18),
                       child: Row(children: [
                         const ImageIcon(
                             AssetImage('images/assets/password_pin.png')),
@@ -190,8 +190,8 @@ class _MyPinScreen extends State<PinScreen> {
                     Container(
                       margin: EdgeInsets.only(
                           top: 20,
-                          left: _width * 0.23,
-                          right: _width * 0.23),
+                          left: _width * 0.18,
+                          right: _width * 0.18),
                       child: Row(children: [
                         const ImageIcon(
                             AssetImage('images/assets/phone_pin.png')),
@@ -237,7 +237,7 @@ class _MyPinScreen extends State<PinScreen> {
                  Container(
                         margin: EdgeInsets.only(
                             top: _height * 0.03,
-                            left: _width * 0.23,),
+                            left: _width * 0.18,),
                        child: TextButton(
                            style: TextButton.styleFrom(
                              elevation: 9,
