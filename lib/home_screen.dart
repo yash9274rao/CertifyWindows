@@ -76,26 +76,22 @@ class _MyHome extends State<HomeScreen> {
                         padding: const EdgeInsets.fromLTRB(10, 20, 20, 0),
                         child: Text(
                           lineOneText,
-                          style: const TextStyle(
+                          style:  TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 22,
-                              color: Color(0xff273C51)),
-                            // minFontSize: 14,
-                            // maxLines: 2,
-                            overflow: TextOverflow.ellipsis
+                              fontSize: ColorCode.titleFont,
+                              color: Color(ColorCode.line1color),
+                          )
                         ),
                       ),
                       Padding(
                         padding: EdgeInsets.fromLTRB(10, 20, 25, 0),
                         child: Text(
                           lineTwoText,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.normal,
-                              fontSize: 18,
-                              color: Color(0xff245F99)),
-                              // minFontSize: 14,
-                              // maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            fontSize: ColorCode.subTextFont,
+                            color: Color(ColorCode.line2color),
+                          )
                         ),
                       ),
                       Padding(

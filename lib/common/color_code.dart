@@ -11,7 +11,7 @@ class ColorCode {
   static int addColorTitle = 0xff273C51;
   static int addColorSub = 0xff66717B;
   static int line1color =  0xff15395C;
-  static int line2color =  0xff5D5C5C;
+  static int line2color =  0xff151515;
   static Color dynamicBackgroundColorBtn = Color(int.parse('0xff3A95EF'));
   static Color dynamicTextColorBtn = Color(int.parse('0xffEBF1F8'));
 
@@ -19,6 +19,7 @@ class ColorCode {
   static double buttonsHeight = 90.0;
 
   static double titleFont = 32;
+  static double subTitleFont = 28;
   static double subTextFont = 24;
   static double buttonFont = 28;
   static double editTextFont = 24;
