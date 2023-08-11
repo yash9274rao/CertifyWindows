@@ -204,6 +204,7 @@ class _MyHome extends State<MyLanch> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 45,height: 16,),
               ],
             ),
           )),
@@ -300,14 +301,14 @@ class _MyHome extends State<MyLanch> {
         } else {
           await _isProgressLoading.hide();
           setState(() {
-            if (pref.getString(Sharepref.platform) == "web") _is_web = true;
+            if (pref.getString(Sharepref.platform) == "web") _is_web = false;
             _isVisibility = true;
           });
         }
       } else {
         await _isProgressLoading.hide();
         setState(() {
-          if (pref.getString(Sharepref.platform) == "web") _is_web = true;
+          if (pref.getString(Sharepref.platform) == "web") _is_web = false;
           _isVisibility = true;
         });
       }

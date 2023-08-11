@@ -215,7 +215,8 @@ class CheckInSlots extends State<ConfirmLanch> {
                             );
                           }),
                     ),
-                ]))
+                          const SizedBox(width: 45,height: 16,),
+                        ]))
     )
     )
     );

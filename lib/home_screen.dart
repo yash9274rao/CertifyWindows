@@ -341,7 +341,8 @@ class _MyHome extends State<HomeScreen> {
                               color: Color(0xff15395C)),
                         ),
                       ),
-                    ])))))));
+                          const SizedBox(width: 45,height: 16,),
+                        ])))))));
   }
 
   Future<void> timeDateSet() async {

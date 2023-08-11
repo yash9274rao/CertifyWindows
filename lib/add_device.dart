@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                 onSuggestionSelected: (suggestion) {
                                   _textEditingControllerDeviceName.text = suggestion;
-                                  _deviceName = _textEditingControllerDeviceName.text;
+                                  _deviceName = _textEditingControllerDeviceName.text.trim();
                                   setState(() {
                                     dropdownVisiability = false;
                                     dropdownFacilityVisiability = false;
@@ -287,18 +287,33 @@ class _MyHomePageState extends State<MyHomePage> {
                         Expanded(
                           child: TextFormField(
                               onSaved: (val) => _deviceName = val!,
+                              onChanged: (text){
+                                setState(() {
+                                  if (text.startsWith('-') || text.startsWith('_') ||
+                                      !RegExp(r'^[a-zA-Z0-9_\-!]+$').hasMatch(text)) {
+                                    _validateDeviceName = false;
+                                  } else {
+                                    _validateDeviceName = true;
+                                  }
+                                });
+                              },
                               decoration: InputDecoration(
                                 border: UnderlineInputBorder(),
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                    BorderSide(color: Colors.grey),
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(5))),
+                                // focusedBorder: UnderlineInputBorder(
+                                //     borderSide:
+                                //     BorderSide(color: Colors.grey),
+                                //     borderRadius: BorderRadius.all(
+                                //         Radius.circular(5))),
                                 enabledBorder: UnderlineInputBorder(
                                   // borderSide: BorderSide.none,
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(5))),
-
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: _validateDeviceName? Colors.blue :Colors.redAccent, width: 1.0),
+                                ),
+                                errorBorder:OutlineInputBorder(
+                                  borderSide: BorderSide(color: _validateDeviceName? Colors.grey :Colors.redAccent, width: 1.0),
+                                ) ,
                                 filled: true,
                                 fillColor: Colors.white,
                                 labelText: "Enter Device Name",
@@ -513,7 +528,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis),
                         ),
-          ])
+          ]),
+                            const SizedBox(width: 45,height: 16,),
                       ]))),
 
         ));
@@ -557,7 +573,7 @@ class _MyHomePageState extends State<MyHomePage> {
         pref.setString(Sharepref.serialNo, _deviceName);
         bool isDeviceName = false;
         for (var data in widget.offlineDeviceData) {
-          if (_deviceName.trim() == data.deviceName) {
+          if (_deviceName == data.deviceName.trim()) {
             offlineDeviceDataSelected = data;
             isDeviceName = true;
             break;
@@ -584,21 +600,25 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       if (_deviceName.isEmpty) {
         context.showToast("Please enter device name");
-      }else
-      newDeviceAdding();
+      } else if(!_validateDeviceName){
+        setState(() {
+          _validateDeviceName = false;
+        });
+        context.showToast("Special characters are not allowed");
+      }else newDeviceAdding();
   }
   }
   Future<void> newDeviceAdding() async {
     settingId = 0;
     facilityId = 0;
     for (var data in widget.tabletSettingData) {
-    if (_textEditingControllerSettings.text.trim() == data.settingName) {
+    if (_textEditingControllerSettings.text == data.settingName) {
     settingId = data.id;
     break;
     }
     }
     for (var data in widget.facilityListData) {
-    if (_textEditingControllerFacility.text.trim() == data.facilityName) {
+    if (_textEditingControllerFacility.text == data.facilityName) {
     facilityId = data.facilityId;
     break;
     }
@@ -619,7 +639,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
-    registerBody['deviceName'] = _deviceName.trim();
+    registerBody['deviceName'] = _deviceName;
     registerBody['serialNumber'] = pref.getString(Sharepref.serialNo);
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;

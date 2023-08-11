@@ -273,7 +273,8 @@ class _MyPinScreen extends State<PinScreen> {
                                     ),
                                   ),
 
-                            ))
+                            )),
+                    const SizedBox(width: 45,height: 16,),
                   ],
                 ),
               )),
