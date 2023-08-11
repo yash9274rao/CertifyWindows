@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                                 onSuggestionSelected: (suggestion) {
                                   _textEditingControllerDeviceName.text = suggestion;
-                                  _deviceName = _textEditingControllerDeviceName.text;
+                                  _deviceName = _textEditingControllerDeviceName.text.trim();
                                   setState(() {
                                     dropdownVisiability = false;
                                     dropdownFacilityVisiability = false;
@@ -573,7 +573,7 @@ class _MyHomePageState extends State<MyHomePage> {
         pref.setString(Sharepref.serialNo, _deviceName);
         bool isDeviceName = false;
         for (var data in widget.offlineDeviceData) {
-          if (_deviceName.trim() == data.deviceName) {
+          if (_deviceName == data.deviceName.trim()) {
             offlineDeviceDataSelected = data;
             isDeviceName = true;
             break;
@@ -612,13 +612,13 @@ class _MyHomePageState extends State<MyHomePage> {
     settingId = 0;
     facilityId = 0;
     for (var data in widget.tabletSettingData) {
-    if (_textEditingControllerSettings.text.trim() == data.settingName) {
+    if (_textEditingControllerSettings.text == data.settingName) {
     settingId = data.id;
     break;
     }
     }
     for (var data in widget.facilityListData) {
-    if (_textEditingControllerFacility.text.trim() == data.facilityName) {
+    if (_textEditingControllerFacility.text == data.facilityName) {
     facilityId = data.facilityId;
     break;
     }
@@ -639,7 +639,7 @@ class _MyHomePageState extends State<MyHomePage> {
     SharedPreferences pref = await SharedPreferences.getInstance();
     Map<String, dynamic> registerBody = HashMap();
     registerBody['deviceType'] = pref.getString(Sharepref.platformId);
-    registerBody['deviceName'] = _deviceName.trim();
+    registerBody['deviceName'] = _deviceName;
     registerBody['serialNumber'] = pref.getString(Sharepref.serialNo);
     registerBody['IMEINumber'] = "";
     registerBody['status'] = 1;
