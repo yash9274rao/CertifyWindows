@@ -101,6 +101,7 @@ class _MyHome extends State<HomeScreen> {
                             flex: 1,
                             child: SingleChildScrollView(
                               child: Container(
+                                padding: const EdgeInsets.only(top: 55.0,bottom: 55.0),
                                 margin: EdgeInsets.only(right: 50),
                                 decoration: BoxDecoration(
                                   color: ColorCode.dynamicBackgroundColorBtn,
@@ -109,13 +110,13 @@ class _MyHome extends State<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    const Padding(
-                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      child: Image(
-                                        image: AssetImage(
-                                            'images/assets/quote.png'),
-                                      ),
-                                    ),
+                                    // const Padding(
+                                    //   padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    //   child: Image(
+                                    //     image: AssetImage(
+                                    //         'images/assets/quote.png'),
+                                    //   ),
+                                    // ),
                                     Center(
                                       child: TextButton.icon(
                                         icon:  Icon(
@@ -146,13 +147,13 @@ class _MyHome extends State<HomeScreen> {
                                           maxLines: 1,
                                         ),
                                     ),
-                                    const Align(
-                                      alignment: Alignment.bottomRight,
-                                      child: Image(
-                                        image: AssetImage(
-                                            'images/assets/quote_down.png'),
-                                      ),
-                                    ),
+                                    // const Align(
+                                    //   alignment: Alignment.bottomRight,
+                                    //   child: Image(
+                                    //     image: AssetImage(
+                                    //         'images/assets/quote_down.png'),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               ),
