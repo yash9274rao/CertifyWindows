@@ -171,62 +171,62 @@ class ApiService {
     }
   }
 
-  Future<QrData?> validateQRCode(accessToken, bodys) async {
-    QrData qrData = new QrData();
-    qrData.isValid = false;
-    qrData.setFirstName = "Anonymous";
-    try {
-      var url = Uri.parse("${_apiBaseUrl}ValidateQRCode");
-      var res = await http.post(url,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            'Content-Type': 'application/json',
-            'Accept': '*/*',
-            'Authorization': 'Bearer $accessToken'
-          },
-          body: jsonEncode(bodys));
-      print('validateQRCode = ${res.request}');
-      print('validateQRCode req = ${jsonEncode(bodys)}');
-      print('validateQRCode res = ${res.body}');
-
-      QrData qrData = new QrData();
-      if (res.statusCode == 200) {
-        ValidateQrCodeResponse validateQrCodeResponse =
-            ValidateQrCodeResponse.fromJson(json.decode(res.body));
-        if (validateQrCodeResponse.responseCode == 1) {
-          qrData.firstName =
-              validateQrCodeResponse.responseData?.firstName ?? "";
-          qrData.lastName = validateQrCodeResponse.responseData?.lastName ?? "";
-          qrData.middleName =
-              validateQrCodeResponse.responseData?.middleName ?? "";
-          qrData.id = validateQrCodeResponse.responseData?.id ?? "";
-          qrData.memberId = validateQrCodeResponse.responseData?.memberId ?? "";
-          qrData.accessId = validateQrCodeResponse.responseData?.accessId ?? "";
-          qrData.trqStatus =
-              validateQrCodeResponse.responseData?.trqStatus ?? 0;
-          qrData.memberTypeId =
-              validateQrCodeResponse.responseData?.memberTypeId ?? 0;
-          qrData.isValid = true;
-          qrData.memberTypeName =
-              validateQrCodeResponse.responseData?.memberTypeName ?? "";
-          qrData.faceTemplate =
-              validateQrCodeResponse.responseData?.faceTemplate ?? "";
-          qrData.isVisitor =
-              validateQrCodeResponse.responseData?.isVisitor ?? 0;
-          qrData.scheduleId =
-              validateQrCodeResponse.responseData?.scheduleId ?? 0;
-          qrData.eventName =
-              validateQrCodeResponse.responseData?.eventName ?? "";
-          return qrData;
-        } else {
-          return qrData;
-        }
-      }
-    } catch (e) {
-      log("validateQrCodeResponse =" + e.toString());
-      return qrData;
-    }
-  }
+  // Future<QrData?> validateQRCode(accessToken, bodys) async {
+  //   QrData qrData = new QrData();
+  //   qrData.isValid = false;
+  //   qrData.setFirstName = "Anonymous";
+  //   try {
+  //     var url = Uri.parse("${_apiBaseUrl}ValidateQRCode");
+  //     var res = await http.post(url,
+  //         headers: {
+  //           "Access-Control-Allow-Origin": "*",
+  //           'Content-Type': 'application/json',
+  //           'Accept': '*/*',
+  //           'Authorization': 'Bearer $accessToken'
+  //         },
+  //         body: jsonEncode(bodys));
+  //     print('validateQRCode = ${res.request}');
+  //     print('validateQRCode req = ${jsonEncode(bodys)}');
+  //     print('validateQRCode res = ${res.body}');
+  //
+  //     QrData qrData = new QrData();
+  //     if (res.statusCode == 200) {
+  //       ValidateQrCodeResponse validateQrCodeResponse =
+  //           ValidateQrCodeResponse.fromJson(json.decode(res.body));+
+  //       if (validateQrCodeResponse.responseCode == 1) {
+  //         qrData.firstName =
+  //             validateQrCodeResponse.responseData?.firstName ?? "";
+  //         qrData.lastName = validateQrCodeResponse.responseData?.lastName ?? "";
+  //         qrData.middleName =
+  //             validateQrCodeResponse.responseData?.middleName ?? "";
+  //         qrData.id = validateQrCodeResponse.responseData?.id ?? "";
+  //         qrData.memberId = validateQrCodeResponse.responseData?.memberId ?? "";
+  //         qrData.accessId = validateQrCodeResponse.responseData?.accessId ?? "";
+  //         qrData.trqStatus =
+  //             validateQrCodeResponse.responseData?.trqStatus ?? 0;
+  //         qrData.memberTypeId =
+  //             validateQrCodeResponse.responseData?.memberTypeId ?? 0;
+  //         qrData.isValid = true;
+  //         qrData.memberTypeName =
+  //             validateQrCodeResponse.responseData?.memberTypeName ?? "";
+  //         qrData.faceTemplate =
+  //             validateQrCodeResponse.responseData?.faceTemplate ?? "";
+  //         qrData.isVisitor =
+  //             validateQrCodeResponse.responseData?.isVisitor ?? 0;
+  //         qrData.scheduleId =
+  //             validateQrCodeResponse.responseData?.scheduleId ?? 0;
+  //         qrData.eventName =
+  //             validateQrCodeResponse.responseData?.eventName ?? "";
+  //         return qrData;
+  //       } else {
+  //         return qrData;
+  //       }
+  //     }
+  //   } catch (e) {
+  //     log("validateQrCodeResponse =" + e.toString());
+  //     return qrData;
+  //   }
+  // }
   Future<QrData?> validateQRCodeForKiosk(accessToken, bodys) async {
     QrData qrData = new QrData();
     qrData.isValid = false;

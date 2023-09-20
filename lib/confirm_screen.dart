@@ -181,7 +181,7 @@ class _Confirm extends State<ConfirmScreen> {
         qrData = await ApiService().validateVendor(
             pref.get(Sharepref.accessToken), validateVendor) as QrData;
         // await Future.delayed(const Duration(seconds: 5));
-        qrData.setQrCodeID = widget.dataStr;
+        qrData.setQrCodeID = widget.dataStr.substring(widget.dataStr.lastIndexOf("/") + 1);
         accessLogs(qrData);
       }
       // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
