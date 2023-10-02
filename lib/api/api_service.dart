@@ -274,6 +274,8 @@ class ApiService {
               validateQrCodeResponse.responseData?.isVisitor ?? 0;
           qrData.scheduleId =
               validateQrCodeResponse.responseData?.scheduleId ?? 0;
+          qrData.documentType =
+              validateQrCodeResponse.responseData?.documentType ?? 0;
           qrData.eventName =
               validateQrCodeResponse.responseData?.eventName ?? "";
           if(validateQrCodeResponse.responseData!.fromDate.isNotEmpty) {
@@ -361,6 +363,14 @@ class ApiService {
               Sharepref.subText,
               settingsResponse
                   .responseData?.jsonValue?.confirmationViewSettings?.subText);
+          pref.setString(
+              Sharepref.showVaccinationIndicator,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.showVaccinationIndicator);
+          pref.setString(
+              Sharepref.showNonVaccinationIndicator,
+              settingsResponse.responseData?.jsonValue?.confirmationViewSettings
+                  ?.showNonVaccinationIndicator);
           pref.setString(
               Sharepref.enableAnonymousQRCode,
               settingsResponse.responseData?.jsonValue?.identificationSettings

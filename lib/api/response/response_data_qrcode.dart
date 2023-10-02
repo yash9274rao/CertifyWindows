@@ -14,7 +14,7 @@ class ResponseDataQrCode {
   final String eventName;
   final String fromDate;
   final String toDate;
-
+  final int documentType;
 
 
   const ResponseDataQrCode(
@@ -33,6 +33,7 @@ class ResponseDataQrCode {
         required this.eventName,
         required this.fromDate,
         required this.toDate,
+        required this.documentType,
       });
 
   factory ResponseDataQrCode.fromJson(Map<String, dynamic> json) {
@@ -51,6 +52,7 @@ class ResponseDataQrCode {
         scheduleId: json['scheduleId'] ?? 0,
         eventName: json['eventName'] ?? "",
         fromDate: json['fromDate'] ?? "",
-        toDate: json['toDate'] ?? "");
+        toDate: json['toDate'] ?? "",
+        documentType: json['documentType'] ?? 0);
   }
 }

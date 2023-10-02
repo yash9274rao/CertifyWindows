@@ -14,6 +14,7 @@ class ColorCode {
   static int line2color =  0xff151515;
   static Color dynamicBackgroundColorBtn = Color(int.parse('0xff3A95EF'));
   static Color dynamicTextColorBtn = Color(int.parse('0xffEBF1F8'));
+  static Color vaccinationIndicatorColor = Color(int.parse('0xfff2f2f2'));
 
   static double buttonsValues = 0.25;
   static double buttonsHeight = 90.0;

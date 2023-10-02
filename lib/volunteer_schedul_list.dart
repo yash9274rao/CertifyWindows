@@ -18,11 +18,13 @@ class VolunteerSchedulingList extends StatelessWidget {
         required this.itemId,
         required this.name,
         required this.attendanceMode,
+        required this.documentType,
         required this.volunteerList})
       : super(key: key);
   final int itemId;
   final String name;
   final String attendanceMode;
+  final int documentType;
   final List<VolunteerSchedulingDetailList> volunteerList;
 
   @override
@@ -30,16 +32,18 @@ class VolunteerSchedulingList extends StatelessWidget {
     return MaterialApp(
       title: 'Certify.me Kiosk',
       debugShowCheckedModeBanner: false,
-      home: ConfirmLanch(itemId, name, attendanceMode, volunteerList),
+      home: ConfirmLanch(itemId, name, attendanceMode, documentType, volunteerList),
     );
   }
 }
 class ConfirmLanch extends StatefulWidget {
-  ConfirmLanch(this.itemId, this.name, this.attendanceMode, this.volunteerList);
+  ConfirmLanch(this.itemId, this.name, this.attendanceMode, this.documentType
+  ,this.volunteerList);
 
   final int itemId;
   final String name;
   final String attendanceMode;
+  final int documentType;
   final List<VolunteerSchedulingDetailList> volunteerList;
   @override
   CheckInSlots createState() => CheckInSlots();
@@ -170,6 +174,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                   type: "pin",
                                                   name: widget.name,
                                                   id: widget.itemId,
+                                                  documentType: widget.documentType,
                                                   scheduleId: widget.volunteerList[index].scheduleId!, scheduleEventName: widget.volunteerList[index].scheduleTitle!, scheduleEventTime: '${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}',)));
                                   cancelTimer();
                                 },
