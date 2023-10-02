@@ -23,6 +23,7 @@ class ConfirmScreen extends StatefulWidget {
       required this.type,
       required this.name,
       required this.id,
+        required this.documentType,
       required this.scheduleId,
       required this.scheduleEventName,
       required this.scheduleEventTime})
@@ -34,7 +35,7 @@ class ConfirmScreen extends StatefulWidget {
       name,
       scheduleEventName,
       scheduleEventTime;
-  final int scheduleId, id;
+  final int scheduleId, id, documentType;
 
   @override
   _Confirm createState() => _Confirm();
@@ -71,6 +72,8 @@ class _Confirm extends State<ConfirmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final _height = MediaQuery.of(context).size.height;
+    final _width = MediaQuery.of(context).size.width;
     _isProgressLoading = ProgressDialog(context,
         type: ProgressDialogType.normal, isDismissible: false);
     _isProgressLoading.style(
@@ -78,7 +81,16 @@ class _Confirm extends State<ConfirmScreen> {
     );
     return Scaffold(
       body: SingleChildScrollView(
-          child: Column(
+        child: Container(
+          width: _width,
+          height: _height,
+        decoration: BoxDecoration(
+        border: Border.all(
+        color: ColorCode.vaccinationIndicatorColor, // Border color
+        width: 10.0,          // Border width
+    ),
+    ),
+    child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -137,7 +149,9 @@ class _Confirm extends State<ConfirmScreen> {
                                 ]),
                           )))))
         ],
-      )),
+      ),
+        ),
+      ),
     );
   }
 
@@ -151,6 +165,7 @@ class _Confirm extends State<ConfirmScreen> {
         _imageToShow =
             const Image(image: AssetImage('images/assets/final_logo.png'));
       }
+      ColorCode.vaccinationIndicatorColor = Color(int.parse('0xfff2f2f2'));
     });
     await _isProgressLoading.show();
   }
@@ -204,6 +219,7 @@ class _Confirm extends State<ConfirmScreen> {
       qrData.setFirstName = widget.name;
       qrData.setQrCodeID = "";
       qrData.scheduleId = widget.scheduleId;
+      qrData.documentType = widget.documentType;
       qrData.id = '${widget.id}';
       qrData.eventName = widget.scheduleEventName;
       qrData.eventTime = widget.scheduleEventTime;
@@ -237,6 +253,11 @@ class _Confirm extends State<ConfirmScreen> {
         }
         confirmationText = pref.getString(Sharepref.mainText) ?? "";
         confirmationSubText = pref.getString(Sharepref.subText) ?? "";
+      if(pref.getString(Sharepref.showVaccinationIndicator) == "1" && qrData.documentType == 1){
+        ColorCode.vaccinationIndicatorColor = Color(int.parse('0xff33cc33'));
+      }else if(pref.getString(Sharepref.showNonVaccinationIndicator) == "1" && qrData.documentType == 0){
+        ColorCode.vaccinationIndicatorColor = Color(int.parse('0xffff6347'));
+      }
       } else {
         textHolderModalController = "";
         if (widget.type == "pin")
@@ -258,6 +279,8 @@ class _Confirm extends State<ConfirmScreen> {
 
   Future<void> navigationHome() async {
     await _isProgressLoading.hide();
+    ColorCode.vaccinationIndicatorColor = Color(int.parse('0xfff2f2f2'));
+
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => HomeScreen()));
   }

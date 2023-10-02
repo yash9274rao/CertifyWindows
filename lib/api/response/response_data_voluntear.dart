@@ -3,6 +3,7 @@ class ResponseDataVolunteer {
   final String firstName;
   final String middleName;
   final String lastName;
+  final int documentType;
   final List<VolunteerSchedulingDetailList>? volunteerList;
 
   const ResponseDataVolunteer(
@@ -10,6 +11,7 @@ class ResponseDataVolunteer {
       required this.firstName,
       required this.middleName,
       required this.lastName,
+      required this.documentType,
       required this.volunteerList});
 
   factory ResponseDataVolunteer.fromJson(Map<String, dynamic> json) {
@@ -18,6 +20,7 @@ class ResponseDataVolunteer {
       firstName: json['firstName'] ?? "",
       middleName: json['middleName'] ?? "",
       lastName: json['lastName'] ?? "",
+      documentType: json['documentType'] ?? 0,
       volunteerList: json['volunteerSchedulingDetailList'] == null
           ? []
           : List.from(json['volunteerSchedulingDetailList'])

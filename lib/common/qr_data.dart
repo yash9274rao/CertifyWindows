@@ -19,7 +19,7 @@ class QrData {
   late int responseCode = 0;
   late int responseSubCode = 0;
   String? responseMessage = "";
-
+  late int documentType = 0;
 
 
   set setQrCodeID(String qrCodeId) {
@@ -120,4 +120,9 @@ class QrData {
   }
 
   String? get getResponseMessage => responseMessage;
+  set setDocumentType(int documentType) {
+    this.documentType = documentType;
+  }
+  int get getDocumentType => documentType;
+
 }

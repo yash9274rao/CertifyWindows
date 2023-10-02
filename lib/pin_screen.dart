@@ -35,6 +35,8 @@ class _MyPinScreen extends State<PinScreen> {
   int itemId = 0;
   String name = "";
   String nameFull = "";
+  int documentType = 0;
+
   late Timer timerDelay;
   List<VolunteerSchedulingDetailList> volunteerList = [];
   late ProgressDialog _isProgressLoading;
@@ -309,7 +311,7 @@ class _MyPinScreen extends State<PinScreen> {
           context.showToast("No active slots");
         } else {
           volunteerList = volunteerResponse!.responseData!.volunteerList!;
-          CheckInOutValidations(volunteerResponse!.responseData!.id);
+          CheckInOutValidations(volunteerResponse!.responseData!.id,volunteerResponse!.responseData!.documentType);
         }
       }
     } else {
@@ -350,7 +352,7 @@ class _MyPinScreen extends State<PinScreen> {
     });
   }
 
-  Future<void> CheckInOutValidations(int id) async {
+  Future<void> CheckInOutValidations(int id,int documentType) async {
     try {
       // final List<VolunteerSchedulingDetailList> volunteerListCheckIn = [];
       final List<VolunteerSchedulingDetailList> volunteerListCheckOut = [];
@@ -376,6 +378,7 @@ class _MyPinScreen extends State<PinScreen> {
                       type: "pin",
                       name: nameFull,
                       id: id,
+                      documentType: documentType,
                       scheduleId: volunteerList[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}'!)));
         } else {
           cancelTimer();
@@ -386,6 +389,7 @@ class _MyPinScreen extends State<PinScreen> {
                       itemId: id,
                       name: nameFull,
                       attendanceMode: widget.attendanceMode,
+                      documentType: documentType,
                       volunteerList: volunteerList)));
         }
         // } else {
@@ -405,6 +409,7 @@ class _MyPinScreen extends State<PinScreen> {
                       type: "pin",
                       name: nameFull,
                       id: id,
+                    documentType: documentType,
                       scheduleId: volunteerListCheckOut[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}',)));
         } else {
           cancelTimer();
@@ -415,6 +420,7 @@ class _MyPinScreen extends State<PinScreen> {
                       itemId: id,
                       name: nameFull,
                       attendanceMode: widget.attendanceMode,
+                      documentType: documentType,
                       volunteerList: volunteerListCheckOut)));
         }
       }
