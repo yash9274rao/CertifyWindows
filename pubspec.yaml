@@ -71,13 +71,13 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "images/assets/final_logo.png"
+  image_path: "images/assets/launcher_icons.png"
   web:
     generate: true
-    image_path: "images/assets/final_logo.png"
+    image_path: "images/assets/launcher_icons.png"
     background_color: "#hexcode"
     theme_color: "#hexcode"
 # The following section is specific to Flutter packages.
