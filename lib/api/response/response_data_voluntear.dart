@@ -38,6 +38,7 @@ class VolunteerSchedulingDetailList {
   final int status;
   final String checkIndate;
   final String checkOutDate;
+  final int enableWalkin;
 
 
   const VolunteerSchedulingDetailList(
@@ -47,7 +48,8 @@ class VolunteerSchedulingDetailList {
       required this.toTime,
         required this.status,
         required this.checkIndate,
-        required this.checkOutDate});
+        required this.checkOutDate,
+      required this.enableWalkin});
 
   factory VolunteerSchedulingDetailList.fromJson(Map<String, dynamic> json) {
     return VolunteerSchedulingDetailList(
@@ -58,6 +60,7 @@ class VolunteerSchedulingDetailList {
       status: json['status'],
       checkIndate: json['checkIndate'],
       checkOutDate: json['checkOutDate'],
+      enableWalkin: json['enableWalkin'] ?? 0,
     );
   }
 }

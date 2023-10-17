@@ -379,7 +379,7 @@ class _MyPinScreen extends State<PinScreen> {
                       name: nameFull,
                       id: id,
                       documentType: documentType,
-                      scheduleId: volunteerList[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}'!)));
+                      scheduleId: volunteerList[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}'!,enableWalkin: volunteerList[0].enableWalkin!)));
         } else {
           cancelTimer();
           Navigator.pushReplacement(
@@ -410,7 +410,7 @@ class _MyPinScreen extends State<PinScreen> {
                       name: nameFull,
                       id: id,
                     documentType: documentType,
-                      scheduleId: volunteerListCheckOut[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}',)));
+                      scheduleId: volunteerListCheckOut[0].scheduleId!, scheduleEventName: volunteerList[0].scheduleTitle!, scheduleEventTime: '${volunteerList[0].fromTime} - ${volunteerList[0].toTime}',enableWalkin: volunteerList[0].enableWalkin!)));
         } else {
           cancelTimer();
           Navigator.pushReplacement(
