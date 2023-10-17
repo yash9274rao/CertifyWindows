@@ -53,7 +53,7 @@ class _MyPinScreen extends State<PinScreen> {
     _isProgressLoading = ProgressDialog(context,type: ProgressDialogType.normal, isDismissible: false);
     _isProgressLoading.style(padding: EdgeInsets.all(25),);
     return MaterialApp(
-        title: 'Certify.me Kiosk',
+        title: 'Certify.me KIOSK',
         home: Scaffold(
           body: Container(
               color: Colors.white,

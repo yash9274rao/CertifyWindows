@@ -1,6 +1,6 @@
 # certify_me_kiosk
 
-A new Certify.me Kiosk project.
+A new Certify.me KIOSK project.
 
 ## Getting Started
 

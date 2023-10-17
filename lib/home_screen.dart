@@ -50,7 +50,7 @@ class _MyHome extends State<HomeScreen> {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
-        title: 'Certify.me Kiosk',
+        title: 'Certify.me KIOSK',
         home: Scaffold(
             body: Container(
                 child: Visibility(

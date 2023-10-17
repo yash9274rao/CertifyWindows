@@ -23,7 +23,7 @@ class login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Certify.me Kiosk',
+      title: 'Certify.me kiosk',
       theme: ThemeData(
           // This is the theme of your application.
           //
