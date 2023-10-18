@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Certify.me Kiosk',
+      title: 'Certify.me KIOSK',
       debugShowCheckedModeBanner: false,
       home: MyLanch(),
     );
@@ -62,7 +62,7 @@ class _MyHome extends State<MyLanch> {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
     return MaterialApp(
-      title: 'Certify.me Kiosk',
+      title: 'Certify.me KIOSK',
       home: Scaffold(
         body: Container(
           color: Colors.white,

@@ -30,7 +30,7 @@ class VolunteerSchedulingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Certify.me Kiosk',
+      title: 'Certify.me KIOSK',
       debugShowCheckedModeBanner: false,
       home: ConfirmLanch(itemId, name, attendanceMode, documentType, volunteerList),
     );
@@ -75,7 +75,7 @@ class CheckInSlots extends State<ConfirmLanch> {
     final _height= MediaQuery.of(context).size.height;
     final _width= MediaQuery.of(context).size.width;
     return MaterialApp(
-        title: 'Certify.me Kiosk',
+        title: 'Certify.me KIOSK',
         home: Scaffold(
             body: SingleChildScrollView(
                 child: Container(
@@ -83,6 +83,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.fromLTRB(45, 55, 45, 0),
+    child: SingleChildScrollView(
                     child: Column(mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -175,7 +176,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                                   name: widget.name,
                                                   id: widget.itemId,
                                                   documentType: widget.documentType,
-                                                  scheduleId: widget.volunteerList[index].scheduleId!, scheduleEventName: widget.volunteerList[index].scheduleTitle!, scheduleEventTime: '${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}',)));
+                                                  scheduleId: widget.volunteerList[index].scheduleId!, scheduleEventName: widget.volunteerList[index].scheduleTitle!, scheduleEventTime: '${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}',enableWalkin: widget.volunteerList[index].enableWalkin)));
                                   cancelTimer();
                                 },
                                 child:Container(
@@ -214,15 +215,14 @@ class CheckInSlots extends State<ConfirmLanch> {
                                         ),
                                       ),
                                 ),
-                                    ],)
+                                    ],))
 
-                                )
                             );
                           }),
                     ),
                           const SizedBox(width: 45,height: 16,),
                         ]))
-    )
+    ))
     )
     );
   }

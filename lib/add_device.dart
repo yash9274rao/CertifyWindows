@@ -34,7 +34,7 @@ class AddDevice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Certify.me Kiosk',
+      title: 'Certify.me KIOSK',
       home: MyHomePage(offlineDeviceData, tabletSettingData, facilityListData),
     );
   }

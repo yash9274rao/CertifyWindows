@@ -26,7 +26,8 @@ class ConfirmScreen extends StatefulWidget {
         required this.documentType,
       required this.scheduleId,
       required this.scheduleEventName,
-      required this.scheduleEventTime})
+      required this.scheduleEventTime,
+      required this.enableWalkin})
       : super(key: key);
 
   final String dataStr,
@@ -35,7 +36,7 @@ class ConfirmScreen extends StatefulWidget {
       name,
       scheduleEventName,
       scheduleEventTime;
-  final int scheduleId, id, documentType;
+  final int scheduleId, id, documentType, enableWalkin;
 
   @override
   _Confirm createState() => _Confirm();
@@ -335,6 +336,8 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['allowAccess'] = qrData.getIsValid;
     accessLogs['scheduleId'] = qrData.scheduleId;
     accessLogs['eventName'] = qrData.eventName;
+    accessLogs['enableWalkin'] = widget.enableWalkin;
+
     AccesslogsResponse accesslogsResponse = await ApiService()
         .accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
     validateResponse(qrData, accesslogsResponse.responseSubCode);

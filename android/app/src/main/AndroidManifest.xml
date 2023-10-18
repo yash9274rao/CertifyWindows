@@ -8,7 +8,7 @@
         android:largeScreens="true"
         android:xlargeScreens="true"/>
     <application
-        android:label="Certify.me Kiosk"
+        android:label="Certify.me KIOSK"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
