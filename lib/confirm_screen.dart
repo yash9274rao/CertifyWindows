@@ -202,7 +202,7 @@ class _Confirm extends State<ConfirmScreen> {
       }
       // else if (widget.dataStr.contains("tr")  || pref.get(Sharepref.enableVolunteerQR) == "1")
       else if (widget.dataStr.startsWith("tr") ||
-          widget.dataStr.startsWith("vm") ||
+          widget.dataStr.startsWith("vm") || widget.dataStr.startsWith("aq") ||
           (widget.dataStr.startsWith("vi"))) {
         ValidateQRCodeAccessLog();
       } else if (pref.getString(Sharepref.enableAnonymousQRCode) == "1") {

@@ -31,10 +31,6 @@ class ApiService {
             'device_sn': sn
           },
           body: jsonEncode(bodys));
-      print(res.request);
-      print("sn $sn");
-      print(res.body);
-
       if (res.statusCode == 200) {
         ActivateApplicationResponse activateApplicationResponse =
             ActivateApplicationResponse.fromJson(jsonDecode(res.body));
@@ -48,12 +44,10 @@ class ApiService {
 
   Future<GetDeviceTokenResponse?> getGenerateToken(bodys) async {
     try {
-      print('jsonEncode =${jsonEncode(bodys)}');
       var url = Uri.parse("${_apiBaseUrl}GetDeviceToken");
       var res = await http.post(url,
           headers: {"Access-Control-Allow-Origin": "*", 'Accept': '*/*'},
           body: jsonEncode(bodys));
-      print('GenerateToken =${res.body}');
       if (res.statusCode == 200) {
         GetDeviceTokenResponse getDeviceTokenResponse =
             GetDeviceTokenResponse.fromJson(json.decode(res.body));
@@ -93,9 +87,6 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
-      print('validateVendor uel = ${res.request}');
-      print('validateVendor body = ${jsonEncode(bodys)}');
-      print('validateVendor = ${res.body}');
       QrData qrData = QrData();
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
@@ -119,7 +110,6 @@ class ApiService {
 
   Future<String?> deviceHealthCheck(accessToken, bodys, deviceSn) async {
     try {
-      print('deviceHealthCheck ${jsonEncode(bodys)}');
 
       var url = Uri.parse("${_apiBaseUrl}DeviceHealthCheck");
       var res = await http.post(url,
@@ -131,8 +121,6 @@ class ApiService {
             'DeviceSN': '${deviceSn}'
           },
           body: jsonEncode(bodys));
-      print('deviceHealthCheck request = ${res.request}');
-      print('deviceHealthCheck = ${res.body}');
       return "";
     } catch (e) {
       log("validateVendorvalidateVendor =" + e.toString());
@@ -142,7 +130,6 @@ class ApiService {
 
   Future<AccesslogsResponse> accessLogs(accessToken, bodys) async {
     try {
-      print('AccessLogs ${bodys}');
       var url = Uri.parse("${_apiBaseUrl}AccessLogs");
       var res = await http.post(url,
           headers: {
@@ -152,9 +139,6 @@ class ApiService {
             'Authorization': 'Bearer ${accessToken}'
           },
           body: jsonEncode(bodys));
-      print('AccessLogs request = ${res.request}');
-      print('AccessLogs body = ${jsonEncode(bodys)}');
-      print('AccessLogs = ${res.body}');
       if (res.statusCode == 200) {
         AccesslogsResponse accesslogsResponse =
             AccesslogsResponse.fromJson(json.decode(res.body));
@@ -310,9 +294,6 @@ class ApiService {
             'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
           body: jsonEncode(deviceSetting));
-     print('deviceSetting request url  =${res.request}');
-     print('deviceSetting request =${jsonEncode(deviceSetting)}');
-     print('deviceSetting =${res.body}');
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
             SettingsResponse.fromJson(json.decode(res.body));
@@ -434,9 +415,7 @@ class ApiService {
             'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
           body: jsonEncode(bodys));
-      print('registerDeviceForApp res body = ${res.body}');
 
-      print('registerDeviceForApp request = ${res.request}');
 
       if (res.statusCode == 200) {
         RegisterDeviceResponse registerDeviceResponse =
@@ -466,9 +445,6 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
-      print('Volunteer request url  =${res.request}');
-      print('Volunteer request =${jsonEncode(bodys)}');
-      print('Volunteer =${res.body}');
 
       if (res.statusCode == 200) {
         VolunteerResponse volunteerResponse =
