@@ -17,7 +17,7 @@ import 'response/validate_vendor_response.dart';
 
 class ApiService {
   static const String _apiBaseUrl =
-      "https://apidev.certify.me/"; //"https://apidev.certify.me/";
+      "https://api.certify.me/"; //"https://apidev.certify.me/";
   String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
