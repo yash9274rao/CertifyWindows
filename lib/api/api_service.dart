@@ -17,7 +17,7 @@ import 'response/validate_vendor_response.dart';
 
 class ApiService {
   static const String _apiBaseUrl =
-      "https://apidev.certify.me/"; //"https://apidev.certify.me/";
+      "https://apiqa.certify.me/"; //"https://apidev.certify.me/";
   String responseData = "";
 
   Future<ActivateApplicationResponse?> activateApplication(bodys, sn) async {
@@ -87,6 +87,8 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
+      print("validateVendor url "+ url.toString());
+      print("validateVendor"+ res.body);
       QrData qrData = QrData();
       if (res.statusCode == 200) {
         ValidateVendorResponse validateVendorResponse =
@@ -95,6 +97,7 @@ class ApiService {
           qrData.setFirstName =
               (validateVendorResponse.responseData?.vendorName ?? "");
           qrData.setIsValid = true;
+          qrData.appointmentId = validateVendorResponse.responseData?.appointmentId ?? "";
           return qrData;
         } else {
           qrData.setFirstName = "Anonymous";
@@ -294,6 +297,8 @@ class ApiService {
             'Authorization': 'bearer ${pref.getString(Sharepref.accessToken)}'
           },
           body: jsonEncode(deviceSetting));
+      print(res.request);
+      print(res.body);
       if (res.statusCode == 200) {
         SettingsResponse settingsResponse =
             SettingsResponse.fromJson(json.decode(res.body));
@@ -376,6 +381,10 @@ class ApiService {
               Sharepref.enableVolunteerQR,
               settingsResponse.responseData?.jsonValue?.identificationSettings
                   ?.enableVolunteerQR);
+          pref.setString(
+              Sharepref.selectFacility,
+              settingsResponse.responseData?.jsonValue?.identificationSettings
+                  ?.selectFacility);
           // pref.setString(
           //     Sharepref.enableBufferTime,
           //     settingsResponse.responseData?.jsonValue?.bufferTimeSettings?.enableBufferTime);
@@ -445,7 +454,9 @@ class ApiService {
             'Authorization': 'Bearer $accessToken'
           },
           body: jsonEncode(bodys));
-
+      print('validatePin = ${res.request}');
+      print('validatePin req = ${jsonEncode(bodys)}');
+      print('validatePin res = ${res.body}');
       if (res.statusCode == 200) {
         VolunteerResponse volunteerResponse =
             VolunteerResponse.fromJson(json.decode(res.body));
@@ -455,4 +466,28 @@ class ApiService {
       log(e.toString());
     }
   }
+  Future<QrData?> getAvailabilityFacilityListForKiosk(accessToken, bodys) async {
+    QrData qrData = new QrData();
+    qrData.isValid = false;
+    qrData.setFirstName = "Anonymous";
+    try {
+      var url = Uri.parse("${_apiBaseUrl}XTGetAvailabilityFacilityListForKiosk");
+      var res = await http.post(url,
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+            'Authorization': 'Bearer $accessToken'
+          },
+          body: jsonEncode(bodys));
+      print('getAvailabilityFacilityListForKiosk = ${res.request}');
+      print('getAvailabilityFacilityListForKiosk req = ${jsonEncode(bodys)}');
+      print('getAvailabilityFacilityListForKiosk res = ${res.body}');
+      return qrData;
+    } catch (e) {
+      log("validateQrCodeResponse =" + e.toString());
+      return qrData;
+    }
+  }
+
 }

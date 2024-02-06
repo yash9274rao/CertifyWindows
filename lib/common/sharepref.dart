@@ -49,6 +49,8 @@ class Sharepref {
   static String isPin = "isPin";
   static String checkInMode = "CheckinMode";
   static String enableVolunteerQR = "enableVolunteerQR";
+  static String selectFacility = "selectFacility";
+
 
   //BufferTime Settings
   static String enableBufferTime = "enableBufferTime";
