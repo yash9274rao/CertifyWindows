@@ -197,7 +197,21 @@ class CheckInSlots extends State<ConfirmLanch> {
                                         )
                                     ]
                                     ),
-                                    child:  Row(
+                                    child:  Wrap(
+                                      alignment: WrapAlignment.spaceAround,
+                            children: <Widget>[
+                                    Row(
+                                    children: [
+                                      const Flexible(child: ImageIcon(AssetImage('images/assets/hospitalline.png'),),),
+                                      const SizedBox(width: 8, ),
+                                      AutoSizeText(
+                                          widget.volunteerList[index].facilityName,
+                                          style: const TextStyle(
+                                            color: Color(0xff15395C),
+                                            fontSize: 16,
+                                          ),
+                                        ),],),
+                                      Row(
                                       children: [
                                      AutoSizeText(
                                         '${widget.volunteerList[index].fromTime} - ${widget.volunteerList[index].toTime}',
@@ -215,7 +229,7 @@ class CheckInSlots extends State<ConfirmLanch> {
                                         ),
                                       ),
                                 ),
-                                    ],))
+                                    ],), ],), )
 
                             );
                           }),

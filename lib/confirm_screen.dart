@@ -337,6 +337,7 @@ class _Confirm extends State<ConfirmScreen> {
     accessLogs['scheduleId'] = qrData.scheduleId;
     accessLogs['eventName'] = qrData.eventName;
     accessLogs['enableWalkin'] = widget.enableWalkin;
+    accessLogs['appointmentId']= qrData.appointmentId;
 
     AccesslogsResponse accesslogsResponse = await ApiService()
         .accessLogs(pref.getString(Sharepref.accessToken), accessLogs);
