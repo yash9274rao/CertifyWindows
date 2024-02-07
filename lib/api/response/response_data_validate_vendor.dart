@@ -1,7 +1,7 @@
 class ResponseDataValidateVendor {
   final String vendorImage;
   final String vendorName;
-  final String appointmentId;
+  final int appointmentId;
 
   const ResponseDataValidateVendor(
       {required this.vendorImage, required this.vendorName, required this.appointmentId});
@@ -10,6 +10,6 @@ class ResponseDataValidateVendor {
     return ResponseDataValidateVendor(
         vendorImage: json['vendorImage'] ?? "",
         vendorName: json['vendorName'] ?? "",
-        appointmentId: json['appointmentId'] ?? "");
+        appointmentId: json['appointmentId'] ?? 0);
   }
 }

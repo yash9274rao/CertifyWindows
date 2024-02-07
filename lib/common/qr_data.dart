@@ -15,7 +15,7 @@ class QrData {
   String? middleName = "";
   String? eventName = "";
   String? eventTime = "";
-  late String appointmentId = "";
+  late int appointmentId = 0;
 
 
   late int responseCode = 0;
@@ -24,11 +24,11 @@ class QrData {
   late int documentType = 0;
 
 
-  set setAppointmentId(String appointmentId) {
+  set setAppointmentId(int appointmentId) {
     this.appointmentId = appointmentId;
   }
 
-  String get getAppointmentId => appointmentId;
+  int get getAppointmentId => appointmentId;
 
   set setQrCodeID(String qrCodeId) {
     this.qrCodeId = qrCodeId;

@@ -97,7 +97,7 @@ class ApiService {
           qrData.setFirstName =
               (validateVendorResponse.responseData?.vendorName ?? "");
           qrData.setIsValid = true;
-          qrData.appointmentId = validateVendorResponse.responseData?.appointmentId ?? "";
+          qrData.appointmentId = validateVendorResponse.responseData?.appointmentId ?? 0;
           return qrData;
         } else {
           qrData.setFirstName = "Anonymous";
